@@ -1,18 +1,17 @@
 <template>
   <div>
-    <p class="fs-12 q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs">{{ rules.length ? '*' : '' }} {{ label }}</span>
+    <p class="text-caption q-pb-sm row items-center text-weight-regular">
+      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
       <slot name="subTitle"></slot>
     </p>
     <q-option-group
-      v-model="model"
-      :options="inputSelectOption"
+      v-model="internalOption.model"
+      :options="externalOption.selectOption"
       color="primary"
-      class="q-mb-sm"
       inline
-      :class="[classes]"
-      :ref="inputId"
-      :disable="disable || readonly"
+      :class="['q-mb-sm', externalOption.classes]"
+      :ref="externalOption.inputId"
+      :disable="externalOption.disable || externalOption.readonly"
       :spellcheck="false"
       autocapitalize="off"
       autocomplete="new-password"
@@ -24,59 +23,86 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
+import { cloneDeep } from 'lodash';
+
+interface Option {
+  model: string;
+  classes: string;
+  rules: never[];
+  label: string;
+  selectOption: never[];
+  hint: string;
+  readonly: boolean;
+  inputId: string;
+  disable: boolean;
+}
+
+const EXTERNAL_OPTION = {
+  model: '',
+  classes: '',
+  rules: [],
+  label: '',
+  hint: '',
+  selectOption: [],
+  readonly: false,
+  inputId: '',
+  disable: false,
+};
 
 @Component({ name: 'FormRadioComponent', emits: ['input'] })
 export default class FormRadioComponent extends Vue {
   declare $refs: any;
-  @Prop({ default: {} }) option!: {
-    model: string;
-    classes?: string;
-    rules: any[];
-    label: string;
-    inputSelectOption: any[];
-    readonly: boolean;
-    inputId: string;
-    disable: boolean;
-  };
-  @Watch('option.inputSelectOption', { deep: true })
-  onInputSelectOptionchange(newVal: any) {
-    this.inputSelectOption = newVal;
-    this.inputSelectOptionBak = newVal;
+  @Prop({ default: {} }) option!: Option;
+
+  @Watch('option', { deep: true })
+  onOptionChange(newVal: Option) {
+    // 检查哪些属性发生了变化，并执行相应的操作
+    if (newVal.disable !== this.prevOption?.disable) {
+      this.externalOption.disable = newVal.disable;
+    }
+    if (newVal.model !== this.prevOption?.model) {
+      this.internalOption.model = newVal.model;
+    }
+    if (newVal.classes !== this.prevOption?.classes) {
+      this.externalOption.classes = newVal.classes || '';
+    }
+    if (newVal.rules !== this.prevOption?.rules) {
+      this.externalOption.rules = newVal.rules;
+    }
+    if (newVal.label !== this.prevOption?.label) {
+      this.externalOption.label = newVal.label;
+    }
+    if (newVal.hint !== this.prevOption?.hint) {
+      this.externalOption.hint = newVal.hint;
+    }
+    if (newVal.readonly !== this.prevOption?.readonly) {
+      this.externalOption.readonly = newVal.readonly;
+    }
+    if (newVal.selectOption !== this.prevOption?.selectOption) {
+      this.externalOption.selectOption = newVal.selectOption;
+      this.internalOption.selectOptionBak = cloneDeep(newVal.selectOption);
+    }
+    this.prevOption = cloneDeep(newVal);
   }
-  @Watch('option.model', { deep: true })
-  onModelchange(newVal: any) {
-    this.model = newVal;
-  }
-  @Watch('option.disable', { deep: true })
-  onDisablechange(newVal: boolean) {
-    this.disable = newVal;
-  }
-  @Watch('model')
+
+  @Watch('internalOption.model')
   onchange() {
-    this.$emit('input', this.model);
+    this.$emit('input', this.internalOption.model);
   }
+
+  created() {
+    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.internalOption.model = this.option.model;
+    this.prevOption = cloneDeep(this.option);
+  }
+
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private model: string = '';
-  private classes = '';
-  private rules: any[] = [];
-  private label = '';
-  private inputSelectOption: any[] = [];
-  private inputSelectOptionBak: any[] = [];
-  private readonly: boolean = false;
-  private inputId: string = '';
-  private showPlaceholder = true;
-  private disable = false;
-  mounted() {
-    this.model = this.option?.model ?? '';
-    this.classes = this.option?.classes ?? '';
-    this.rules = this.option?.rules;
-    this.label = this.option?.label;
-    this.inputSelectOption = this.option?.inputSelectOption;
-    this.inputSelectOptionBak = this.option?.inputSelectOption;
-    this.readonly = this.option?.readonly;
-    this.inputId = this.option.inputId;
-    this.disable = this.option.disable || false;
-  }
+  public prevOption: Option | undefined;
+  public externalOption = cloneDeep(EXTERNAL_OPTION);
+  public internalOption = {
+    model: '',
+    selectOptionBak: [],
+  };
 }
 </script>
 

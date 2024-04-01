@@ -2,16 +2,16 @@
 @import '../quasar.variables.scss';
 .body--dark {
   .in-table-link-button {
-    box-shadow: 0px 1px 2px 0px rgba($color: #ffffff, $alpha: 0);
+    box-shadow: 0 1px 2px 0 rgba($color: #ffffff, $alpha: 0);
   }
   .in-table-delete-button {
-    box-shadow: 0px 1px 2px 0px rgba($color: #ffffff, $alpha: 0);
+    box-shadow: 0 1px 2px 0 rgba($color: #ffffff, $alpha: 0);
   }
   .split-line {
     background-image: linear-gradient(90deg, transparent, rgba($color: #ffffff, $alpha: 0.4), transparent);
   }
   .thin-shadow {
-    box-shadow: 0px 6px 16px -1px rgba($color: #ffffff, $alpha: 0.15);
+    box-shadow: 0 6px 16px -1px rgba($color: #ffffff, $alpha: 0.15);
   }
   .detail-link-type:hover {
     color: #ffffff;
@@ -22,16 +22,16 @@
 }
 .body--light {
   .in-table-link-button {
-    box-shadow: 0px 1px 2px 0px rgba($color: #000000, $alpha: 0);
+    box-shadow: 0 1px 2px 0 rgba($color: #000000, $alpha: 0);
   }
   .in-table-delete-button {
-    box-shadow: 0px 1px 2px 0px rgba($color: #000000, $alpha: 0);
+    box-shadow: 0 1px 2px 0 rgba($color: #000000, $alpha: 0);
   }
   .split-line {
     background-image: linear-gradient(90deg, transparent, rgba($color: #000000, $alpha: 0.4), transparent);
   }
   .thin-shadow {
-    box-shadow: 0px 6px 16px -1px rgba($color: #000000, $alpha: 0.05);
+    box-shadow: 0 6px 16px -1px rgba($color: #000000, $alpha: 0.05);
   }
   .detail-link-type:hover {
     color: #000000;
@@ -306,12 +306,12 @@
     background: var(--q-negative);
   }
   &.text-critical {
-    padding: 0;
     border-radius: 0;
     position: relative;
     color: var(--q-negative) !important;
     line-height: 1.2;
-    padding-left: 12px;
+    padding: 0 0 0 12px;
+
     &::before {
       content: '';
       position: absolute;
@@ -329,11 +329,11 @@
     background: var(--my-label-warn-major);
   }
   &.text-major {
-    padding: 0;
     border-radius: 0;
     position: relative;
     color: var(--my-label-warn-major) !important;
-    padding-left: 12px;
+    padding: 0 0 0 12px;
+
     &::before {
       content: '';
       position: absolute;
@@ -351,11 +351,11 @@
     background: var(--my-label-warn-minor);
   }
   &.text-minor {
-    padding: 0;
     border-radius: 0;
     position: relative;
     color: var(--my-label-warn-minor) !important;
-    padding-left: 12px;
+    padding: 0 0 0 12px;
+
     &::before {
       content: '';
       position: absolute;
@@ -373,11 +373,11 @@
     background: var(--my-label-warn-warning);
   }
   &.text-warning {
-    padding: 0;
     border-radius: 0;
     position: relative;
     color: var(--my-label-warn-warning) !important;
-    padding-left: 12px;
+    padding: 0 0 0 12px;
+
     &::before {
       content: '';
       position: absolute;
@@ -395,11 +395,11 @@
     background: var(--my-label-warn-cleared);
   }
   &.text-cleared {
-    padding: 0;
     border-radius: 0;
     position: relative;
     color: var(--my-label-warn-cleared) !important;
-    padding-left: 12px;
+    padding: 0 0 0 12px;
+
     &::before {
       content: '';
       position: absolute;

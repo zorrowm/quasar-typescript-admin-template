@@ -1,11 +1,6 @@
 <template>
   <div>
-    <q-banner
-      inline-actions
-      rounded
-      class="bg-primary text-white m-b-20"
-      v-show="banner"
-    >
+    <q-banner inline-actions rounded class="bg-primary text-white q-mb-lg" v-show="banner">
       This is a banner that can be closed manually
       <template v-slot:action>
         <q-btn flat label="close" @click="banner = false" />
@@ -17,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-facing-decorator';
-import { UserModule } from '../../store/modules/user';
+import { UserModule } from 'src/store/modules/user';
 import Construction from 'src/components/Construction/index.vue';
 import setting from 'src/setting.json';
 @Component({
@@ -35,5 +30,4 @@ export default class AccountComponent extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

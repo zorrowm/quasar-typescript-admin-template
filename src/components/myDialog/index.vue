@@ -1,14 +1,14 @@
 <template>
   <div>
-    <q-dialog transition-show="jump-down" transition-hide="jump-up" v-model="myDialogParams.visiable" persistent @before-hide="handlerBeforeHide">
+    <q-dialog transition-show="jump-down" transition-hide="jump-up" v-model="myDialogParams.visible" persistent @before-hide="handlerBeforeHide">
       <q-card class="my-dialog" :style="calcMyDialogWidth">
-        <div class="title f-bold q-pa-md fs-18">
+        <div class="title f-bold q-pa-md text-h6">
           {{ myDialogParams.title }}
         </div>
         <div class="split-line h-1"></div>
         <div class="scroll content" style="max-height: 500px">
           <q-form :ref="myDialogParams.id">
-            <slot></slot>
+            <slot />
           </q-form>
         </div>
         <div class="split-line h-1"></div>
@@ -26,6 +26,32 @@ import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
 import { getCurrentInstance } from 'vue';
 import { cloneDeep } from 'lodash';
 
+interface IOption {
+  id: string;
+  dialogType: string;
+  getDataLoading: boolean;
+  clickLoading: boolean;
+  visible: boolean;
+  title: string;
+  showConfirm: boolean;
+  params: any;
+  customComfirm: boolean;
+  noTwiceConfirm: boolean;
+}
+
+const DEFAULT_OPTION: IOption = {
+  id: '',
+  dialogType: '',
+  getDataLoading: false,
+  clickLoading: false,
+  visible: false,
+  title: '',
+  showConfirm: true,
+  params: {},
+  customComfirm: false,
+  noTwiceConfirm: false,
+};
+
 @Component({
   name: 'MyDialogComponent',
   emits: ['close', 'confirm', 'before-hide'],
@@ -33,61 +59,32 @@ import { cloneDeep } from 'lodash';
 export default class MyDialogComponent extends Vue {
   declare $refs: any;
   @Prop({ default: '50vw' }) width!: string;
-  @Prop({
-    default: {
-      id: 'my-dialog',
-      dialogType: 'add',
-      clickLoading: false,
-      getDataLoading: false,
-      visiable: false,
-      title: '',
-      showConfirm: true,
-      params: {},
-      customComfirm: false,
-      noTwiceConfirm: false,
-    },
-  })
-  option!: {
-    id: string;
-    dialogType: string;
-    getDataLoading: boolean;
-    clickLoading: boolean;
-    visiable: boolean;
-    title: string;
-    showConfirm: boolean;
-    params: any;
-    customComfirm: boolean;
-    noTwiceConfirm: boolean;
-  };
+  @Prop({ default: () => ({}) }) option!: IOption;
 
-  @Watch('option.visiable')
-  onVisiableChange(newVal: boolean) {
-    if (newVal) {
-      this.$nextTick(() => {
-        this.$refs[this.myDialogParams.id] && this.$refs[this.myDialogParams.id].resetValidation();
-      });
+  @Watch('option', { deep: true })
+  onOptionChange(newVal: IOption) {
+    // 检查哪些属性发生了变化，并执行相应的逻辑
+    if (newVal.visible !== this.prevOption!.visible) {
+      if (newVal.visible) {
+        this.$nextTick(() => {
+          this.$refs[this.myDialogParams.id] && this.$refs[this.myDialogParams.id].resetValidation();
+        });
+      }
+      this.myDialogParams.visible = newVal.visible;
     }
-    this.myDialogParams.visiable = newVal;
-  }
-
-  @Watch('option.dialogType')
-  onDialogTypeChange(newVal: string) {
-    this.myDialogParams.dialogType = newVal;
-  }
-
-  @Watch('option.clickLoading')
-  onClickLoadingChange(newVal: boolean) {
-    this.myDialogParams.clickLoading = newVal;
-  }
-
-  @Watch('option.getDataLoading')
-  onGetDataLoadingChange(newVal: boolean) {
-    this.myDialogParams.getDataLoading = newVal;
-  }
-
-  @Watch('option.title')
-  onTitleChange(newVal: string) {
-    this.myDialogParams.title = newVal;
+    if (newVal.dialogType !== this.prevOption!.dialogType) {
+      this.myDialogParams.dialogType = newVal.dialogType;
+    }
+    if (newVal.clickLoading !== this.prevOption!.clickLoading) {
+      this.myDialogParams.clickLoading = newVal.clickLoading;
+    }
+    if (newVal.getDataLoading !== this.prevOption!.getDataLoading) {
+      this.myDialogParams.getDataLoading = newVal.getDataLoading;
+    }
+    if (newVal.title !== this.prevOption!.title) {
+      this.myDialogParams.title = newVal.title;
+    }
+    this.prevOption = cloneDeep(newVal);
   }
 
   get calcMyDialogWidth() {
@@ -126,33 +123,20 @@ export default class MyDialogComponent extends Vue {
       };
     }
   }
-  private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private bakParams = {};
-  private myDialogParams = {
-    id: '',
-    dialogType: '',
-    clickLoading: false,
-    getDataLoading: false,
-    visiable: false,
-    title: '',
-    showConfirm: true,
-    params: {},
-  };
 
-  mounted() {
-    this.myDialogParams.id = this.option.id;
-    this.myDialogParams.dialogType = this.option.dialogType;
-    this.myDialogParams.getDataLoading = this.option.getDataLoading;
-    this.myDialogParams.clickLoading = this.option.clickLoading;
-    this.myDialogParams.visiable = this.option.visiable;
-    this.myDialogParams.title = this.option.title;
-    this.myDialogParams.showConfirm = this.option.showConfirm ?? true;
-    this.myDialogParams.params = this.option.params;
+  created() {
+    this.myDialogParams = cloneDeep(Object.assign(DEFAULT_OPTION, this.option));
     this.bakParams = cloneDeep(this.option.params);
+    this.prevOption = cloneDeep(this.option);
   }
 
+  private globals = getCurrentInstance()!.appContext.config.globalProperties;
+  private bakParams = {};
+  private prevOption: IOption | undefined;
+  private myDialogParams = cloneDeep(DEFAULT_OPTION);
+
   /* event */
-  private handlerClickCancel() {
+  public handlerClickCancel() {
     this.$nextTick(() => {
       this.$emit('close', { type: this.myDialogParams.dialogType });
       this.$refs[this.myDialogParams.id].resetValidation();

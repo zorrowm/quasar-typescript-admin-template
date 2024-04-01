@@ -5,7 +5,7 @@ import setting from 'src/setting.json';
 import { PermissionModule } from 'src/store/modules/permission';
 import globalMessage from 'src/utils/notify';
 import { UserModule } from 'src/store/modules/user';
-import { sleep } from 'src/utils/tools';
+
 /*
   name:'router-name'             the name field is required when using <keep-alive>, it should also match its component's name property
                                  detail see : https://vuejs.org/v2/guide/components-dynamic-async.html#keep-alive-with-Dynamic-Components
@@ -22,7 +22,7 @@ import { sleep } from 'src/utils/tools';
 function redirect(to: any): any {
   const routes = PermissionModule.routes;
   const item: any = routes.find((item: any) => item.meta && item.path && item.component && item.name !== 'Login');
-  if (!item || (item && !item.children.length)) {
+  if (!item || (item && item.children && !item.children.length)) {
     globalMessage.show({
       type: 'error',
       content: `当前账号：${UserModule.username} 权限异常`,
@@ -30,9 +30,10 @@ function redirect(to: any): any {
     UserModule.ResetToken();
     return '/login';
   } else {
-    return `${item.path}${item.children[0].path ? `/${item.children[0].path}` : ''}`;
+    return `${item.path}${item.children && item.children[0].path ? `/${item.children[0].path}` : ''}`;
   }
 }
+
 export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/login',
@@ -431,33 +432,19 @@ export const asyncRoutes: RouteRecordRaw[] = [
   {
     path: '/table',
     component: shallowRef(Layout),
-    name: 'Table',
-    redirect: redirect,
+    name: 'Table0',
     meta: {
-      pagePermissionId: ['table', 'table-index', 'table-beta'],
-      title: 'table',
-      icon: 'table_chart',
+      pagePermissionId: ['table'],
     },
     children: [
       {
-        path: 'index',
-        name: 'table-index',
+        path: '',
+        name: 'Table',
         meta: {
-          title: 'table-index',
-          icon: 'label',
-          pagePermissionId: ['table-index'],
+          title: 'table',
+          icon: 'table_chart',
         },
-        component: () => import(/* webpackChunkName: "table-index" */ 'pages/table/index.vue'),
-      },
-      {
-        path: 'beta',
-        name: 'table-beta',
-        meta: {
-          title: 'table-beta',
-          icon: 'label',
-          pagePermissionId: ['table-beta'],
-        },
-        component: () => import(/* webpackChunkName: "table-beta" */ 'pages/table/beta.vue'),
+        component: () => import(/* webpackChunkName: "table" */ 'pages/table/index.vue'),
       },
     ],
   },

@@ -1,22 +1,22 @@
 <template>
   <div>
-    <p class="fs-12 q-pb-sm row items-center text-weight-regular" v-show="!hideTitle">
-      <span class="q-mr-xs">{{ rules.length ? '*' : '' }} {{ label }}</span>
+    <p class="text-caption q-pb-sm row items-center text-weight-regular" v-show="!externalOption.hideTitle">
+      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
       <slot name="subTitle"></slot>
     </p>
     <q-select
-      :ref="inputId"
-      v-model="model"
-      :options="inputSelectOption"
-      :class="['q-mb-sm', classes]"
-      :rules="rules"
-      :clearable="showClose"
-      :readonly="readonly"
-      :disable="disable"
-      :hint="hint"
-      :use-input="model ? false : userInput"
-      :input-class="inputId"
-      :placeholder="$t('messages.pleaseSelect')"
+      :ref="externalOption.inputId"
+      v-model="internalOption.model"
+      :options="externalOption.selectOption"
+      :class="['q-mb-sm', externalOption.classes]"
+      :rules="externalOption.rules"
+      :clearable="externalOption.showClose"
+      :readonly="externalOption.readonly"
+      :disable="externalOption.disable"
+      :hint="externalOption.hint"
+      :use-input="externalOption.userInput"
+      :input-class="externalOption.inputId"
+      :placeholder="internalOption.model ? (externalOption.userInput ? '' : externalOption.placeholder) : externalOption.placeholder"
       :input-debounce="100"
       @filter="filterFn"
       :spellcheck="false"
@@ -33,8 +33,8 @@
       clear-icon="app:clear"
     >
       <template #selected>
-        <template v-if="(typeof model === 'object' && model && model.length) || (typeof model !== 'object' && model)">
-          {{ inputSelectOptionBak.find((data) => String(data.value) === String(model))?.label ?? model }}
+        <template v-if="(typeof internalOption.model === 'object' && internalOption.model && internalOption.model.length) || (typeof internalOption.model !== 'object' && internalOption.model)">
+          {{ internalOption.selectOptionBak.find((data) => String(data.value) === String(internalOption.model))?.label ?? internalOption.model }}
         </template>
       </template>
       <template v-slot:option="scope">
@@ -55,93 +55,105 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
+import { cloneDeep } from 'lodash';
+
+interface Option {
+  model: string;
+  placeholder: string;
+  classes: string;
+  rules: never[];
+  label: string;
+  selectOption: never[];
+  showClose: boolean;
+  readonly: boolean;
+  hint: string;
+  userInput: boolean;
+  inputId: string;
+  disable: boolean;
+  hideTitle: boolean;
+}
+
+const EXTERNAL_OPTION = {
+  model: '',
+  placeholder: '',
+  classes: '',
+  rules: [],
+  label: '',
+  selectOption: [],
+  showClose: true,
+  readonly: false,
+  hint: '',
+  userInput: false,
+  inputId: '',
+  disable: false,
+  hideTitle: false,
+};
 
 @Component({ name: 'FormSelectComponent', emits: ['input'] })
 export default class FormSelectComponent extends Vue {
   declare $refs: any;
-  @Prop({ default: {} }) option!: {
-    model: string;
-    inputPlaceholder?: string;
-    classes?: string;
-    rules: any[];
-    label: string;
-    inputSelectOption: any[];
-    showClose: boolean;
-    readonly: boolean;
-    hint: string;
-    userInput: boolean;
-    inputId: string;
-    disable: boolean;
-    hideTitle: boolean;
-  };
+  @Prop({ default: {} }) option!: Option;
 
-  @Watch('option.inputSelectOption', { deep: true })
-  onInputSelectOptionchange(newVal: any) {
-    this.inputSelectOption = newVal;
-    this.inputSelectOptionBak = newVal;
+  @Watch('option', { deep: true })
+  onOptionChange(newVal: Option) {
+    if (newVal.model !== this.prevOption?.model) {
+      this.internalOption.model = newVal.model;
+    }
+    if (newVal.classes !== this.prevOption?.classes) {
+      this.externalOption.classes = newVal.classes || '';
+    }
+    if (newVal.rules !== this.prevOption?.rules) {
+      this.externalOption.rules = newVal.rules;
+    }
+    if (newVal.label !== this.prevOption?.label) {
+      this.externalOption.label = newVal.label;
+    }
+    if (newVal.hint !== this.prevOption?.hint) {
+      this.externalOption.hint = newVal.hint;
+    }
+    if (newVal.readonly !== this.prevOption?.readonly) {
+      this.externalOption.readonly = newVal.readonly;
+    }
+    if (newVal.selectOption !== this.prevOption?.selectOption) {
+      this.externalOption.selectOption = newVal.selectOption;
+      this.internalOption.selectOptionBak = cloneDeep(newVal.selectOption);
+    }
+    this.prevOption = cloneDeep(this.option);
   }
 
-  @Watch('option.model', { deep: true })
-  onModelchange(newVal: any) {
-    this.model = newVal;
-  }
-
-  @Watch('option.disable', { deep: true })
-  onDisablechange(newVal: boolean) {
-    this.disable = newVal;
-  }
-
-  @Watch('model')
+  @Watch('internalOption.model')
   onchange() {
     this.$nextTick(() => {
-      this.$refs[this.inputId] && this.$refs[this.inputId].hidePopup();
+      this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].hidePopup();
     });
-    this.$emit('input', this.model);
+    this.$emit('input', this.internalOption.model);
+  }
+
+  created() {
+    EXTERNAL_OPTION.placeholder = this.$t('messages.pleaseSelect');
+    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.internalOption.model = this.option.model;
+    this.prevOption = cloneDeep(this.option);
   }
 
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private model: string = '';
-  private inputPlaceholder = '';
-  private classes = '';
-  private rules: any[] = [];
-  private label = '';
-  private inputSelectOption: any[] = [];
-  private inputSelectOptionBak: any[] = [];
-  private showClose: boolean = true;
-  private readonly: boolean = false;
-  private hint: string = '';
-  private inputId: string = '';
-  private userInput: boolean = false;
-  private disable = false;
-  private hideTitle = false;
-
-  mounted() {
-    this.model = this.option?.model ?? '';
-    this.inputPlaceholder = this.option?.inputPlaceholder ?? 'Please select';
-    this.classes = this.option?.classes ?? '';
-    this.rules = this.option?.rules;
-    this.label = this.option?.label;
-    this.inputSelectOption = this.option?.inputSelectOption;
-    this.inputSelectOptionBak = this.option?.inputSelectOption;
-    this.showClose = this.option.showClose ?? true;
-    this.readonly = this.option?.readonly;
-    this.userInput = this.option?.userInput;
-    this.hint = this.option.hint;
-    this.inputId = this.option.inputId;
-    this.disable = this.option.disable || false;
-    this.hideTitle = this.option.hideTitle || false;
-  }
+  public prevOption: Option | undefined;
+  public externalOption = cloneDeep(EXTERNAL_OPTION);
+  public internalOption = {
+    model: '',
+    selectOptionBak: [],
+  };
 
   public async validForm() {
-    return this.$refs[this.inputId].validate();
+    return this.$refs[this.externalOption.inputId].validate();
   }
 
   private filterFn(val: any, update: any) {
     update(() => {
       if (val === '') {
-        this.inputSelectOption = this.inputSelectOptionBak;
+        this.externalOption.selectOption = this.internalOption.selectOptionBak;
       } else {
-        this.inputSelectOption = this.inputSelectOptionBak.filter((v) => {
+        this.externalOption.selectOption = this.internalOption.selectOptionBak.filter((v: any) => {
           return String(v.label.toLowerCase()).indexOf(val.toLocaleString()) !== -1;
         });
       }

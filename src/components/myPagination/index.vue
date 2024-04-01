@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row items-center justify-end q-mt-md">
-      <p class="m-t-3">{{ $t('table.total') }} {{ _paginationParams.rowsNumber }}</p>
+      <p class="q-mt-xs">{{ $t('table.total') }} {{ _paginationParams.rowsNumber }}</p>
       <q-input
         v-model.trim="_paginationParams.currentPage"
         @keyup.enter="_paginationInput"

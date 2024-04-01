@@ -13,6 +13,4 @@ import { Component, Vue } from 'vue-facing-decorator';
 export default class myComponentMenu1 extends Vue {}
 </script>
 
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

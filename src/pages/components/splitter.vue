@@ -56,6 +56,7 @@ export default class myComponentSplitter extends Vue {
     background: #000000;
   }
 }
+
 .body--light {
   .splitter {
     background: #f5f5f5;

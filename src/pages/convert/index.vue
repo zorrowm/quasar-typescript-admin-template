@@ -26,6 +26,7 @@ import 'prismjs/themes/prism.css';
 import 'codemirror/lib/codemirror.css';
 import 'src/utils/cssConvert';
 import CodeMirror from 'codeMirror';
+
 const lessStr = '@width:500px;@height:300px;@font_size:12px;textarea {width:@width;height:@height;font-size:@font_size;}';
 const scssStr = '';
 const less = (window as any).less;
@@ -38,6 +39,7 @@ export default class myComponentConvert extends Vue {
   private style = lessStr;
   private editor: any;
   private convertCss = '';
+
   private convert() {
     this.type === 'less' &&
       less.render(this.editor.getValue(), (e: any, data: any) => {
@@ -47,6 +49,7 @@ export default class myComponentConvert extends Vue {
         });
       });
   }
+
   private init() {
     this.$nextTick(() => {
       const $source: any = document.getElementById('source');
@@ -63,6 +66,7 @@ export default class myComponentConvert extends Vue {
       });
     });
   }
+
   mounted() {
     this.init();
   }
@@ -75,11 +79,13 @@ export default class myComponentConvert extends Vue {
     background: #000000;
   }
 }
+
 .body--light {
   .splitter {
     background: #f5f5f5;
   }
 }
+
 .confirm-btn {
   position: absolute;
   left: 50%;

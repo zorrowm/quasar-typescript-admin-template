@@ -1,7 +1,6 @@
-
 <template>
   <div class="handle-button" @click="show = true">
-    <q-icon name="settings" class="fs-24"></q-icon>
+    <q-icon name="settings" class="text-h5"></q-icon>
   </div>
   <el-drawer v-model="show" size="300px" :with-header="false">
     <slot />

@@ -1,5 +1,5 @@
 <template>
-  <q-banner dense class="my-banner" v-show="show" :class="[bannerType, showClose ? 'p-r-32' : 'q-pr-md']">
+  <q-banner dense class="my-banner" v-show="show" :class="[bannerType, showClose ? 'q-pr-xl' : 'q-pr-md']">
     <template v-slot:avatar>
       <q-icon
         name="info"

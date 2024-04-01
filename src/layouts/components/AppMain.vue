@@ -94,7 +94,7 @@ export default class AppMainComponent extends Vue {
 }
 .hasTagsView {
   .app-main {
-    height: calc(100vh - var(--v3-header-height) - var(--v3-navigationbar-height) - 16px - 16px);
+    height: calc(100vh - var(--v3-header-height) - var(--v3-navigationbar-height));
   }
 }
 </style>

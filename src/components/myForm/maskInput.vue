@@ -1,19 +1,19 @@
 <template>
   <div>
-    <p class="fs-12 q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs">{{ rules.length ? '*' : '' }} {{ label }}</span>
+    <p class="text-caption q-pb-sm row items-center text-weight-regular">
+      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
       <slot name="subTitle"></slot>
     </p>
     <q-input
-      v-model.trim="model"
-      :type="type"
-      :class="['q-mb-sm', classes]"
-      :placeholder="inputPlaceholder"
-      :rules="rules"
-      :hint="hint"
-      :readonly="readonly"
-      :mask="mask"
-      ref="inputDom"
+      v-model.trim="internalOption.model"
+      :type="externalOption.type"
+      :class="['q-mb-sm', externalOption.classes]"
+      :placeholder="externalOption.placeholder"
+      :rules="externalOption.rules"
+      :hint="externalOption.hint"
+      :readonly="externalOption.readonly"
+      :mask="externalOption.mask"
+      ref="MyInputRef"
       autocapitalize="off"
       autocomplete="new-password"
       autocorrect="off"
@@ -32,6 +32,8 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
+import { cloneDeep } from 'lodash';
+
 /* #	数字
 S	字母，a到z，不区分大小写
 N	字母数字，不区分大小写
@@ -39,51 +41,83 @@ A	字母，转换为大写
 a	字母，转换为小写
 X	字母数字，字母转换为大写
 x	字母数字，字母转换为小写 */
+
+interface Option {
+  model: string;
+  type: string;
+  placeholder: string;
+  classes: string;
+  rules: never[];
+  label: string;
+  hint: string;
+  mask: string;
+  readonly: boolean;
+}
+
+const EXTERNAL_OPTION = {
+  model: '',
+  type: 'text',
+  placeholder: '',
+  classes: '',
+  rules: [],
+  label: '',
+  hint: '',
+  mask: '',
+  readonly: false,
+};
+
 @Component({ name: 'FormMaskInputComponent', emits: ['input'] })
 export default class FormMaskInputComponent extends Vue {
   declare $refs: any;
-  @Prop({ default: {} }) option!: {
-    model: string;
-    type: string;
-    inputPlaceholder?: string;
-    classes?: string;
-    rules: any[];
-    label: string;
-    hint: string;
-    mask: string;
-    readonly: boolean;
-  };
-  @Watch('option.model')
-  onModelchange(newVal: any) {
-    this.model = newVal;
+  @Prop({ default: {} }) option!: Option;
+
+  @Watch('option', { deep: true })
+  onOptionchange(newVal: Option) {
+    if (newVal.model !== this.prevOption?.model) {
+      this.internalOption.model = newVal.model;
+    }
+    if (newVal.classes !== this.prevOption?.classes) {
+      this.externalOption.classes = newVal.classes || '';
+    }
+    if (newVal.rules !== this.prevOption?.rules) {
+      this.externalOption.rules = newVal.rules;
+    }
+    if (newVal.label !== this.prevOption?.label) {
+      this.externalOption.label = newVal.label;
+    }
+    if (newVal.hint !== this.prevOption?.hint) {
+      this.externalOption.hint = newVal.hint;
+    }
+    if (newVal.readonly !== this.prevOption?.readonly) {
+      this.externalOption.readonly = newVal.readonly;
+    }
+    if (newVal.mask !== this.prevOption?.mask) {
+      this.externalOption.mask = newVal.mask;
+    }
+    this.prevOption = cloneDeep(this.option);
   }
-  @Watch('model')
-  onchange(newVal: string) {
-    this.$emit('input', newVal);
+
+  @Watch('internalOption.model')
+  onchange() {
+    this.$emit('input', this.internalOption.model);
   }
+
+  created() {
+    EXTERNAL_OPTION.placeholder = this.globals.$t('messages.pleaseEnter');
+    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.internalOption.model = this.option.model;
+    this.prevOption = cloneDeep(this.option);
+  }
+
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private model = '';
-  private type = '';
-  private inputPlaceholder = '';
-  private classes = '';
-  private rules: any[] = [];
-  private label = '';
-  private hint: string = '';
-  private mask: string = '';
-  private readonly: boolean = false;
-  mounted() {
-    this.model = this.option.model ?? '';
-    this.type = this.option?.type ?? 'text';
-    this.inputPlaceholder = this.option?.inputPlaceholder ?? this.globals.$t('messages.pleaseEnter');
-    this.classes = this.option?.classes ?? '';
-    this.rules = this.option?.rules;
-    this.label = this.option?.label;
-    this.hint = this.option.hint ?? '';
-    this.mask = this.option.mask;
-    this.readonly = this.option.readonly ?? false;
-  }
+  public prevOption: Option | undefined;
+  private externalOption = cloneDeep(EXTERNAL_OPTION);
+  public internalOption = {
+    model: '',
+  };
+
   public async validForm() {
-    return this.$refs['inputDom'].validate();
+    return this.$refs['MyInputRef'].validate();
   }
 }
 </script>

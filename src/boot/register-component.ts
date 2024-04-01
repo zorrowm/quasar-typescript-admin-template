@@ -25,12 +25,12 @@ export default boot(({ app }) => {
   app.component('MyTooltip', MyTooltip);
   app.component('MyDialog', MyDialog);
   app.component('MyFormInput', MyFormInput);
-  app.component('MyMaskInput', MyMaskInput);
+  app.component('MyFormMaskInput', MyMaskInput);
   app.component('MyFormSelect', MyFormSelect);
   app.component('MyFormMultipleSelect', MyFormMultipleSelect);
   app.component('MyFormDateRange', MyFormDateRange);
   app.component('MyFormDateRangeWithTime', MyFormDateRangeWithTime);
   app.component('MyFormSlider', MyFormSlider);
   app.component('MyFormRadio', MyFormRadio);
-  app.component('MyTreeSelect', MyTreeSelect);
+  app.component('MyFormTreeSelect', MyTreeSelect);
 });

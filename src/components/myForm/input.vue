@@ -1,19 +1,19 @@
 <template>
   <div>
-    <p class="fs-12 q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs">{{ rules.length ? '*' : '' }} {{ label }}</span>
+    <p class="text-caption q-pb-sm row items-center text-weight-regular">
+      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
       <slot name="subTitle"></slot>
     </p>
     <q-input
-      v-model.trim="model"
-      :type="type"
-      :class="['q-mb-sm', classes]"
-      :placeholder="inputPlaceholder"
-      :rules="rules"
-      :hint="hint"
-      :readonly="readonly"
-      :disable="disable"
-      ref="inputDom"
+      v-model.trim="internalOption.model"
+      :type="externalOption.type"
+      :class="['q-mb-sm', externalOption.classes]"
+      :placeholder="externalOption.placeholder"
+      :rules="externalOption.rules"
+      :hint="externalOption.hint"
+      :readonly="externalOption.readonly"
+      :disable="externalOption.disable"
+      ref="MyInputRef"
       autocapitalize="off"
       autocomplete="new-password"
       autocorrect="off"
@@ -34,70 +34,85 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
+import { cloneDeep } from 'lodash';
 
+interface Option {
+  model: string;
+  type?: string;
+  placeholder?: string;
+  classes?: string;
+  rules: never[];
+  label: string;
+  hint: string;
+  readonly: boolean;
+  disable: boolean;
+}
+
+const EXTERNAL_OPTION = {
+  model: '',
+  type: 'text',
+  placeholder: '',
+  classes: '',
+  rules: [],
+  label: '',
+  hint: '',
+  readonly: false,
+  disable: false,
+};
 @Component({ name: 'FormInputComponent', emits: ['input'] })
 export default class FormInputComponent extends Vue {
   declare $refs: any;
-  @Prop({ default: {} }) option!: {
-    model: string;
-    type?: string;
-    inputPlaceholder?: string;
-    classes?: string;
-    rules: any[];
-    label: string;
-    hint: string;
-    readonly: boolean;
-    disable: boolean;
-  };
 
-  @Watch('option.disable', { deep: true })
-  onDisablechange(newVal: boolean) {
-    this.disable = newVal;
+  @Prop({ default: {} }) option!: Option;
+
+  @Watch('option', { deep: true })
+  onOptionChange(newVal: Option) {
+    // 检查哪些属性发生了变化，并执行相应的操作
+    if (newVal.disable !== this.prevOption?.disable) {
+      this.externalOption.disable = newVal.disable;
+    }
+    if (newVal.model !== this.prevOption?.model) {
+      this.internalOption.model = newVal.model;
+    }
+    if (newVal.classes !== this.prevOption?.classes) {
+      this.externalOption.classes = newVal.classes || '';
+    }
+    if (newVal.rules !== this.prevOption?.rules) {
+      this.externalOption.rules = newVal.rules;
+    }
+    if (newVal.label !== this.prevOption?.label) {
+      this.externalOption.label = newVal.label;
+    }
+    if (newVal.hint !== this.prevOption?.hint) {
+      this.externalOption.hint = newVal.hint;
+    }
+    if (newVal.readonly !== this.prevOption?.readonly) {
+      this.externalOption.readonly = newVal.readonly;
+    }
+    this.prevOption = cloneDeep(newVal);
   }
 
-  @Watch('option.model', { deep: true })
-  onModelchange(newVal: string) {
-    this.model = newVal;
+  @Watch('internalOption.model')
+  onchange() {
+    this.$emit('input', this.internalOption.model);
   }
 
-  @Watch('model')
-  onchange(newVal: string) {
-    this.$emit('input', newVal);
-  }
-
-  @Watch('option.classes')
-  onClassesChange(newVal: string) {
-    this.classes = newVal;
-  }
-
-  @Watch('option.rules', { deep: true })
-  onRulesChange(newVal: any[]) {
-    this.rules = newVal;
-  }
-
-  @Watch('option.label', { deep: true })
-  onLabelChange(newVal: string) {
-    this.label = newVal;
+  created() {
+    EXTERNAL_OPTION.placeholder = this.$t('messages.pleaseEnter');
+    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.internalOption.model = this.option.model;
+    this.prevOption = cloneDeep(this.option);
   }
 
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private model = '';
-  private type = '';
-  private inputPlaceholder = '';
-  private classes = '';
-  private rules: any[] = [];
-  private label = '';
-  private hint: string = '';
-  private readonly: boolean = false;
-  private disable: boolean = false;
-
-  mounted() {
-    const { model = '', type = 'text', inputPlaceholder = this.globals.$t('messages.pleaseEnter'), classes = '', rules = [], label = '', hint = '', readonly = false, disable = false } = this.option;
-    Object.assign(this, { model, type, inputPlaceholder, classes, rules, label, hint, readonly, disable });
-  }
+  public prevOption: Option | undefined;
+  public externalOption = cloneDeep(EXTERNAL_OPTION);
+  public internalOption = {
+    model: '',
+  };
 
   public async validForm() {
-    return await this.$refs['inputDom'].validate();
+    return await this.$refs['MyInputRef'].validate();
   }
 }
 </script>

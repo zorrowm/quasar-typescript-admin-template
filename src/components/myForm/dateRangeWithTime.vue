@@ -1,18 +1,18 @@
 <template>
   <div>
-    <p class="fs-12 q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs"> {{ dateParams.required ? '*' : '' }} {{ dateParams.label }} </span>
+    <p class="text-caption q-pb-sm row items-center text-weight-regular">
+      <span class="q-mr-xs"> {{ externalOption.required ? '*' : '' }} {{ externalOption.label }} </span>
       <slot name="subTitle"></slot>
     </p>
     <div class="pick-date">
       <div class="row">
-        <span class="fs-12 q-mr-sm mt-3">Start:</span>
+        <span class="text-caption q-mr-sm mt-3">Start:</span>
         <q-input
           ref="startInputEl"
-          :rules="dateParams.startRules"
-          :class="dateParams.startClasses"
-          v-model="dateParams.startModel"
-          :placeholder="dateParams.startPlaceholder"
+          :rules="internalOption.startRules"
+          :class="internalOption.startClasses"
+          v-model="internalOption.startModel"
+          :placeholder="internalOption.startPlaceholder"
           :spellcheck="false"
           autocapitalize="off"
           mask="####/##/## ##:##:##"
@@ -28,12 +28,12 @@
             <q-icon name="o_event" class="cursor-pointer">
               <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down">
                 <div class="row">
-                  <q-date v-model="dateParams.startModel" mask="YYYY/MM/DD HH:mm:ss" flat></q-date>
-                  <q-time v-model="dateParams.startModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
+                  <q-date v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" flat> Start date & time</q-date>
+                  <q-time v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
                 </div>
                 <div class="row items-center justify-center q-my-sm">
                   <q-btn v-close-popup label="Now" color="primary" flat @click="setNow('startModel')" />
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup label="Close" color="primary" />
                 </div>
               </q-popup-proxy>
             </q-icon>
@@ -41,13 +41,13 @@
         </q-input>
       </div>
       <div class="row">
-        <span class="fs-12 q-mr-sm mt-3">End:</span>
+        <span class="text-caption q-mr-sm mt-3">End:</span>
         <q-input
           ref="endInputEl"
-          :rules="dateParams.endRules"
-          :class="dateParams.endClasses"
-          v-model="dateParams.endModel"
-          :placeholder="dateParams.endPlaceholder"
+          :rules="internalOption.endRules"
+          :class="internalOption.endClasses"
+          v-model="internalOption.endModel"
+          :placeholder="internalOption.endPlaceholder"
           :spellcheck="false"
           autocapitalize="off"
           mask="####/##/## ##:##:##"
@@ -61,10 +61,10 @@
         >
           <template v-slot:append>
             <q-icon name="o_event" class="cursor-pointer">
-              <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down" :target="!!dateParams.startModel">
+              <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down" :target="!!internalOption.startModel">
                 <div class="row">
-                  <q-date v-model="dateParams.endModel" mask="YYYY/MM/DD HH:mm:ss" flat :options="endDateOption"></q-date>
-                  <q-time v-model="dateParams.endModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
+                  <q-date v-model="internalOption.endModel" mask="YYYY/MM/DD HH:mm:ss" flat :options="endDateOption"> End date & time</q-date>
+                  <q-time v-model="internalOption.endModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
                 </div>
                 <div class="row items-center justify-center q-my-sm q-gutter-x-md">
                   <q-btn v-close-popup label="Now" color="primary" flat @click="setNow('endModel')" />
@@ -83,116 +83,181 @@
 import { getCurrentInstance } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
 import { date } from 'quasar';
+import { cloneDeep } from 'lodash';
+
+interface Option {
+  from: string;
+  to: string;
+  required: boolean;
+  label: string;
+}
+
+const EXTERNAL_OPTION = {
+  from: '',
+  to: '',
+  required: false,
+  label: '',
+};
 
 @Component({ name: 'myDateRangeWithTImeComponent', emits: ['input'] })
 export default class myDateRangeWithTImeComponent extends Vue {
   $refs: any;
-  @Prop({
-    default: {},
-  })
-  option!: any;
-
-  @Watch('option.model', { deep: true })
-  onchange5(newVal: any) {
-    this.dateParams.model = newVal;
-    this.dateParams.startModel = newVal.start;
-    this.dateParams.endModel = newVal.end;
-  }
-
-  @Watch('dateParams.model', { deep: true })
-  onResultChange(newVal: any) {
-    this.$emit('input', newVal);
-  }
-
-  @Watch('option.required', { deep: true })
-  onRequiredChange(newVal: any) {
-    this.dateParams.required = newVal;
-    if (newVal) {
-      this.dateParams.startRules = [
-        (v: any) => !!v || 'Start date is required',
-        (v: any) => {
-          if (!date.isValid(v)) {
-            return 'Start date is invalid';
-          }
-          const start = new Date(v).getTime();
-          const end = new Date(this.dateParams.endModel).getTime();
-          return start < end || 'Start date must be less than end date';
-        },
-      ] as any;
-      this.dateParams.endRules = [
-        (v: any) => !!v || 'End date is required',
-        (v: any) => {
-          if (!date.isValid(v)) {
-            return 'End date is invalid';
-          }
-          const start = new Date(this.dateParams.startModel).getTime();
-          const end = new Date(v).getTime();
-          return start < end || 'Start date must be less than end date';
-        },
-      ] as any;
-    } else {
-      this.dateParams.startRules = [] as any;
-      this.dateParams.endRules = [] as any;
-    }
-  }
-
-  @Watch('dateParams.startModel')
-  onStartDateChange(newVal: any) {
-    if (this.dateParams.endModel) {
-      this.$refs.endInputEl && this.$refs.endInputEl.validate();
-    }
-    this.dateParams.model.start = newVal;
-  }
-
-  @Watch('dateParams.endModel')
-  onEndDateChange(newVal: any) {
-    if (this.dateParams.startModel) {
-      this.$refs.startInputEl && this.$refs.startInputEl.validate();
-    }
-    this.dateParams.model.end = newVal;
-  }
+  @Prop({ default: {} }) option!: any;
 
   get endDateOption(): any {
     return (date: string | number | Date) => {
-      if (!this.dateParams.startModel) return false;
-      const start = this.dateParams.startModel.split(' ')[0];
-      return date >= start;
+      if (!this.internalOption.startModel) return false;
+      const from = this.internalOption.startModel.split(' ')[0];
+      return date >= from;
     };
   }
 
-  mounted() {
-    this.dateParams.startModel = this.option.model.start;
-    this.dateParams.endModel = this.option.model.end;
-    this.dateParams.label = this.option.label;
-    this.dateParams.required = this.option.required;
+  @Watch('option', { deep: true })
+  onOptionChange(newVal: any) {
+    if (newVal.from !== this.prevOption?.from) {
+      this.internalOption.startModel = newVal.from;
+    }
+    if (newVal.to !== this.prevOption?.to) {
+      this.internalOption.endModel = newVal.to;
+    }
+    if (newVal.required !== this.prevOption?.required) {
+      this.externalOption.required = newVal.required;
+      this.initDateRule();
+    }
+    if (newVal.label !== this.prevOption?.label) {
+      this.externalOption.label = newVal.label;
+    }
+    this.prevOption = cloneDeep(newVal);
+  }
+
+  @Watch('internalOption', { deep: true })
+  onInternalOptionChange(newVal: any) {
+    if (newVal.startModel !== this.prevInternalOption.startModel) {
+      this.$emit('input', {
+        from: newVal.startModel,
+        to: newVal.endModel,
+      });
+    }
+    if (newVal.endModel !== this.prevInternalOption.endModel) {
+      this.$emit('input', {
+        from: newVal.startModel,
+        to: newVal.endModel,
+      });
+    }
+    if (newVal.startModel) {
+      this.$refs.endInputEl && this.$refs.endInputEl.validate();
+    }
+    if (newVal.endModel) {
+      this.$refs.startInputEl && this.$refs.startInputEl.validate();
+    }
+    this.prevInternalOption = cloneDeep(newVal);
+  }
+
+  created() {
+    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.internalOption.startModel = this.option.from;
+    this.internalOption.endModel = this.option.to;
+    this.initDateRule();
+    this.prevOption = cloneDeep(this.option);
+    this.prevInternalOption = cloneDeep(this.internalOption);
   }
 
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private dateParams = {
-    model: {
-      start: '',
-      end: '',
-    },
+  public prevOption: Option | undefined;
+  public prevInternalOption: any;
+  public externalOption = cloneDeep(EXTERNAL_OPTION);
+  public internalOption = {
     startModel: '',
     endModel: '',
-    required: false,
+    startPlaceholder: 'Start date & time',
+    endPlaceholder: 'End date & time',
     startClasses: 'col',
     endClasses: 'col',
     startRules: [],
     endRules: [],
-    startPlaceholder: 'Start date & time',
-    endPlaceholder: 'End date & time',
-    label: '',
-    placeholder: 'Select start and end times',
   };
 
   private setNow(type: string) {
-    (this.dateParams as any)[type] = date.formatDate(new Date().getTime(), 'YYYY/MM/DD HH:mm:ss');
+    (this.internalOption as any)[type] = date.formatDate(new Date().getTime(), 'YYYY/MM/DD HH:mm:ss');
+  }
+
+  private initDateRule() {
+    if (this.externalOption.required) {
+      this.internalOption.startRules = [
+        (val: any) => !!val || this.globals.$t('messages.required'),
+        (val: any) => {
+          if (val) {
+            if (date.isValid(val)) {
+              return true;
+            } else {
+              return 'Start date is invalid';
+            }
+          } else {
+            return 'Start date is required';
+          }
+        },
+        (val: any) => {
+          const to = this.internalOption.endModel;
+          if (val) {
+            if (date.isValid(val) && date.isValid(to)) {
+              if (+new Date(val) < +new Date(to)) {
+                return true;
+              } else {
+                return 'Start date must be less than end date';
+              }
+            } else {
+              return 'Start date is invalid';
+            }
+          } else {
+            return 'Start date is required';
+          }
+        },
+      ] as any;
+      this.internalOption.endRules = [
+        (val: any) => !!val || this.globals.$t('messages.required'),
+        (val: any) => {
+          if (val) {
+            if (date.isValid(val)) {
+              return true;
+            } else {
+              return 'End date is invalid';
+            }
+          } else {
+            return 'End date is required';
+          }
+        },
+        (val: any) => {
+          const from = this.internalOption.startModel;
+          if (val) {
+            if (date.isValid(from) && date.isValid(val)) {
+              if (+new Date(from) < +new Date(val)) {
+                return true;
+              } else {
+                return 'Start date must be less than end date';
+              }
+            } else {
+              return 'End date is invalid';
+            }
+          } else {
+            return 'End date is required';
+          }
+        },
+      ] as any;
+    } else {
+      this.internalOption.startRules = [];
+      this.internalOption.endRules = [];
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+:deep(.q-time) {
+  border-radius: 0 !important;
+}
+:deep(.q-date) {
+  border-radius: 0 !important;
+}
 .pick-date {
   display: grid;
   grid-template-columns: 1fr 1fr;

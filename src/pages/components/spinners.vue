@@ -1,9 +1,6 @@
 <template>
   <div class="q-pa-md q-gutter-xs">
-    <div
-      class="q-gutter-md row justify-center"
-      style="font-size: 3em; margin-bottom: 20px"
-    >
+    <div class="q-gutter-md row justify-center" style="font-size: 3em; margin-bottom: 20px">
       <q-spinner-audio color="secondary" />
       <q-spinner-ball color="red" />
       <q-spinner-bars color="purple" />
@@ -34,10 +31,10 @@ import { Component, Vue } from 'vue-facing-decorator';
 @Component({ name: 'myComponentSpinners' })
 export default class myComponentSpinners extends Vue {
   private timer: any;
+
   private showLoading() {
     this.$q.loading.show({
-      message:
-        'Some important <b>process</b> is in progress.<br/><span class="text-amber text-italic">Please wait...</span>',
+      message: 'Some important <b>process</b> is in progress.<br/><span class="text-amber text-italic">Please wait...</span>',
       html: true,
     });
     // hiding in 3s
@@ -49,5 +46,4 @@ export default class myComponentSpinners extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

@@ -1,10 +1,7 @@
 import * as directives from 'src/directives/index';
 import { boot } from 'quasar/wrappers';
 import { type Directive } from 'vue';
-import ElementPlus from 'element-plus';
 import 'src/router/permission';
-import 'element-plus/dist/index.css';
-import 'element-plus/theme-chalk/dark/css-vars.css';
 import vue3PhotoPreview from 'vue3-photo-preview';
 import 'vue3-photo-preview/dist/index.css';
 import globalMessage from 'src/utils/notify';
@@ -13,9 +10,8 @@ import 'src/utils/types';
 import VueSidePanel from 'vue3-side-panel';
 import 'vue3-side-panel/dist/vue3-side-panel.css';
 import { defaultFill } from 'src/utils/tools';
-import { date } from 'quasar';
+import { date, Platform } from 'quasar';
 
-import { Platform } from 'quasar';
 export default boot(({ app }) => {
   // We globally register our directive with Vue;
   // Rememeber that all directives in Vue will start with 'v-'
@@ -27,7 +23,6 @@ export default boot(({ app }) => {
   });
   app.use(vue3PhotoPreview);
   app.use(VueSidePanel);
-  app.use(ElementPlus);
   app.config.globalProperties.$globalMessage = globalMessage;
   app.config.globalProperties.$window = window;
   app.config.globalProperties.$globalConfirm = globalConfirm;
@@ -37,8 +32,7 @@ export default boot(({ app }) => {
     if (!time || String(time).length < 10) return '--';
     if (!/^\d+$/g.test(time.toString())) {
       if (String(time).indexOf('T') !== -1 && !Number.isNaN(new Date(time).getTimezoneOffset())) {
-        const formattedString = date.formatDate(+new Date(time), 'YYYY-MM-DD HH:mm:ss');
-        return formattedString;
+        return date.formatDate(+new Date(time), 'YYYY-MM-DD HH:mm:ss');
       } else {
         if (/\d/.test(String(time))) {
           return String(time);
@@ -49,8 +43,7 @@ export default boot(({ app }) => {
     } else {
       if (String(time).length === 10) timeStamp = time += '000';
       else timeStamp = String(time);
-      const formattedString = date.formatDate(Number(timeStamp), 'YYYY-MM-DD HH:mm:ss');
-      return formattedString;
+      return date.formatDate(Number(timeStamp), 'YYYY-MM-DD HH:mm:ss');
     }
   };
   document.querySelector('body')?.classList.add(Platform.is.platform);

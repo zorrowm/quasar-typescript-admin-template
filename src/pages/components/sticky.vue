@@ -5,7 +5,7 @@
         <q-toolbar>
           <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
 
-          <q-toolbar-title> <strong>Quasar</strong> Framework </q-toolbar-title>
+          <q-toolbar-title><strong>Quasar</strong> Framework</q-toolbar-title>
 
           <q-btn flat round dense icon="menu" @click="drawerRight = !drawerRight" />
         </q-toolbar>
@@ -15,7 +15,7 @@
         <q-toolbar>
           <q-btn flat round dense icon="menu" @click="drawerLeft = !drawerLeft" />
 
-          <q-toolbar-title> <strong>Quasar</strong> Framework </q-toolbar-title>
+          <q-toolbar-title><strong>Quasar</strong> Framework</q-toolbar-title>
 
           <q-btn flat round dense icon="menu" @click="drawerRight = !drawerRight" />
         </q-toolbar>
@@ -82,14 +82,9 @@ import { Component, Vue } from 'vue-facing-decorator';
   name: 'myComponentSticky',
 })
 export default class myComponentSticky extends Vue {
-  get drawerLeft() {
-    return this.$q.screen.width > 700;
-  }
-  get drawerRight() {
-    return this.$q.screen.width > 500;
-  }
+  private drawerLeft = this.$q.screen.width > 700;
+  private drawerRight = this.$q.screen.width > 500;
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

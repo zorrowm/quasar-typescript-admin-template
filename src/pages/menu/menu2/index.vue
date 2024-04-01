@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <q-card> menu 2 </q-card>
+    <q-card> menu 2</q-card>
   </div>
 </template>
 
@@ -11,6 +11,4 @@ import { Component, Vue } from 'vue-facing-decorator';
 export default class myComponentMenu2 extends Vue {}
 </script>
 
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

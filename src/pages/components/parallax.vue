@@ -7,7 +7,7 @@
     </div>
     <q-parallax :height="200" :speed="0.5">
       <template v-slot:media>
-        <img src="https://cdn.quasar.dev/img/parallax1.jpg" />
+        <img src="https://cdn.quasar.dev/img/parallax1.jpg" alt="" />
       </template>
 
       <h1 class="text-white">Docks</h1>
@@ -24,5 +24,4 @@ import { Component, Vue } from 'vue-facing-decorator';
 export default class myComponentParallax extends Vue {}
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

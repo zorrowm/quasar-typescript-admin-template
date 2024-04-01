@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-card class="q-pa-md">
-      <div class="fs-18 f-bold">Line chart example</div>
+      <div class="text-h6 f-bold">Line chart example</div>
       <div>
         <canvas id="c-line-chart" style="width: 100%; height: 300px"></canvas>
       </div>
@@ -12,6 +12,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-facing-decorator';
 import { Chart } from 'chart.js/auto';
+
 @Component({ name: 'myChartsComponent' })
 export default class myChartsComponent extends Vue {
   mounted() {

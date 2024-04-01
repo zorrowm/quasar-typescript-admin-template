@@ -4,7 +4,7 @@
     <Breadcrumb class="breadcrumb" />
     <div class="right-menu">
       <a class="right-menu-item" href="https://dirkhe1051931999.github.io/quasar/" target="__blank">vue2 with quasar and use vue-class-decorator</a>
-      <q-icon name="arrow_forward_ios" class="fs-18 text-white q-mr-md"></q-icon>
+      <q-icon name="arrow_forward_ios" class="text-h6 text-white q-mr-md"></q-icon>
       <q-separator dark vertical />
       <div class="right-menu-item" :id="`${appTitle}-version`">{{ version }}</div>
       <q-separator dark vertical />
@@ -50,27 +50,27 @@
           <div class="column w-200">
             <div class="text-h6 q-mb-md">Settings</div>
             <div class="row justify-between items-center">
-              <span class="fs-12"> Tab Bar?</span>
+              <span class="text-caption"> Tab Bar?</span>
               <el-switch v-model="showTagsView" class="drawer-switch" />
             </div>
             <div class="row justify-between items-center">
-              <span class="fs-12">Sidebar Logo?</span>
+              <span class="text-caption">Sidebar Logo?</span>
               <el-switch v-model="showSidebarLogo" class="drawer-switch" />
             </div>
             <div class="row justify-between items-center">
-              <span class="fs-12">Fixed Header</span>
+              <span class="text-caption">Fixed Header</span>
               <el-switch v-model="fixedHeader" class="drawer-switch" />
             </div>
             <div class="row justify-between items-center">
-              <span class="fs-12">Notify?</span>
+              <span class="text-caption">Notify?</span>
               <el-switch v-model="showNotify" class="drawer-switch" />
             </div>
             <div class="row justify-between items-center">
-              <span class="fs-12">Switch Theme Button?</span>
+              <span class="text-caption">Switch Theme Button?</span>
               <el-switch v-model="showThemeSwitch" class="drawer-switch" />
             </div>
             <div class="row justify-between items-center">
-              <span class="fs-12">Full Screen Button?</span>
+              <span class="text-caption">Full Screen Button?</span>
               <el-switch v-model="showScreenfull" class="drawer-switch" />
             </div>
           </div>

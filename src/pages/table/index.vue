@@ -1,391 +1,1062 @@
 <template>
-  <div class="q-pa-md">
-    <q-form class="row query-list m-b-30" ref="queryFrom">
-      <div v-for="(item, index) in queryInput" :key="index">
-        <q-input
-          v-model.trim="queryParams[item.id]"
-          :type="item.type"
-          :class="['', item.class]"
-          :label="item.placeholder"
-          v-if="item.inputType === 'text'"
-          autocapitalize="off"
-          autocomplete="off"
-          autocorrect="off"
-          clearable
-          dense
-          outlined
-          :spellcheck="false"
-        />
-        <q-select
-          v-if="item.inputType === 'select'"
-          :class="['', item.class]"
-          v-model="queryParams[item.id]"
-          :options="item.selectArr"
-          :label="item.placeholder"
-          autocapitalize="off"
-          autocomplete="off"
-          autocorrect="off"
-          clearable
-          dense
-          outlined
-          :spellcheck="false"
-        />
-      </div>
-      <q-btn color="primary" icon="search" label="Query" no-caps class="q-mr-md h-40" :loading="queryLoading" />
-      <q-btn icon="youtube_searched_for" label="Reset" outline color="primary" no-caps class="h-40" :loading="resetLoading" />
-    </q-form>
-    <q-table
-      flat
-      bordered
-      :columns="tableParams.column"
-      :rows="tableParams.data"
-      :loading="tableParams.loading"
-      :pagination="tableParams.pagination"
-      hide-pagination
-      no-data-label="NO DATA"
-      class="my-table"
-    >
-      <!-- top -->
-      <template v-slot:top>
-        <div class="row justify-between full-width items-center">
-          <span class="fs-20">Table</span>
-          <q-btn color="primary" label="New" class="w-100" icon="add" dense @click="handlerClickTableAdd" />
-        </div>
-      </template>
-      <!-- detail -->
-      <template v-slot:body-cell-iccid="props">
-        <q-td class="text-left">
-          <span class="link-type" @click="handlerClickDetail">{{ props.row.iccid }}</span>
-        </q-td>
-      </template>
-      <!-- image -->
-      <template v-slot:body-cell-img="props">
-        <q-td class="text-left relative">
-          <photo-provider>
-            <photo-consumer v-for="src in [props.row.img]" :intro="src" :key="src" :src="src">
-              <img :src="src" style="height: 170px; width: 300px" />
-              <div class="absolute-bottom text-subtitle4 text-center view-subtitle">Preview image</div>
-            </photo-consumer>
-          </photo-provider>
-        </q-td>
-      </template>
-      <!--      loading-->
-      <template v-slot:loading>
-        <q-inner-loading color="primary" showing />
-      </template>
-      <template v-slot:header-cell-action="props">
-        <q-th :props="props">{{ props.col.label.indexOf('$') !== -1 ? $t(`table.${props.col.label.replace('$', '')}`) : props.col.label }}</q-th>
-      </template>
-      <!--      actions-->
-      <template v-slot:body-cell-action="props">
-        <q-td class="text-left">
-          <span class="in-table-link-button" v-if="props">Active</span>
-          <span class="in-table-delete-button q-ml-sm">Suspend</span>
-        </q-td>
-      </template>
-    </q-table>
-    <div class="row items-center justify-end q-mt-md" v-if="tableParams.pagination.rowsNumber">
-      <p class="q-mr-md">Total {{ tableParams.pagination.rowsNumber }}</p>
-      <q-pagination
-        v-model="tableParams.pagination.page"
-        :input="false"
-        :max-pages="6"
-        :max="tableParams.pagination.rowsNumber / tableParams.pagination.rowsPerPage < 1 ? 1 : Math.ceil(tableParams.pagination.rowsNumber / tableParams.pagination.rowsPerPage)"
-        @update:model-value="paginationInput"
-        ellipses
-        outline
-        boundary-numbers
-      ></q-pagination>
-    </div>
-    <q-dialog v-model="addVisiable" persistent>
-      <q-card style="max-width: 1000px">
-        <q-card-section class="row items-center">
-          <div class="text-h6">Add Form</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none" style="width: 1000px; max-width: 1000px">
-          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-            <q-input filled v-model="name" label="Your name *" hint="Name and surname" lazy-rules :rules="[(val) => (val && val.length > 0) || 'Please type something']" />
+  <div>
+    <div class="query-form-and-action">
+      <q-form ref="queryFrom" class="form">
+        <div class="query">
+          <div v-for="(item, index) in queryParams.input" :key="index" class="query-item" v-show="!item.collapse">
             <q-input
-              filled
-              type="number"
-              v-model="age"
-              label="Your age *"
-              lazy-rules
-              :rules="[(val) => (val !== null && val !== '') || 'Please type your age', (val) => (val > 0 && val < 100) || 'Please type a real age']"
+              v-model.trim="queryParams.params[item.id]"
+              :type="item.inputType"
+              :class="[item.class]"
+              :label="item.placeholder"
+              v-if="item.type === 'text'"
+              autocapitalize="off"
+              autocomplete="new-password"
+              autocorrect="off"
+              clearable
+              dense
+              outlined
+              dropdown-icon="app:topbar-arrow-bottom"
+              clear-icon="app:clear"
+              :spellcheck="false"
             />
-            <q-toggle v-model="accept" label="I accept the license and terms" />
-            <div class="text-right">
-              <q-btn label="Submit" type="submit" color="primary" />
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+            <q-select
+              v-if="item.type === 'select'"
+              :class="[item.class]"
+              v-model="queryParams.params[item.id]"
+              :options="item.selectOption"
+              :label="item.placeholder"
+              :spellcheck="false"
+              autocapitalize="off"
+              autocomplete="new-password"
+              autocorrect="off"
+              clearable
+              dense
+              options-dense
+              outlined
+              emit-value
+              dropdown-icon="app:topbar-arrow-bottom"
+              clear-icon="app:clear"
+              map-options
+            />
+          </div>
+          <div class="action">
+            <q-btn color="primary" icon="search" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" class="q-mr-md" style="height: 40px" />
+            <q-btn :label="$t('action.reset')" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" class="q-mr-md" style="height: 40px" />
+            <q-btn
+              :icon="queryParams.allExpand ? 'expand_less' : 'expand_more'"
+              :label="queryParams.allExpand ? 'Collapse' : 'Expand'"
+              outline
+              color="primary"
+              flat
+              @click="handleClickCollapse"
+              style="height: 40px"
+            />
+          </div>
+        </div>
+      </q-form>
+    </div>
+    <div class="thin-shadow q-pa-md">
+      <q-table
+        flat
+        bordered
+        :columns="tableParams.column"
+        :rows="tableParams.data"
+        :loading="tableParams.loading"
+        :pagination="tableParams.pagination"
+        hide-pagination
+        :no-data-label="$t(`tip.noData`)"
+        class="my-table"
+        :selected-rows-label="(numberOfRows) => `select ${numberOfRows} ${$t(`table.per`)}`"
+        selection="multiple"
+        v-model:selected="tableParams.selected"
+        row-key="name"
+      >
+        <template #top>
+          <div class="full-width justify-end row">
+            <q-btn color="primary" icon="o_add" label="Add" class="q-mr-md" @click="handleClickAdd" />
+            <q-btn icon="o_upload" label="Upload" outline color="primary" @click="handleClickUpload" />
+          </div>
+        </template>
+        <template v-slot:header="props">
+          <q-tr :props="props">
+            <!-- selected -->
+            <q-th style="text-align: left">
+              <q-checkbox color="primary" v-model="props.selected" />
+            </q-th>
+            <!-- expand -->
+            <q-th auto-width>Expand</q-th>
+            <!-- other -->
+            <q-th v-for="col in props.cols" :key="col.name" :props="props" style="text-align: left">
+              {{ col.label.indexOf('$') !== -1 ? $t(`table.${col.label.replace('$', '')}`) : col.label }}
+            </q-th>
+          </q-tr>
+        </template>
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <!-- selected -->
+            <q-td class="text-left">
+              <q-checkbox color="primary" v-model="props.selected" />
+            </q-td>
+            <!-- expand -->
+            <q-td auto-width>
+              <q-toggle v-model="props.expand" checked-icon="add" unchecked-icon="remove" />
+            </q-td>
+            <!-- other -->
+            <q-td v-for="col in props.cols" :key="col.name" :props="props" class="text-left">
+              <span v-if="!col.inSlot">{{ col.value }}</span>
+              <div v-else class="text-left">
+                <!-- simplified rendering logic for id, name, action -->
+                <div v-if="col.name === 'id'">{{ tableParams.data.indexOf(props.row) + 1 }}</div>
+                <span v-else-if="col.name === 'name'" class="link-type" @click="handlerClickDetail(props.row)">{{ props.row.name }}</span>
+                <div v-else-if="col.name === 'action'" class="action-buttons">
+                  <span class="in-table-link-button q-mr-md" @click="handlerClickUpdate(props.row)">{{ $t('action.update') }} </span>
+                  <span class="in-table-delete-button q-mr-md" @click="handlerClickDelete(props.row)">{{ $t('action.delete') }} </span>
+                  <span class="in-table-link-button">
+                    {{ $t(`action.more`) }}
+                    <q-icon name="o_expand_more"></q-icon>
+                    <q-popup-proxy style="min-width: 100px">
+                      <q-list>
+                        <q-item clickable dense v-close-popup>
+                          <q-item-section class="text-center"> 123123 </q-item-section>
+                        </q-item>
+                        <q-item clickable dense v-close-popup>
+                          <q-item-section class="text-center"> 123123 </q-item-section>
+                        </q-item>
+                        <q-item clickable dense v-close-popup>
+                          <q-item-section class="text-center"> 123123 </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-popup-proxy>
+                  </span>
+                </div>
+              </div>
+            </q-td>
+          </q-tr>
+          <q-tr v-show="props.expand" :props="props">
+            <!-- expand detail -->
+            <q-td colspan="100%">
+              <div class="text-left">Name:{{ props.row.name }}</div>
+              <div>this is expand detail , it maybe json string or other special text</div>
+            </q-td>
+          </q-tr>
+        </template>
+        <!--      loading-->
+        <template v-slot:loading>
+          <q-inner-loading color="primary" showing />
+        </template>
+      </q-table>
+      <MyPagination :paginationParams="tableParams.pagination" v-if="tableParams.pagination.rowsNumber > 0" @pagination="paginationInput"></MyPagination>
+    </div>
+    <MyDialog
+      :option="{
+        id: dialogAddUpdateParams.id,
+        dialogType: dialogAddUpdateParams.dialogType,
+        clickLoading: dialogAddUpdateParams.clickLoading,
+        getDataLoading: dialogAddUpdateParams.getDataLoading,
+        visible: dialogAddUpdateParams.visible,
+        title: dialogAddUpdateParams.title,
+        params: dialogAddUpdateParams.params,
+        showConfirm: true,
+      }"
+      @close="dialogAddUpdateCloseEvent"
+      @confirm="dialogAddUpdateConfirmEvent"
+      @before-hide="dialogAddUpdateBeforeHideEvent"
+    >
+      <div class="row q-col-gutter-x-md">
+        <div v-for="(item, index) in dialogAddUpdateParams.input" :key="index" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
+          <MyFormSelect
+            v-if="item.type === 'select'"
+            :option="{
+              inputId: `${dialogAddUpdateParams.id}-select-${item.model}`,
+              rules: item.rules,
+              classes: item.classes,
+              model: dialogAddUpdateParams.params[item.model],
+              label: item.label,
+              selectOption: item.selectOption,
+              userInput: true,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          />
+          <MyFormDateRange
+            v-if="item.type === 'date-range'"
+            :option="{
+              from: dialogAddUpdateParams.params[item.model].from,
+              to: dialogAddUpdateParams.params[item.model].to,
+              required: item.required,
+              label: item.label,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          />
+          <MyFormDateRangeWithTime
+            v-if="item.type === 'date-time-range'"
+            :ref="dialogAddUpdateParams.id + '-date-time-range-' + item.model"
+            :option="{
+              from: dialogAddUpdateParams.params[item.model].from,
+              to: dialogAddUpdateParams.params[item.model].to,
+              required: item.required,
+              label: item.label,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          />
+          <MyFormSlider
+            v-if="item.type === 'slider'"
+            :option="{
+              rules: item.rules,
+              classes: item.classes,
+              model: dialogAddUpdateParams.params[item.model],
+              label: item.label,
+              min: item.min,
+              max: item.max,
+              step: item.step,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          />
+          <MyFormRadio
+            v-if="item.type === 'radio'"
+            :option="{
+              inputId: `${dialogAddUpdateParams.id}-select-${item.model}`,
+              rules: item.rules,
+              classes: item.classes,
+              model: dialogAddUpdateParams.params[item.model],
+              label: item.label,
+              selectOption: item.selectOption,
+              disable: item.disable,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          />
+          <MyFormTreeSelect
+            v-if="item.type === 'tree-select'"
+            :option="{
+              inputId: `${dialogAddUpdateParams.id}-tree-select-${item.model}`,
+              rules: item.rules,
+              classes: item.classes,
+              model: dialogAddUpdateParams.params[item.model],
+              label: item.label,
+              selectOption: item.selectOption,
+              disable: item.disable,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          />
+          <MyFormMultipleSelect
+            v-if="item.type === 'multiple-select'"
+            :option="{
+              inputId: `${dialogAddUpdateParams.id}-multiple-select-${item.model}`,
+              rules: item.rules,
+              classes: item.classes,
+              model: dialogAddUpdateParams.params[item.model],
+              label: item.label,
+              selectOption: item.selectOption,
+              multiple: item.multiple,
+              userInput: true,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          >
+            <template #subTitle>
+              <el-popover placement="top" title="popover-title" :width="320" popper-style="z-index:9999" trigger="hover">
+                <p v-for="(item, index) in ['test1', 'test2', 'test3']" :key="index">{{ index + 1 }}. {{ item }}</p>
+                <template #reference>
+                  <q-icon name="o_info" class="text-grey cursor-pointer" />
+                </template>
+              </el-popover>
+            </template>
+          </MyFormMultipleSelect>
+          <MyFormInput
+            v-if="item.type === 'text'"
+            :option="{
+              model: dialogAddUpdateParams.params[item.model],
+              rules: item.rules,
+              classes: item.classes,
+              label: item.label,
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          >
+            <template #subTitle>
+              <el-popover placement="top" title="popover-title" :width="320" popper-style="z-index:9999" trigger="hover">
+                <p v-for="(item, index) in ['test1', 'test2', 'test3']" :key="index">{{ index + 1 }}. {{ item }}</p>
+                <template #reference>
+                  <q-icon name="o_info" class="text-grey cursor-pointer" />
+                </template>
+              </el-popover>
+            </template>
+          </MyFormInput>
+          <MyFormMaskInput
+            v-if="item.type === 'mask-input'"
+            :option="{
+              model: dialogAddUpdateParams.params[item.model],
+              rules: item.rules,
+              classes: item.classes,
+              label: item.label,
+              mask: '####/####/####/####',
+              hint: '####/####/####/####',
+            }"
+            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+          >
+          </MyFormMaskInput>
+        </div>
+      </div>
+    </MyDialog>
+    <MyDialog
+      :option="{
+        id: dialogUpload.id,
+        dialogType: 'upload',
+        clickLoading: dialogUpload.clickLoading,
+        getDataLoading: dialogUpload.getDataLoading,
+        visible: dialogUpload.visible,
+        title: dialogUpload.title,
+        params: dialogUpload.params,
+        showConfirm: false,
+      }"
+      @close="dialogUploadCloseEvent"
+      @confirm="hanleClickUploadConfirm"
+      @before-hide="dialogUploadBeforeHideEvent"
+    >
+      <div class="dialog-upload-form">
+        <input type="file" class="hide" :ref="dialogUpload.fileID" :accept="dialogUpload.accept" :draggable="false" @change="uploadFileSuccess" />
+        <div class="container">
+          <div class="center" @click="handleClickUploadFile">
+            <q-icon name="o_cloud_upload" class="fs-50" color="primary"></q-icon>
+            <p class="click">Click to upload</p>
+            <p class="format">File type is: xlsx</p>
+            <p class="fileName" v-if="dialogUpload.params.fileName">
+              {{ dialogUpload.params.fileName }}
+            </p>
+          </div>
+        </div>
+        <div class="upload-limit">
+          <span class="link-type">{{ $t('action.download_template') }}</span>
+          Here's some text
+        </div>
+      </div>
+    </MyDialog>
+    <MyDialog
+      :option="{
+        id: dialogDetailParams.id,
+        dialogType: 'detail',
+        clickLoading: dialogDetailParams.clickLoading,
+        getDataLoading: dialogDetailParams.getDataLoading,
+        visible: dialogDetailParams.visible,
+        title: dialogDetailParams.title,
+        params: dialogDetailParams.params,
+        showConfirm: false,
+      }"
+      @close="dialogDetailCloseEvent"
+      @before-hide="dialogDetailBeforeHideEvent"
+    >
+      <q-list class="row q-col-gutter-x-md">
+        <q-item v-for="(item, index) in dialogDetailParams.params" :key="index" :clickable="false" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
+          <q-item-section>
+            <q-item-label caption>{{ item.label }}：</q-item-label>
+            <q-item-label :class="item.class" style="margin-top: 8px">
+              <span v-if="!item.inSlot">{{ item.value }}</span>
+              <div v-else class="text-left">
+                <span class="text-red" v-if="item.id === 'name'">
+                  {{ item.value }}
+                </span>
+              </div>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </MyDialog>
   </div>
 </template>
 
 <script lang="ts">
 import { cloneDeep } from 'lodash';
-import { Component, Vue, Watch } from 'vue-facing-decorator';
+import { Component, Vue } from 'vue-facing-decorator';
 import { defaultFill } from 'src/utils/tools';
-const QUERY_PARAMS = {
-  imsi: '',
-  iccid: '',
-  package: '',
-  operator: '',
-  area: '',
-  state: '',
-  allocated: '',
-  statusType: '',
-  ascription: '',
+import { getCurrentInstance } from 'vue';
+
+const CONST_PARAMS: any = {
+  query: { a: '', b: '', c: '', d: '' },
+  dialog_add_update: {
+    a: '1',
+    b: '2',
+    c: '1',
+    d: ['2'],
+    e: { from: '2024/01/01', to: '2024/02/03' },
+    f: '1231/2312/3123/1231',
+    g: { from: '2024/01/01 00:00:00', to: '2024/02/03 00:00:00' },
+    h: 10,
+    i: 'true',
+    j: '1',
+  },
 };
 @Component({
-  name: 'myComponentMenu2TableIndex',
+  name: 'myComponentTableBeta',
+  methods: {
+    test() {
+      console.log('test');
+    },
+  },
 })
-export default class myComponentMenu2TableIndex extends Vue {
-  private queryParams = cloneDeep(QUERY_PARAMS);
-  private queryLoading = false;
-  private resetLoading = false;
-  private queryInput: any = [
-    {
-      placeholder: 'IMSI',
-      type: 'text',
-      class: 'w-250 q-mr-md q-mb-md',
-      inputType: 'number',
-      id: 'imsi',
-    },
-    {
-      placeholder: 'ICCID',
-      type: 'text',
-      class: 'w-250 q-mr-md q-mb-md',
-      inputType: 'number',
-      id: 'iccid',
-    },
-    {
-      placeholder: 'Plan',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      id: 'package',
-      selectArr: ['Plan1', 'Plan2'],
-      selectArrObject: [],
-    },
-    {
-      placeholder: 'Operator',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      id: 'operator',
-      selectArr: ['Operator1', 'Operator2'],
-      selectArrObject: [],
-    },
-    {
-      placeholder: 'Area',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      id: 'area',
-      selectArr: ['Province1', 'Province2'],
-      selectArrObject: [],
-    },
-    {
-      placeholder: 'Profile status',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      id: 'state',
-      selectArr: ['Active', 'Deactivate'],
-      selectArrObject: [],
-    },
-    {
-      placeholder: 'Occupation status',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      id: 'allocated',
-      selectArr: ['Occupied', 'Unoccupied'],
-      selectArrObject: [],
-    },
-    {
-      placeholder: 'Plan type',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      selectArr: ['Type1', 'Type2'],
-      selectArrObject: [],
-      id: 'statusType',
-    },
-    {
-      placeholder: 'Affiliation',
-      type: 'select',
-      class: 'w-250 q-mr-md q-mb-md',
-      selectArr: ['Org1', 'Org2'],
-      selectArrObject: [],
-      id: 'ascription',
-    },
-  ];
+export default class myComponentTableBeta extends Vue {
+  /**instance */
+  declare $refs: any;
+  /**params */
+  private globals = getCurrentInstance()!.appContext.config.globalProperties;
+  private queryParams: any = {
+    id: 'query',
+    queryLoading: false,
+    resetLoading: false,
+    allExpand: false,
+    params: cloneDeep(CONST_PARAMS.query),
+    input: [
+      {
+        placeholder: 'Input1',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: false,
+        defaultCollapse: false,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input1',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: false,
+        defaultCollapse: false,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input1',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: false,
+        defaultCollapse: false,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input1',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: false,
+        defaultCollapse: false,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input11',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: true,
+        defaultCollapse: true,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input10',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: true,
+        defaultCollapse: true,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input1',
+        type: 'text',
+        class: '',
+        id: 'a',
+        collapse: false,
+        defaultCollapse: false,
+        inputType: 'text',
+      },
+      {
+        placeholder: 'Input2',
+        type: 'select',
+        class: '',
+        collapse: false,
+        defaultCollapse: false,
+        selectOption: [
+          {
+            label: 'option 1',
+            value: '1',
+          },
+          {
+            label: 'option 2',
+            value: '2',
+          },
+        ],
+        id: 'b',
+      },
+      {
+        placeholder: 'Input3',
+        type: 'text',
+        class: '',
+        collapse: false,
+        defaultCollapse: false,
+        id: 'c',
+        inputType: 'text',
+      },
+    ],
+  };
   private tableParams = {
+    selected: [],
     loading: false,
-    data: [],
+    data: [
+      {
+        name: 'jen.he.female',
+        sex: 'female',
+        c: 'ccccccccccccccccc1',
+        d: 'ddddddddddddddddd1',
+        e: 'eeeeeeeeeeeeeeeee1',
+        f: 'fffffffffffffffff1',
+        g: 'ggggggggggggggggg1',
+        h: 'hhhhhhhhhhhhhhhhh1',
+        i: 'iiiiiiiiiiiiiiiii1',
+      },
+      {
+        name: 'jen.he.male',
+        sex: 'male',
+        c: 'ccccccccccccccccc2',
+        d: 'ddddddddddddddddd2',
+        e: 'eeeeeeeeeeeeeeeee2',
+        f: 'fffffffffffffffff2',
+        g: 'ggggggggggggggggg2',
+        h: 'hhhhhhhhhhhhhhhhh2',
+        i: 'iiiiiiiiiiiiiiiii2',
+      },
+    ],
     pagination: {
       page: 1,
       rowsPerPage: 10,
-      rowsNumber: 1,
+      rowsNumber: 2,
     },
     column: [
       {
-        name: 'imsi',
-        label: 'IMSI',
+        name: 'id',
+        label: 'ID',
+        inSlot: true,
+      },
+      {
+        name: 'name',
+        label: 'Name',
+        inSlot: true,
+      },
+      {
+        name: 'sex',
+        label: 'Sex',
         align: 'left',
-        field: (row: any) => row.imsi,
+        field: (row: any) => row.sex,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'iccid',
-        label: 'ICCID',
-        field: (row: any) => row.iccid,
-        format: (val: any) => `${defaultFill(val)}`,
+        name: 'c',
+        label: 'Table4',
         align: 'left',
-      },
-      {
-        name: 'operator',
-        label: 'Operator',
-        align: 'left',
-        field: (row: any) => row.carrierName,
+        field: (row: any) => row.c,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'img',
-        label: 'Image',
+        name: 'd',
+        label: 'Table5',
         align: 'left',
-        field: (row: any) => row.img,
+        field: (row: any) => row.d,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'area',
-        label: 'Area',
+        name: 'e',
+        label: 'Table6',
         align: 'left',
-        field: (row: any) => row.area,
+        field: (row: any) => row.e,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'bundleName',
-        label: 'Plan',
+        name: 'f',
+        label: 'Table7',
         align: 'left',
-        field: (row: any) => row.bundleName,
+        field: (row: any) => row.f,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'statusType',
-        label: 'Plan type',
+        name: 'g',
+        label: 'Table8',
         align: 'left',
-        field: (row: any) => row.bundleTypeId,
+        field: (row: any) => row.g,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'bootUpSatus',
-        label: 'Profile type',
+        name: 'h',
+        label: 'Table9',
         align: 'left',
-        field: (row: any) => row.state,
+        field: (row: any) => row.h,
         format: (val: any) => `${defaultFill(val)}`,
       },
       {
-        name: 'occupancyStatus',
-        label: 'Affiliation',
+        name: 'i',
+        label: 'Table10',
         align: 'left',
-        field: (row: any) => row.allocated,
+        field: (row: any) => row.i,
         format: (val: any) => `${defaultFill(val)}`,
       },
-      { name: 'action', label: '$action', field: 'action', align: 'left' },
+      {
+        name: 'action',
+        label: '$action',
+        field: 'action',
+        align: 'left',
+        inSlot: true,
+      },
     ],
   };
-  private addVisiable = false;
-  private name = null;
-  private age = null;
-  private previewImgUrl = '';
-  private accept = false;
-  private paginationInput() {
-    if (this.tableParams.pagination.rowsNumber / this.tableParams.pagination.rowsPerPage < 1) return;
+  public dialogAddUpdateParams = {
+    id: 'dialog_add_update',
+    dialogType: 'add',
+    clickLoading: false,
+    getDataLoading: false,
+    visible: false,
+    title: '',
+    params: cloneDeep(CONST_PARAMS.dialog_add_update),
+    input: [
+      {
+        model: 'a',
+        type: 'text',
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        label: 'Username',
+      },
+      {
+        model: 'b',
+        type: 'text',
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        classes: 'input-password',
+        label: 'New password',
+      },
+      {
+        model: 'c',
+        type: 'select',
+        selectOption: [
+          {
+            label: 'option1',
+            value: '1',
+          },
+          {
+            label: 'option2',
+            value: '2',
+          },
+        ],
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        label: 'select',
+      },
+      {
+        model: 'd',
+        type: 'multiple-select',
+        multiple: true,
+        selectOption: [
+          {
+            label: 'option1',
+            value: '1',
+          },
+          {
+            label: 'option2',
+            value: '2',
+          },
+        ],
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        label: 'Multipl Select',
+      },
+      {
+        model: 'e',
+        type: 'date-range',
+        required: true,
+        label: 'Date',
+      },
+      {
+        model: 'g',
+        type: 'date-time-range',
+        required: true,
+        label: 'Date and time',
+      },
+      {
+        model: 'h',
+        type: 'slider',
+        min: 0,
+        max: 100,
+        step: 1,
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        label: 'slider',
+      },
+      {
+        model: 'i',
+        type: 'radio',
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        selectOption: [
+          {
+            label: 'one',
+            value: 'true',
+          },
+          {
+            label: 'two',
+            value: 'false',
+          },
+        ],
+        label: 'radio',
+      },
+      {
+        model: 'f',
+        type: 'mask-input',
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        label: 'Mask Input',
+      },
+      {
+        model: 'j',
+        type: 'tree-select',
+        rules: [
+          (val: string | number | undefined | null) => {
+            return (val && String(val).length > 0) || this.globals.$t('messages.required');
+          },
+        ],
+        selectOption: [
+          {
+            label: 'Open...',
+            value: '1',
+            children: [],
+          },
+          {
+            label: 'New',
+            value: '2',
+            children: [],
+          },
+          {
+            label: 'Preferences',
+            children: [
+              {
+                label: 'Submenu Label 1',
+                value: '3',
+                children: [],
+              },
+              {
+                label: 'Submenu Label 2',
+                children: [
+                  {
+                    label: '3rd level Label 4',
+                    children: [],
+                    value: '4',
+                  },
+                  {
+                    label: '3rd level Label 5',
+                    children: [],
+                    value: '5',
+                  },
+                  {
+                    label: '3rd level Label 6',
+                    children: [],
+                    value: '6',
+                  },
+                ],
+              },
+              {
+                label: 'Submenu Label 3',
+                children: [
+                  {
+                    label: '3rd level Label 7',
+                    children: [],
+                    value: '7',
+                  },
+                  {
+                    label: '3rd level Label 8',
+                    children: [],
+                    value: '8',
+                  },
+                  {
+                    label: '3rd level Label 9',
+                    children: [],
+                    value: '9',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            label: 'Quit',
+            value: '10',
+            children: [],
+          },
+        ],
+        label: 'Tree select',
+      },
+    ],
+  };
+  private dialogUpload = {
+    id: 'dialog-upload-file',
+    fileID: 'dialog_upload_file',
+    clickLoading: false,
+    getDataLoading: false,
+    visible: false,
+    title: '',
+    accept: '.xls',
+    params: { file: '', fileName: '' },
+  };
+  private dialogDetailParams = {
+    id: 'dialog-upload-file',
+    getDataLoading: false,
+    clickLoading: false,
+    visible: false,
+    title: 'Detail',
+    params: [
+      { label: 'Name', value: '', id: 'name', class: '', inSlot: true },
+      { label: 'Sex', value: '', id: 'sex', class: '' },
+      { label: 'C', value: '', id: 'c', class: '' },
+      { label: 'D', value: '', id: 'd', class: '' },
+      { label: 'E', value: '', id: 'e', class: '' },
+      { label: 'F', value: '', id: 'f', class: '' },
+      { label: 'g', value: '', id: 'g', class: '' },
+      { label: 'h', value: '', id: 'h', class: '' },
+      { label: 'I', value: '', id: 'i', class: '' },
+    ],
+  };
+
+  mounted() {}
+
+  /**event */
+  private paginationInput(data: any) {
+    this.tableParams.pagination = data;
     this.getData();
   }
-  private handlerClickTableAdd() {
-    this.addVisiable = true;
+
+  private async handleQuery() {
+    this.queryParams.queryLoading = true;
+    this.tableParams.pagination.page = 1;
+    await this.getData();
+    this.queryParams.queryLoading = false;
   }
-  private onSubmit() {
-    if (this.accept !== true) {
-      this.$q.notify({
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: 'You need to accept the license and terms first',
-      });
-    } else {
-      this.$q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: 'Submitted',
-      });
-    }
+
+  private async handleResetQuery() {
+    this.queryParams.resetLoading = true;
+    this.queryParams.params = cloneDeep(CONST_PARAMS.query);
+    this.tableParams.pagination.page = 1;
+    await this.getData();
+    this.queryParams.resetLoading = false;
   }
-  private onReset() {
-    this.name = null;
-    this.age = null;
-    this.accept = false;
-  }
-  private handlerClickDetail() {
-    this.$q.notify({
-      message: 'uhhh... no details',
-      icon: 'announcement',
-      position: 'bottom',
+
+  private handleClickCollapse() {
+    this.queryParams.allExpand = !this.queryParams.allExpand;
+    this.queryParams.input.forEach((item: any) => {
+      item.collapse = this.queryParams.allExpand ? false : item.defaultCollapse;
     });
   }
-  private getData() {}
+
+  private handleClickAdd() {
+    this.dialogAddUpdateParams.visible = true;
+    this.dialogAddUpdateParams.dialogType = 'add';
+    this.dialogAddUpdateParams.title = 'Add';
+  }
+
+  private handlerClickUpdate(row: any) {
+    this.dialogAddUpdateParams.visible = true;
+    this.dialogAddUpdateParams.dialogType = 'update';
+    this.dialogAddUpdateParams.title = 'Update';
+  }
+
+  private handleClickUpload() {
+    this.dialogUpload.visible = true;
+    this.dialogUpload.title = 'Upload';
+    this.$nextTick(() => {
+      this.$refs[this.dialogUpload.fileID].type = 'text';
+      this.dialogUpload.params.fileName = '';
+      this.dialogUpload.params.file = '';
+      setTimeout(() => {
+        this.$refs[this.dialogUpload.fileID].type = 'file';
+        this.$refs[this.dialogUpload.fileID].value = '';
+      }, 100);
+    });
+  }
+
+  private handleClickUploadFile() {
+    this.$refs[this.dialogUpload.fileID].click();
+  }
+
+  private uploadFileSuccess() {
+    const files = this.$refs[this.dialogUpload.fileID].files;
+    let postFiles = Array.prototype.slice.call(files);
+    postFiles = postFiles.slice(0, 1);
+    postFiles.forEach((rawFile: any) => {
+      this.dialogUpload.params.fileName = rawFile.name;
+      this.dialogUpload.params.file = rawFile;
+    });
+  }
+
+  private handlerClickDetail(row: any) {
+    const arr = cloneDeep(this.dialogDetailParams.params);
+    for (let item of arr) {
+      for (let key in row) {
+        if (item.id === key) {
+          item.value = row[key];
+        }
+      }
+    }
+    this.dialogDetailParams.params = arr;
+    this.dialogDetailParams.visible = true;
+  }
+
+  private monitorDialogUploadHide() {
+    this.dialogUpload.params.fileName = '';
+    this.dialogUpload.params.file = '';
+  }
+
+  private dialogAddUpdateCloseEvent(data: { type: string }) {
+    this.dialogAddUpdateParams.visible = false;
+  }
+
+  private dialogAddUpdateBeforeHideEvent(data: { type: string; params: any }) {
+    if (data.params) {
+      this.dialogAddUpdateParams.params = data.params;
+    }
+  }
+
+  private dialogUploadCloseEvent(data: { type: string }) {
+    this.dialogUpload.visible = false;
+  }
+
+  private dialogUploadBeforeHideEvent(data: { type: string; params: any }) {
+    if (data.params) {
+      this.dialogUpload.params = data.params;
+    }
+  }
+
+  private dialogDetailCloseEvent(data: { type: string }) {
+    this.dialogDetailParams.visible = false;
+  }
+
+  private dialogDetailBeforeHideEvent(data: { type: string; params: any }) {
+    if (data.params) {
+      this.dialogAddUpdateParams.params = data.params;
+    }
+  }
+
+  /**http */
+  private getData() {
+    try {
+      this.tableParams.loading = true;
+      this.tableParams.loading = false;
+    } catch (error) {
+      this.tableParams.loading = false;
+    } finally {
+      return Promise.resolve();
+    }
+  }
+
+  private async dialogAddUpdateConfirmEvent() {
+    try {
+      this.dialogAddUpdateParams.clickLoading = true;
+      // await HTTP_REQUEST()
+      console.log(this.dialogAddUpdateParams.params);
+      this.dialogAddUpdateParams.clickLoading = false;
+      this.dialogAddUpdateParams.visible = false;
+      this.$globalMessage.show({
+        type: 'success',
+        content: this.$t('messages.success'),
+      });
+      this.getData();
+    } catch (error) {
+      this.dialogAddUpdateParams.clickLoading = false;
+    }
+  }
+
+  private async handlerClickDelete(row: any) {
+    try {
+      const result = await this.$globalConfirm.show({
+        title: this.$t('messages.tishi'),
+        color: 'primary',
+        content: this.$t('messages.areYouSure'),
+        confirmButtonText: this.$t('action.yes'),
+      });
+      if (result) {
+        // await HTTP_REQUEST()
+        this.$globalMessage.show({
+          type: 'success',
+          content: this.$t('messages.success'),
+        });
+        this.getData();
+      }
+    } catch (error) {}
+  }
+
+  private async hanleClickUploadConfirm() {
+    try {
+      const form = new FormData();
+      form.append('file', this.dialogUpload.params.file);
+      this.dialogUpload.clickLoading = true;
+      // await HTTP_REQUEST()
+      this.$globalMessage.show({
+        type: 'success',
+        content: this.$t('messages.success'),
+      });
+      this.dialogUpload.clickLoading = false;
+      this.dialogUpload.visible = false;
+      this.getData();
+    } catch (error) {
+      this.dialogUpload.clickLoading = false;
+    }
+  }
 }
 </script>
 <style lang="scss">
 .body--dark {
-  :deep(.view-subtitle) {
-    background: rgba($color: #ffffff, $alpha: 0.4);
+  .my-table th:last-child,
+  .my-table td:last-child {
+    box-shadow: rgba($color: #ffffff, $alpha: 0.05) 0px 20px 27px 0px;
   }
 }
+
 .body--light {
-  :deep(.view-subtitle) {
-    background: rgba($color: #000000, $alpha: 0.4);
+  .my-table th:last-child,
+  .my-table td:last-child {
+    box-shadow: rgba($color: #000000, $alpha: 0.05) 0px 20px 27px 0px;
   }
 }
+
 .my-table {
   /* specifying max-width so the example can
     highlight the sticky column on any browser window */
   max-width: 100%;
 }
-.my-table thead tr:first-child th:first-child {
+
+.my-table thead tr:last-child th:last-child {
   /* bg color is important for th; just specify one */
   background-color: var(--my-white);
 }
-.my-table td:first-child {
+
+.my-table td:last-child {
   background-color: var(--my-white);
 }
-.my-table th:first-child,
-.my-table td:first-child {
+
+.my-table th:last-child,
+.my-table td:last-child {
   position: sticky;
-  left: 0;
+  right: 0;
   z-index: 1;
 }
 </style>
-<style lang="scss" scoped>
-.preview-img {
-  height: 170px;
-  width: 300px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-}
-:deep(.view-subtitle) {
-  height: 32px;
-  line-height: 32px;
-  color: var(--my-white);
-  width: 300px;
-  margin: 0 auto;
-}
-</style>
+<style lang="scss" scoped></style>

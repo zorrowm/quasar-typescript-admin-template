@@ -1,16 +1,8 @@
 <template>
   <div>
     <div>
-      <q-select
-        v-model="selectProvince"
-        :options="selectOptionProinces"
-        label="Select province"
-      />
-      <div
-        class="province-map"
-        id="province-map"
-        style="width: 100%; height: 500px"
-      ></div>
+      <q-select v-model="selectProvince" :options="selectOptionProinces" label="Select province" />
+      <div class="province-map" id="province-map" style="width: 100%; height: 500px"></div>
     </div>
   </div>
 </template>
@@ -20,6 +12,7 @@ import { Component, Vue, Watch } from 'vue-facing-decorator';
 import { provs } from './data/chinaProvince';
 import { chinaCountyNameMap } from './data/chinaCountyNameMap';
 import { AppModule } from 'src/store/modules/app';
+
 @Component({
   name: 'myComponentProvinceMap',
 })
@@ -38,6 +31,7 @@ export default class myComponentProvinceMap extends Vue {
     this.provMap.dispose();
     this._initMap([], result);
   }
+
   get selectOptionProinces() {
     const arr = [];
     for (let key in provs) {
@@ -46,16 +40,19 @@ export default class myComponentProvinceMap extends Vue {
     }
     return arr;
   }
+
   async mounted() {
     const result = await AppModule.loadProvinceJson({
       prov: this.currentProvince,
     });
     this._initMap([], result);
   }
+
   private currentProvince = 'gansu';
   private zhixiashi = ['北京', '天津', '上海', '重庆'];
   private selectProvince = '甘肃';
   private provMap: any;
+
   private async _initMap(data: any, result: any) {
     //注册可用的地图,必须在包括 geo 组件或者 map 图表类型的时候才能使用。
     window['echarts'].registerMap(this.currentProvince, result);
@@ -123,6 +120,4 @@ export default class myComponentProvinceMap extends Vue {
 }
 </script>
 
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

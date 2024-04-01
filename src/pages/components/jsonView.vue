@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pre><code class="language-json">{{json}}</code></pre>
+    <pre><code class="language-json">{{ json }}</code></pre>
   </div>
 </template>
 
@@ -21,6 +21,7 @@ export default class myComponentJsonView extends Vue {
   mounted() {
     Prism.highlightAll();
   }
+
   public json = {
     restaurants: [
       {
@@ -150,8 +151,7 @@ export default class myComponentJsonView extends Vue {
             name: 'Emily',
             date: 'October 26, 2016',
             rating: 2,
-            comments:
-              "MEH. I've tried their Jersey location as well but Kang Ho Dong meat quality is severely decreasing. A Korean bbq place with whatever meat? I think NOT!",
+            comments: "MEH. I've tried their Jersey location as well but Kang Ho Dong meat quality is severely decreasing. A Korean bbq place with whatever meat? I think NOT!",
           },
         ],
       },
@@ -414,8 +414,7 @@ export default class myComponentJsonView extends Vue {
             name: 'Sally',
             date: 'October 26, 2016',
             rating: 4,
-            comments:
-              "One of the tastiest and most unique ramen places I've been to in NYC, but also the priciest. I think overall its worth the try. Not an everyday casual ramen shop though.",
+            comments: "One of the tastiest and most unique ramen places I've been to in NYC, but also the priciest. I think overall its worth the try. Not an everyday casual ramen shop though.",
           },
         ],
       },
@@ -451,8 +450,7 @@ export default class myComponentJsonView extends Vue {
             name: 'Rob',
             date: 'October 26, 2016',
             rating: 5,
-            comments:
-              "The hype was real. Please go. Get the ceviche. And the tres leches. You're welcome",
+            comments: "The hype was real. Please go. Get the ceviche. And the tres leches. You're welcome",
           },
           {
             name: 'Jason',
@@ -468,6 +466,4 @@ export default class myComponentJsonView extends Vue {
 }
 </script>
 
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

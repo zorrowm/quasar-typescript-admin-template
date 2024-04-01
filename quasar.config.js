@@ -16,6 +16,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const multiplePage = require('./multiple.page.generate');
 const path = require('path');
 
+const AutoImport = require('unplugin-auto-import/webpack');
+const Components = require('unplugin-vue-components/webpack');
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers');
+
 module.exports = configure((ctx) => {
   return {
     // https://v2.quasar.dev/quasar-cli-webpack/supporting-ts
@@ -53,7 +57,7 @@ module.exports = configure((ctx) => {
       'material-icons', // optional, you are not bound to it
       'material-icons-outlined',
     ],
-    
+
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
@@ -68,7 +72,9 @@ module.exports = configure((ctx) => {
       rtl: false, // https://quasar.dev/options/rtl-support
       preloadChunks: true,
       showProgress: true,
-      scssLoaderOptions: { additionalData: `$publicPath: ${process.env.NODE_ENV === 'production' ? setting.publicPath.replace(/\//g, '') : 'null'};` },
+      scssLoaderOptions: {
+        additionalData: `$publicPath: ${process.env.NODE_ENV === 'production' ? setting.publicPath.replace(/\//g, '') : 'null'};`,
+      },
       gzip: true,
       analyze: false,
 
@@ -88,7 +94,15 @@ module.exports = configure((ctx) => {
           src2: path.resolve(__dirname, './src2'),
         };
         cfg.entry = Object.assign(multiplePage.getEntryPages('src2'), cfg.entry);
-        cfg.plugins.push(...multiplePage.htmlPlugins('src2'));
+        cfg.plugins.push(
+          ...multiplePage.htmlPlugins('src2'),
+          AutoImport({
+            resolvers: [ElementPlusResolver()],
+          }),
+          Components({
+            resolvers: [ElementPlusResolver()],
+          })
+        );
       },
     },
 

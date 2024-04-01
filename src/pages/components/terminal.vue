@@ -17,14 +17,17 @@ import { AttachAddon } from 'xterm-addon-attach';
 export default class myTerminalComponent extends Vue {
   private terminal: any;
   private socket: any;
+
   mounted() {
     this.initSocket();
     window.addEventListener('resize', this.onTerminalResize);
   }
+
   beforeDestroy() {
     this.socket.close();
     this.terminal.dispose();
   }
+
   private initTerm() {
     const term = new Terminal({
       cols: 80,
@@ -61,6 +64,7 @@ export default class myTerminalComponent extends Vue {
     this.terminal.onData((data: any) => {});
     window.addEventListener('resize', this.onTerminalResize);
   }
+
   private onTerminalResize() {
     const terminalContainer: any = document.getElementById('xterm');
     const width = terminalContainer.parentElement.clientWidth;
@@ -71,12 +75,14 @@ export default class myTerminalComponent extends Vue {
     const rows = height / terminal._core._renderService._renderer.dimensions.actualCellHeight - 1;
     this.terminal.resize(cols, rows);
   }
+
   private initSocket() {
     this.socket = new WebSocket('ws://localhost:4001');
     this.socketOnClose();
     this.socketOnOpen();
     this.socketOnError();
   }
+
   private socketOnOpen() {
     this.socket.onopen = () => {
       // 链接成功后
@@ -84,12 +90,14 @@ export default class myTerminalComponent extends Vue {
       this.onTerminalResize();
     };
   }
+
   private socketOnClose() {
     this.socket.onclose = () => {
       // console.log('close socket')
       window.removeEventListener('resize', this.onTerminalResize);
     };
   }
+
   private socketOnError() {
     this.socket.onerror = () => {
       // console.log('socket 链接失败')
@@ -97,7 +105,6 @@ export default class myTerminalComponent extends Vue {
   }
 }
 </script>
-
 
 <style lang="scss">
 #xterm {

@@ -1,7 +1,7 @@
 <template>
   <div class="fs-32 row justify-start items-center wrap">
     <p v-for="item in icons" :key="item" class="q-mr-md q-my-md border q-pa-sm row items-center thin-shadow icon">
-      <span class="fs-14 q-mr-sm">{{ item }}</span>
+      <span class="text-body2 q-mr-sm">{{ item }}</span>
       <q-icon :name="item" />
     </p>
   </div>
@@ -957,6 +957,7 @@ export default class myComponentIcon extends Vue {
     background: #000000;
   }
 }
+
 .body--light {
   .icon {
     background: #ffffff;

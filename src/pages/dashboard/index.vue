@@ -20,22 +20,22 @@
     </q-intersection>
     <div class="row items-start">
       <div class="col-6 row items-center justify-between">
-        <q-card class="w-p-49 text-left q-pa-md flex justify-between items-center m-b-24" v-for="(item, index) in count" :key="index">
+        <q-card class="w-p-49 text-left q-pa-md flex justify-between items-center q-mb-lg" v-for="(item, index) in count" :key="index">
           <q-card-section class="column items-start justify-center" style="padding: 0">
-            <p class="fs-16 text-grey p-b-10">{{ item.name }}</p>
-            <CountTo :startVal="0" :endVal="item.num" :duration="4000" class="fs-20 f-bold"></CountTo>
+            <p class="text-body1 text-grey q-pb-md">{{ item.name }}</p>
+            <CountTo :startVal="0" :endVal="item.num" :duration="4000" class="text-h6 f-bold"></CountTo>
           </q-card-section>
           <q-card-section style="padding: 10px; border-radius: 6px" class="bg-gradient-primary">
-            <q-icon :name="item.icon" class="fs-22 text-white" />
+            <q-icon :name="item.icon" class="text-h6 text-white" />
           </q-card-section>
         </q-card>
       </div>
       <div class="col-6">
         <q-card class="q-ml-md q-pa-md">
           <div>
-            <p class="fs-18 f-bold p-b-10">Overview</p>
+            <p class="text-h6 f-bold q-pb-md">Overview</p>
             <p>
-              <q-icon name="arrow_upward" class="text-green fs-18 f-bold"></q-icon>
+              <q-icon name="arrow_upward" class="text-green text-h6 f-bold"></q-icon>
               4% more in 2022
             </p>
           </div>
@@ -46,24 +46,24 @@
         <div class="q-pl-md q-mb-md row q-mt-md">
           <div class="col-6">
             <q-card class="text-center q-pa-md">
-              <p class="text-primary fs-48 f-bold">87 <span class="fs-18">m³</span></p>
-              <p class="fs-18 q-pt-md q-pb-md">Water</p>
-              <p class="fs-14 text-grey">Consumption</p>
+              <p class="text-primary fs-48 f-bold">87 <span class="text-h6">m³</span></p>
+              <p class="text-h6 q-pt-md q-pb-md">Water</p>
+              <p class="text-body2 text-grey">Consumption</p>
             </q-card>
           </div>
           <div class="col-6 q-pl-md">
             <q-card class="text-center q-pa-md">
-              <p class="text-primary fs-48 f-bold">417 <span class="fs-18">GB</span></p>
-              <p class="fs-18 q-pt-md q-pb-md">Internet</p>
-              <p class="fs-14 text-grey">All devices</p>
+              <p class="text-primary fs-48 f-bold">417 <span class="text-h6">GB</span></p>
+              <p class="text-h6 q-pt-md q-pb-md">Internet</p>
+              <p class="text-body2 text-grey">All devices</p>
             </q-card>
           </div>
         </div>
       </div>
     </div>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <ThreeEarth></ThreeEarth>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <div class="row q-col-gutter-md">
       <div class="col-6">
         <ChartsLine></ChartsLine>
@@ -72,7 +72,7 @@
         <ChartsBar></ChartsBar>
       </div>
     </div>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <div class="row q-col-gutter-md">
       <div class="col-6">
         <ChartsBarLine></ChartsBarLine>
@@ -81,31 +81,33 @@
         <ChartsBubble></ChartsBubble>
       </div>
     </div>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <div class="row q-col-gutter-md">
       <div class="col-6">
         <ChartsPie class="q-mb-md"></ChartsPie>
         <ChartsDoughnut></ChartsDoughnut>
       </div>
-      <div class="col-6"><ChartsRadar></ChartsRadar></div>
+      <div class="col-6">
+        <ChartsRadar></ChartsRadar>
+      </div>
     </div>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <div class="row items-startm justify-between">
       <div class="col-6">
         <q-card class="q-pa-md">
           <div class="header row items-center justify-between q-pb-md">
-            <div class="title fs-18 f-bold">Consumption by room</div>
-            <q-icon name="help_outline" class="fs-20"></q-icon>
+            <div class="title text-h6 f-bold">Consumption by room</div>
+            <q-icon name="help_outline" class="text-h6"></q-icon>
           </div>
           <div class="row items-start">
             <div class="left relative w-300">
               <div class="chart">
                 <canvas id="chart-consumption" height="200" width="300"></canvas>
               </div>
-              <div class="w-300 h-200 absolute left-16 top-52">
-                <div class="f-bold absolute absolute-center text-center">
-                  <p class="fs-24">471.3</p>
-                  <p class="fs-14">WATTS</p>
+              <div class="absolute left-0 top-0 w-300 h-200">
+                <div class="f-bold absolute-center">
+                  <p class="text-h5">471.3</p>
+                  <p class="text-body2">WATTS</p>
                 </div>
               </div>
             </div>
@@ -152,7 +154,7 @@
       <div class="col-6 row">
         <div class="q-pl-md col-6">
           <q-card class="q-pa-md">
-            <div class="header fs-18 q-pb-md f-bold">Consumption per day</div>
+            <div class="header text-h6 q-pb-md f-bold">Consumption per day</div>
             <div>
               <canvas id="chart-cons-week" class="chart-canvas" height="200"></canvas>
             </div>
@@ -160,20 +162,20 @@
         </div>
         <div class="q-pl-md col-6">
           <q-card class="q-pa-md">
-            <div class="header fs-18 q-pb-md f-bold">Consumption per day</div>
+            <div class="header text-h6 q-pb-md f-bold">Consumption per day</div>
             <div class="text-center h-200">
-              <q-circular-progress show-value font-size="12px" :value="81" size="165px" :thickness="0.1" color="primary" track-color="grey-3" class="q-ma-md"> 81% </q-circular-progress>
+              <q-circular-progress show-value font-size="12px" :value="81" size="165px" :thickness="0.1" color="primary" track-color="grey-3" class="q-ma-md"> 81%</q-circular-progress>
             </div>
           </q-card>
         </div>
       </div>
     </div>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <div class="row">
       <div class="col-2">
         <div class="q-pr-md">
           <q-card class="w-full p-24 h-220">
-            <div class="top m-b-24 row items-center justify-between">
+            <div class="top q-mb-lg row items-center justify-between">
               <span>{{ toggle_switch.value1 ? 'On' : 'Off' }}</span>
               <q-toggle v-model="toggle_switch.value1" />
             </div>
@@ -224,9 +226,9 @@
                 </defs>
               </svg>
             </div>
-            <div class="bottom m-t-24">
-              <p class="fs-16">Humidity</p>
-              <p class="fs-12 q-pt-md">Inactive since: 2 days</p>
+            <div class="bottom q-mt-lg">
+              <p class="text-body1">Humidity</p>
+              <p class="text-caption q-pt-md">Inactive since: 2 days</p>
             </div>
           </q-card>
         </div>
@@ -302,8 +304,8 @@
               </svg>
             </div>
             <div class="bottom q-mt-xs text-white">
-              <p class="fs-16">Temperature</p>
-              <p class="fs-12 q-pt-md">Active</p>
+              <p class="text-body1">Temperature</p>
+              <p class="text-caption q-pt-md">Active</p>
             </div>
           </q-card>
         </div>
@@ -362,9 +364,9 @@
                 </defs>
               </svg>
             </div>
-            <div class="bottom m-t-24">
-              <p class="fs-16">Air Conditioner</p>
-              <p class="fs-12 q-pt-md">Inactive since: 1 hour</p>
+            <div class="bottom q-mt-lg">
+              <p class="text-body1">Air Conditioner</p>
+              <p class="text-caption q-pt-md">Inactive since: 1 hour</p>
             </div>
           </q-card>
         </div>
@@ -418,9 +420,9 @@
                 </defs>
               </svg>
             </div>
-            <div class="bottom m-t-24">
-              <p class="fs-16">Humidity</p>
-              <p class="fs-12 q-pt-md">Inactive since: 2 days</p>
+            <div class="bottom q-mt-lg">
+              <p class="text-body1">Humidity</p>
+              <p class="text-caption q-pt-md">Inactive since: 2 days</p>
             </div>
           </q-card>
         </div>
@@ -457,9 +459,9 @@
                 </g>
               </svg>
             </div>
-            <div class="bottom m-t-24 text-white">
-              <p class="fs-16">Humidity</p>
-              <p class="fs-12 q-pt-md">Inactive since: 2 days</p>
+            <div class="bottom q-mt-lg text-white">
+              <p class="text-body1">Humidity</p>
+              <p class="text-caption q-pt-md">Inactive since: 2 days</p>
             </div>
           </q-card>
         </div>
@@ -469,13 +471,13 @@
           <q-card class="w-full p-24 h-220 row items-center justify-center">
             <div class="text-center">
               <q-icon name="add" class="fs-30"></q-icon>
-              <p class="fs-20 q-pt-md">New device</p>
+              <p class="text-h6 q-pt-md">New device</p>
             </div>
           </q-card>
         </div>
       </div>
     </div>
-    <div class="full-width h-1 m-t-32 m-b-32 split-line"></div>
+    <div class="full-width h-1 q-my-xl split-line"></div>
     <div class="row">
       <div class="col-6">
         <div class="q-pr-md">
@@ -516,7 +518,7 @@
                 <q-item-section>Image avatar</q-item-section>
                 <q-item-section avatar>
                   <q-avatar>
-                    <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                    <img src="https://cdn.quasar.dev/img/boy-avatar.png" alt="" />
                   </q-avatar>
                 </q-item-section>
               </q-item>
@@ -524,7 +526,7 @@
                 <q-item-section>Image square avatar</q-item-section>
                 <q-item-section avatar>
                   <q-avatar square>
-                    <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                    <img src="https://cdn.quasar.dev/img/boy-avatar.png" alt="" />
                   </q-avatar>
                 </q-item-section>
               </q-item>
@@ -532,7 +534,7 @@
                 <q-item-section>Image rounded avatar</q-item-section>
                 <q-item-section avatar>
                   <q-avatar rounded>
-                    <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                    <img src="https://cdn.quasar.dev/img/boy-avatar.png" alt="" />
                   </q-avatar>
                 </q-item-section>
               </q-item>
@@ -541,14 +543,14 @@
                 <q-item-section>List item</q-item-section>
                 <q-item-section avatar>
                   <q-avatar rounded>
-                    <img src="https://cdn.quasar.dev/img/mountains.jpg" />
+                    <img src="https://cdn.quasar.dev/img/mountains.jpg" alt="" />
                   </q-avatar>
                 </q-item-section>
               </q-item>
               <q-item clickable v-ripple class="q-px-none">
                 <q-item-section>List item</q-item-section>
                 <q-item-section thumbnail>
-                  <img src="https://cdn.quasar.dev/img/mountains.jpg" />
+                  <img src="https://cdn.quasar.dev/img/mountains.jpg" alt="" />
                 </q-item-section>
               </q-item>
             </q-list>
@@ -625,12 +627,14 @@ import ChartsPie from './components/chartsPie.vue';
 import ChartsDoughnut from './components/chartsDoughnut.vue';
 import ChartsRadar from './components/chartsRadar.vue';
 import ThreeEarth from './components/threeEarth.vue';
+
 interface count {
   name: string;
   num: number;
   icon: string;
   color: string;
 }
+
 @Component({
   name: 'DashboardComponent',
   components: {
@@ -741,16 +745,19 @@ export default class DashboardComponent extends Vue {
       },
     ],
   };
+
   created() {
     for (let item of this.count) {
       item.num = _.random(1000, 4000, false);
     }
   }
+
   mounted() {
     this.initBar();
     this.initTang();
     this.initRose();
   }
+
   public initBar() {
     const xAxisData = [];
     const seriesData = [];
@@ -868,6 +875,7 @@ export default class DashboardComponent extends Vue {
       },
     });
   }
+
   public initTang() {
     var chartDom: CanvasRenderingContext2D | null = (document.getElementById('chart-consumption') as HTMLCanvasElement)?.getContext('2d');
     var gradientStroke1 = chartDom?.createLinearGradient(0, 230, 0, 50);
@@ -935,6 +943,7 @@ export default class DashboardComponent extends Vue {
       },
     });
   }
+
   public initRose() {
     var ctx = (document.getElementById('chart-cons-week') as HTMLCanvasElement)?.getContext('2d');
 
@@ -1010,36 +1019,44 @@ export default class DashboardComponent extends Vue {
   .fc .fc-button {
     box-shadow: 0 4px 7px -1px rgba($color: #ffffff, $alpha: 0.11), 0 2px 4px -1px rgba($color: #ffffff, $alpha: 0.07);
   }
+
   .fc .fc-button-primary:focus,
   .fc .fc-button-primary:hover,
   .fc .fc-button-primary:not(:disabled):active,
   .fc .fc-button-primary:not(:disabled):active:focus {
     box-shadow: 0 3px 5px -1px rgba($color: #ffffff, $alpha: 0.09), 0 2px 3px -1px rgba($color: #ffffff, $alpha: 0.07);
   }
+
   .fc .fc-daygrid-day-number {
     color: #fafafa;
   }
+
   .fc .fc-col-header-cell-cushion {
     color: #d0d3d5;
   }
 }
+
 .body--light {
   .fc .fc-button {
     box-shadow: 0 4px 7px -1px rgba($color: #000000, $alpha: 0.11), 0 2px 4px -1px rgba($color: #000000, $alpha: 0.07);
   }
+
   .fc .fc-button-primary:focus,
   .fc .fc-button-primary:hover,
   .fc .fc-button-primary:not(:disabled):active,
   .fc .fc-button-primary:not(:disabled):active:focus {
     box-shadow: 0 3px 5px -1px rgba($color: #000000, $alpha: 0.09), 0 2px 3px -1px rgba($color: #000000, $alpha: 0.07);
   }
+
   .fc .fc-daygrid-day-number {
     color: #495057;
   }
+
   .fc .fc-col-header-cell-cushion {
     color: #adb5bd;
   }
 }
+
 /*!
 FullCalendar v5.6.0
 Docs & License: https://fullcalendar.io/
@@ -1049,56 +1066,70 @@ Docs & License: https://fullcalendar.io/
 .fc-theme-standard .fc-scrollgrid {
   border: none;
 }
+
 .fc-theme-standard td,
 .fc-theme-standard th {
   border-color: var(--my-grey-9);
 }
+
 .fc-theme-standard thead tr th {
   border-right: none;
   border-left: none;
 }
+
 .fc-theme-standard td:last-child {
   border-right: none;
 }
+
 .fc-theme-standard tr:last-child td {
   border-bottom: none;
 }
+
 .fc-h-event {
   border: none;
 }
+
 .fc-daygrid-block-event .fc-event-time,
 .fc-daygrid-block-event .fc-event-title {
   font-weight: 600;
   padding: 3px 5px;
 }
+
 .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
   margin-bottom: 0;
 }
+
 .fc .fc-col-header-cell-cushion {
   font-size: 14px;
   font-weight: 600;
 }
+
 .fc .fc-daygrid-day-number {
   font-size: 14px;
   font-weight: 600;
   width: 100%;
   text-align: center;
 }
+
 .fc .fc-toolbar-title {
   font-size: 18px;
 }
+
 .fc .fc-button {
   padding-top: 4px;
   transition: all 0.15s ease-in;
 }
+
 .fc .fc-button,
 .fc .fc-button .fc-icon {
   font-size: 14px;
 }
+
 .fc .fc-button-primary {
   background-color: #8392ab;
   border-color: #8392ab;
 }
+
 .fc .fc-button-primary:focus,
 .fc .fc-button-primary:hover,
 .fc .fc-button-primary:not(:disabled):active,
@@ -1107,6 +1138,7 @@ Docs & License: https://fullcalendar.io/
   background-color: #8392ab;
   border-color: #8392ab;
 }
+
 .fc-event.fc-daygrid-event {
   border-radius: 6px;
 }

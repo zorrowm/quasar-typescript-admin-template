@@ -39,8 +39,7 @@ export default class myComponentDialog extends Vue {
     this.$q
       .dialog({
         title: 'Options',
-        message:
-          'Choose your options, but make sure you also pick the second one.',
+        message: 'Choose your options, but make sure you also pick the second one.',
         options: {
           type: 'checkbox',
           model: [],
@@ -64,13 +63,11 @@ export default class myComponentDialog extends Vue {
     this.$q
       .dialog({
         title: 'Options',
-        message:
-          'Choose your options, but make sure you also pick the first two.',
+        message: 'Choose your options, but make sure you also pick the first two.',
         options: {
           type: 'toggle',
           model: [],
-          isValid: (model: any) =>
-            model.includes('opt1') && model.includes('opt2'),
+          isValid: (model: any) => model.includes('opt1') && model.includes('opt2'),
           // inline: true,
           items: [
             { label: 'Option 1', value: 'opt1' },
@@ -88,5 +85,4 @@ export default class myComponentDialog extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

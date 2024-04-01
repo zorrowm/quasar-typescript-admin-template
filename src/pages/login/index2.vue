@@ -4,9 +4,9 @@
       <!-- 修改密码 -->
       <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 q-m-auto row" style="z-index: 1000" v-if="pageType === 'changePassword'">
         <div class="col-md-8 col-lg-8 col-xl-6 col-sm-8 col-xs-8 q-mx-auto">
-          <div class="p-24">
-            <div class="f-bold bold fs-24 q-pb-md">Change password</div>
-            <div class="p-b-24 fs-16">Please enter the following information to change your password</div>
+          <div class="q-pa-lg">
+            <div class="f-bold bold text-h5 q-pb-md">Change password</div>
+            <div class="q-pb-lg text-body1">Please enter the following information to change your password</div>
             <q-form ref="changePasswordForm">
               <div class="field">
                 <div class="row q-py-md text-weight-medium">
@@ -108,9 +108,9 @@
       <!-- 发邮件忘记密码 -->
       <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 q-m-auto row" style="z-index: 1000" v-if="pageType === 'forgotPassword'">
         <div class="col-md-8 col-lg-8 col-xl-6 col-sm-8 col-xs-8 q-mx-auto">
-          <div class="p-24">
-            <div class="f-bold bold fs-24 q-pb-md">Forgot password</div>
-            <div class="p-b-24 fs-16">Please enter your username and email address to reset your password.</div>
+          <div class="q-pa-lg">
+            <div class="f-bold bold text-h5 q-pb-md">Forgot password</div>
+            <div class="q-pb-lg text-body1">Please enter your username and email address to reset your password.</div>
             <q-form ref="forgotPasswordForm">
               <div class="field">
                 <div class="row q-py-md text-weight-medium">
@@ -158,9 +158,9 @@
       <!-- 重置密码 -->
       <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 q-m-auto row" style="z-index: 1000" v-if="pageType === 'resetPassword'">
         <div class="col-md-8 col-lg-8 col-xl-6 col-sm-8 col-xs-8 q-mx-auto">
-          <div class="p-24">
-            <div class="f-bold bold fs-24 q-pb-md">Reset Password</div>
-            <div class="p-b-24 fs-16">Please reset your password.</div>
+          <div class="q-pa-lg">
+            <div class="f-bold bold text-h5 q-pb-md">Reset Password</div>
+            <div class="q-pb-lg text-body1">Please reset your password.</div>
             <q-form ref="resetPasswordForm">
               <div class="field">
                 <div class="row q-py-md text-weight-medium">
@@ -224,10 +224,10 @@
       <!-- 登录 -->
       <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 col-xs-12 q-m-auto row" style="z-index: 1000" v-if="pageType === 'signIn'">
         <div class="col-md-8 col-lg-8 col-xl-6 col-sm-8 col-xs-8 q-mx-auto">
-          <div class="p-24">
-            <div class="f-bold bold fs-24 q-pb-md">Sign In</div>
-            <div class="fs-16 lh-24">Please enter your username and password.</div>
-            <p class="text-grey p-b-24">(Login by typing in any username, code and password)</p>
+          <div class="q-pa-lg">
+            <div class="f-bold bold text-h5 q-pb-md">Sign In</div>
+            <div class="text-body1 lh-24">Please enter your username and password.</div>
+            <p class="text-grey q-pb-lg">(Login by typing in any username, code and password)</p>
             <q-form>
               <div class="field">
                 <div class="row q-pb-md text-weight-medium">
@@ -345,9 +345,11 @@ import { isValidEmail, isValidPassword } from 'src/utils/validate';
 import { getToken } from 'src/utils/cookie';
 import { PermissionModule } from 'src/store/modules/permission';
 import setting from 'src/setting.json';
+
 @Component({ name: 'LoginPage2' })
 export default class LoginPage2 extends Vue {
   declare $refs: any;
+
   @Watch('$route', { immediate: true })
   private onRouteChange(route: any) {
     // TODO: remove the "as Dictionary<string>" hack after v4 release for vue-router
@@ -358,6 +360,7 @@ export default class LoginPage2 extends Vue {
       this.otherQuery = this.getOtherQuery(query);
     }
   }
+
   @Watch('pageType')
   private onPageTypeChange(route: any) {
     this.changePasswordForm.username = '';
@@ -374,26 +377,33 @@ export default class LoginPage2 extends Vue {
       this.$refs.resetPasswordForm && this.$refs.resetPasswordForm.resetValidation();
     });
   }
+
   @Watch('resetPasswordForm.password', { deep: true })
   onResetPasswordChange() {
     this.$refs['resetRePassword'].validate();
   }
+
   @Watch('resetPasswordForm.rePassword', { deep: true })
   onResetRePasswordChange() {
     this.$refs['resetPassword'].validate();
   }
+
   @Watch('changePasswordForm.password', { deep: true })
   onChangePasswordChange() {
     this.$refs['changeRePassword'].validate();
   }
+
   @Watch('changePasswordForm.rePassword', { deep: true })
   onChangeRePasswordChange() {
     this.$refs['changePassword'].validate();
   }
+
   get token() {
     return this.$route.query.token;
   }
+
   created() {}
+
   async mounted() {
     if (this.token) {
       this.pageType = 'resetPassword';
@@ -436,6 +446,7 @@ export default class LoginPage2 extends Vue {
       }
     }
   }
+
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
   public passwordRules = setting.passwordRules;
   public pageType = 'signIn';
@@ -543,6 +554,7 @@ export default class LoginPage2 extends Vue {
     ],
   };
   private redirect?: string;
+
   /* event */
   private getOtherQuery(query: Dictionary<string>) {
     return Object.keys(query).reduce((acc, cur) => {
@@ -552,6 +564,7 @@ export default class LoginPage2 extends Vue {
       return acc;
     }, {} as Dictionary<string>);
   }
+
   private async resetPasswordToSignIn() {
     if (getToken()) {
       const result = await this.$globalConfirm.show({
@@ -572,6 +585,7 @@ export default class LoginPage2 extends Vue {
     this.pageType = 'signIn';
     this.$router.push('/login2');
   }
+
   /* http */
   private async handlerSignIn() {
     if (!this.signInParams.username || !this.signInParams.password) {
@@ -601,6 +615,7 @@ export default class LoginPage2 extends Vue {
     });
     location.reload();
   }
+
   private async handleClickSendCode() {
     if (!this.signInParams.username) {
       this.$globalMessage.show({
@@ -639,6 +654,7 @@ export default class LoginPage2 extends Vue {
       this.signInParams.getCodeConfig.getVerifyCodeLoading = false;
     }
   }
+
   private handlerChangePassword() {
     this.$refs.changePasswordForm.validate().then(async (valid: boolean) => {
       if (valid) {
@@ -662,6 +678,7 @@ export default class LoginPage2 extends Vue {
       }
     });
   }
+
   private handlerForgetPassword() {
     this.$refs.forgotPasswordForm.validate().then(async (valid: boolean) => {
       if (valid) {
@@ -682,6 +699,7 @@ export default class LoginPage2 extends Vue {
       }
     });
   }
+
   private handlerResetPassword() {
     this.$refs.resetPasswordForm.validate().then(async (valid: boolean) => {
       if (valid) {
@@ -712,17 +730,20 @@ export default class LoginPage2 extends Vue {
     box-shadow: 0px 6px 16px 3px rgba($color: #ffffff, $alpha: 0.09);
   }
 }
+
 .body--light {
   .cover {
     box-shadow: 0px 6px 16px 3px rgba($color: #000000, $alpha: 0.09);
   }
 }
+
 .cover {
   width: 100%;
   height: 100%;
   background: $primary;
   border-radius: 16px;
   color: #ffffff;
+
   .intro {
     text-align: center;
     padding: 16px;
@@ -730,6 +751,7 @@ export default class LoginPage2 extends Vue {
     width: 100%;
     bottom: 10%;
   }
+
   .img {
     padding: 16px;
     margin: 128px auto;
@@ -742,10 +764,12 @@ body.screen--md {
       width: 600px;
     }
   }
+
   .intro {
     bottom: 5%;
   }
 }
+
 body.screen--lg {
   .cover {
     .img {
@@ -753,6 +777,7 @@ body.screen--lg {
     }
   }
 }
+
 body.screen--xl {
   .cover {
     .img {

@@ -94,7 +94,7 @@
                 <span>
                   <a href="https://dirkhe1051931999.github.io/quasar/" target="__blank" class="bg-gradient-primary text-gradient">vue2 with quasar and use vue-class-decorator</a>
                 </span>
-                <q-icon name="arrow_forward_ios" class="fs-18 text-primary bg-gradient-primary text-gradient"></q-icon>
+                <q-icon name="arrow_forward_ios" class="text-h6 text-primary bg-gradient-primary text-gradient"></q-icon>
               </div>
             </div>
           </div>
@@ -122,6 +122,7 @@ import { Dictionary } from 'lodash';
 import { GVerify } from 'src/utils/canvas_verify_code';
 import { sliderCaptcha } from 'src/utils/slidercaptcha';
 import { sleep } from 'src/utils/tools';
+
 @Component({ name: 'LoginPage' })
 export default class LoginPage extends Vue {
   @Watch('$route', { immediate: true })
@@ -134,7 +135,9 @@ export default class LoginPage extends Vue {
       this.otherQuery = this.getOtherQuery(query);
     }
   }
+
   created() {}
+
   mounted() {
     try {
       this.verifyCodeInstance = new GVerify('verify-code-login');
@@ -142,6 +145,7 @@ export default class LoginPage extends Vue {
       console.log(error);
     }
   }
+
   private getOtherQuery(query: Dictionary<string>) {
     return Object.keys(query).reduce((acc, cur) => {
       if (cur !== 'redirect') {
@@ -150,6 +154,7 @@ export default class LoginPage extends Vue {
       return acc;
     }, {} as Dictionary<string>);
   }
+
   private verifyCodeInstance: any;
   private otherQuery: Dictionary<string> = {};
   private username = 'admin';
@@ -161,6 +166,7 @@ export default class LoginPage extends Vue {
   private useSwipeVerifyCode = false;
   private showUseSwipeVerifyCode = false;
   private lockShowUseSwipeVerifyCode = false;
+
   private async handLogin() {
     let verifyCodeResult = true;
     if (this.useVerifyCode) {
@@ -219,16 +225,19 @@ export default class LoginPage extends Vue {
     box-shadow: 0 0 3px rgba($color: #ffffff, $alpha: 0.4);
   }
 }
+
 .body--light {
   .slider {
     box-shadow: 0 0 3px rgba($color: #000000, $alpha: 0.4);
   }
 }
+
 .slidercaptcha-block {
   position: absolute;
   left: 0;
   top: 0;
 }
+
 .sliderContainer {
   position: relative;
   text-align: center;
@@ -236,6 +245,7 @@ export default class LoginPage extends Vue {
   background: var(--my-grey-7);
   border-radius: 2px;
 }
+
 .sliderbg {
   position: absolute;
   left: 0;
@@ -244,27 +254,34 @@ export default class LoginPage extends Vue {
   background-color: var(--my-grey-7);
   height: 40px;
 }
+
 .sliderContainer_success .slider {
   background-color: $teal-4;
 }
+
 .sliderContainer_success .sliderMask {
   background-color: $teal-2;
 }
+
 .sliderContainer_fail .slider {
   background: $red-11 !important;
 }
+
 .sliderContainer_fail .sliderMask {
   background: $red-3 !important;
 }
+
 .sliderContainer_fail .slider,
 .sliderContainer_success .slider {
   color: var(--my-white);
 }
+
 .sliderContainer_active .sliderText,
 .sliderContainer_success .sliderText,
 .sliderContainer_fail .sliderText {
   display: none;
 }
+
 .sliderMask {
   position: absolute;
   left: 0;
@@ -273,6 +290,7 @@ export default class LoginPage extends Vue {
   background: $light-blue-2;
   border-radius: 2px;
 }
+
 .slider {
   position: absolute;
   top: 0;
@@ -287,13 +305,16 @@ export default class LoginPage extends Vue {
   align-items: center;
   justify-content: center;
 }
+
 .slider:hover {
   background: $light-blue-5;
   color: var(--my-white);
 }
+
 .sliderText {
   position: relative;
 }
+
 .refreshIcon {
   position: absolute;
   right: 10px;
@@ -304,12 +325,14 @@ export default class LoginPage extends Vue {
   z-index: 5;
   transition: color 0.3s linear;
 }
+
 .refreshIcon:hover {
   color: var(--my-dark-1);
 }
 </style>
 <style lang="scss" scoped>
 @import './index.scss';
+
 .useSwipeVerifyCode {
   position: absolute;
   width: 320px;

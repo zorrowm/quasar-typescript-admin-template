@@ -1,4 +1,3 @@
-
 <template>
   <div class="sidebar-logo-container" :class="{ collapse: collapse }">
     <transition name="sidebar-logo-fade">
@@ -6,9 +5,9 @@
         <img src="~src/assets/logo.png" class="sidebar-logo" />
       </router-link>
       <router-link v-else key="expand" to="/">
-        <div class="row items-center p-l-10 p-r-10">
+        <div class="row items-center q-pa-sm">
           <img src="~src/assets/logo.png" class="sidebar-logo" />
-          <div class="fs-14 f-bold">
+          <div class="text-body2 f-bold">
             {{ PrdTitle }}
           </div>
         </div>

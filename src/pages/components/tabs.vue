@@ -34,7 +34,7 @@
         <q-tab name="addressbook" icon="people" label="Address Book" />
       </q-tabs>
     </div>
-    <q-card class="m-t-30">
+    <q-card class="q-mt-xl">
       <div class="row items-center justify-between p-10">
         <q-splitter v-model="splitterModel" class="w-p-48 splitter">
           <template v-slot:before>
@@ -133,6 +133,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-facing-decorator';
+
 const allTabs = [
   { name: 'mails', icon: 'mail', label: 'Mails' },
   { name: 'alarms', icon: 'alarm', label: 'Alarms' },
@@ -147,13 +148,16 @@ const allTabs = [
 export default class myComponentTabs extends Vue {
   private tab = 'mails';
   private splitterModel = 20;
+
   get allTabs() {
     return allTabs.map((tab) => ({
       tab,
       selected: this.tabs.indexOf(tab) > -1,
     }));
   }
+
   private tabs = allTabs.slice(0, 1);
+
   private setTabSelected(tab: any, status: any) {
     if (status === true) {
       this.tabs.push(tab);
@@ -174,6 +178,7 @@ export default class myComponentTabs extends Vue {
     background: #000000;
   }
 }
+
 .body--light {
   .splitter {
     background: #f5f5f5;

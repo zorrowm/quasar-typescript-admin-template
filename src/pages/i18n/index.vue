@@ -9,6 +9,7 @@
 import languages from 'quasar/lang/index.json';
 import { AppModule } from 'src/store/modules/app';
 import setting from 'src/setting.json';
+
 const appLanguages = languages.filter((lang) => ['de', 'en-us'].includes(lang.isoName));
 import { Component, Vue, Watch } from 'vue-facing-decorator';
 
@@ -19,11 +20,13 @@ export default class myComponentI18n extends Vue {
   mounted() {
     this.locale = this.$q.lang.isoName;
   }
+
   public localeOptions = [
     { value: 'en-US', label: 'English' },
     { value: 'zh-CN', label: '中文' },
   ];
   public locale = '';
+
   public checkLang(language: string) {
     if (language === 'en-US') {
       AppModule.SET_LANGUAGE(language);
@@ -38,5 +41,4 @@ export default class myComponentI18n extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

@@ -12,7 +12,6 @@
   </div>
 </template>
 
-
 <script lang="ts">
 import { Component, Vue } from 'vue-facing-decorator';
 import JsonEditorVue from 'json-editor-vue';
@@ -153,8 +152,7 @@ export default class myComponentJsonEditor extends Vue {
             name: 'Emily',
             date: 'October 26, 2016',
             rating: 2,
-            comments:
-              "MEH. I've tried their Jersey location as well but Kang Ho Dong meat quality is severely decreasing. A Korean bbq place with whatever meat? I think NOT!",
+            comments: "MEH. I've tried their Jersey location as well but Kang Ho Dong meat quality is severely decreasing. A Korean bbq place with whatever meat? I think NOT!",
           },
         ],
       },
@@ -417,8 +415,7 @@ export default class myComponentJsonEditor extends Vue {
             name: 'Sally',
             date: 'October 26, 2016',
             rating: 4,
-            comments:
-              "One of the tastiest and most unique ramen places I've been to in NYC, but also the priciest. I think overall its worth the try. Not an everyday casual ramen shop though.",
+            comments: "One of the tastiest and most unique ramen places I've been to in NYC, but also the priciest. I think overall its worth the try. Not an everyday casual ramen shop though.",
           },
         ],
       },
@@ -454,8 +451,7 @@ export default class myComponentJsonEditor extends Vue {
             name: 'Rob',
             date: 'October 26, 2016',
             rating: 5,
-            comments:
-              "The hype was real. Please go. Get the ceviche. And the tres leches. You're welcome",
+            comments: "The hype was real. Please go. Get the ceviche. And the tres leches. You're welcome",
           },
           {
             name: 'Jason',
@@ -468,11 +464,11 @@ export default class myComponentJsonEditor extends Vue {
       },
     ],
   };
+
   private onJsonChange() {
     console.log(123123);
   }
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md q-gutter-y-sm column items-center">
-    <MyTooltip content="tip tip tip tip tip tip tip tip tip tip tip tip tip tip tip tip" style="width: 100px"> </MyTooltip>
-    <TextToInput value="text text" :that="textToInputThat" :loading="textToInputLoading" @confirm="textToInputConfirm" @close="textToInputClose"> </TextToInput>
+    <MyTooltip content="tip tip tip tip tip tip tip tip tip tip tip tip tip tip tip tip" style="width: 100px"></MyTooltip>
+    <TextToInput value="text text" :that="textToInputThat" :loading="textToInputLoading" @confirm="textToInputConfirm" @close="textToInputClose"></TextToInput>
     <MyBanner content="ok ok ok ok ok ok ok ok ok ok ok ok" bid="notice-banner-1" bannerType="warn" :showClose="true"></MyBanner>
     <MyBanner content="ok ok ok ok ok ok ok ok ok ok ok ok" bid="notice-banner-2" bannerType="success" :showClose="true"></MyBanner>
     <MyBanner content="ok ok ok ok ok ok ok ok ok ok ok ok" bid="notice-banner-3" bannerType="negative" :showClose="true"></MyBanner>
@@ -151,6 +151,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-facing-decorator';
+
 const alerts = [
   {
     color: 'negative',
@@ -177,14 +178,17 @@ const alerts = [
 export default class myComponentNotice extends Vue {
   private textToInputLoading = false;
   private textToInputThat = { a: 1, b: 2 };
+
   private textToInputConfirm({ value, that }: { value: string; that: any }) {
     console.log(value);
     console.log(that);
   }
+
   private textToInputClose({ value, that }: { value: string; that: any }) {
     console.log(value);
     console.log(that);
   }
+
   private showNotif(position: any) {
     const { color, multiLine, icon, message, avatar } = alerts[Math.floor(Math.random() * 10) % alerts.length];
     const random = Math.random() * 100;
@@ -219,6 +223,7 @@ export default class myComponentNotice extends Vue {
       timeout: Math.random() * 5000 + 3000,
     });
   }
+
   private alert() {
     this.$q
       .dialog({
@@ -280,6 +285,7 @@ export default class myComponentNotice extends Vue {
         // console.log('I am triggered on both OK and Cancel')
       });
   }
+
   private show(grid: any) {
     this.$q
       .bottomSheet({

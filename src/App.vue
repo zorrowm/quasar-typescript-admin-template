@@ -22,10 +22,6 @@ export default class myComponentApp extends Vue {
       this.$q.dark.set(false);
       document.querySelector('html')?.classList.remove('dark');
     }
-    this.$globalMessage.show({
-      type: 'success',
-      content: '欢迎使用本系统',
-    });
     const iconPath = path;
     this.$q.iconMapFn = (iconName) => {
       const icon = myIcons[iconName];

@@ -7,9 +7,11 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { Component, Vue } from 'vue-facing-decorator';
+
 @Component({ name: 'myChartWorldComponent' })
 export default class myChartWorldComponent extends Vue {
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
+
   mounted() {
     var markers = [
       { name: 'Egypt', coords: [26.8206, 30.8025] },

@@ -1,9 +1,9 @@
 <template>
   <div>
     <q-card class="q-pa-md">
-      <div class="fs-18 f-bold">Three earth example</div>
+      <div class="text-h6 f-bold">Three earth example</div>
       <div id="c-three-earth">
-        <canvas width="500px" height="350px" style="width: 1047.08px; height: 788.547px"></canvas>
+        <canvas width="500px" height="350px" style="width: 1047px; height: 789px"></canvas>
       </div>
     </q-card>
   </div>
@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-facing-decorator';
+
 @Component({ name: 'myThreeEarthComponent' })
 export default class myThreeEarthComponent extends Vue {
   mounted() {
@@ -88,6 +89,7 @@ export default class myThreeEarthComponent extends Vue {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
       }
+
       animate();
     }
 
@@ -111,6 +113,7 @@ export default class myThreeEarthComponent extends Vue {
           });
       }
     }
+
     init();
   }
 }

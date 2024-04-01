@@ -15,6 +15,7 @@ import { date } from 'quasar';
 })
 export default class myComponentCopy extends Vue {
   private loremipsum = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, ';
+
   private onClick() {
     copyToClipboard(this.loremipsum)
       .then(() => {
@@ -45,11 +46,13 @@ export default class myComponentCopy extends Vue {
     background: #000000;
   }
 }
+
 .body--light {
   .input {
     background: #ffffff;
   }
 }
+
 .animate-bounce {
   animation: q-bounce 2s infinite;
 }

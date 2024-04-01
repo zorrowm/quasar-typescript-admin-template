@@ -1,8 +1,7 @@
-
 <template>
   <div class="VueSidePanel">
     <VueSidePanel v-model="isOpened" lock-scroll width="800px" z-index="2000" hide-close-btn body-class="VueSidePanel" :overlay-opacity="0">
-      <div class="title f-bold q-pa-md fs-18">
+      <div class="title f-bold q-pa-md text-h6">
         {{ title }}
         <div class="close" @click="isOpened = false">
           <q-icon name="app:navigation-close" class="icon"></q-icon>

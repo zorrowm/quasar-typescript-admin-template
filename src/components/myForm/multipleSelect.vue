@@ -1,24 +1,24 @@
 <template>
   <div>
-    <p class="fs-12 q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs">{{ rules.length ? '*' : '' }} {{ label }}</span>
+    <p class="text-caption q-pb-sm row items-center text-weight-regular">
+      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
       <slot name="subTitle"></slot>
     </p>
     <q-select
-      :ref="inputId"
-      v-model="inputModel"
-      :options="inputSelectOption"
-      :class="['q-mb-sm', classes]"
-      :rules="rules"
-      :clearable="showClose"
+      :ref="externalOption.inputId"
+      v-model="internalOption.model"
+      :options="externalOption.selectOption"
+      :class="['q-mb-sm', externalOption.classes]"
+      :rules="externalOption.rules"
+      :clearable="externalOption.showClose"
       :multiple="true"
-      :readonly="readonly"
-      :use-input="userInput"
-      :input-class="inputId"
+      :readonly="externalOption.readonly"
+      :use-input="externalOption.userInput"
+      :input-class="externalOption.inputId"
       :input-debounce="100"
-      :hint="hint"
-      @popup-show="userInput ? popShow() : () => 0"
-      @popup-hide="userInput ? popHide() : () => 0"
+      :hint="externalOption.hint"
+      @popup-show="externalOption.userInput ? popShow() : () => 0"
+      @popup-hide="externalOption.userInput ? popHide() : () => 0"
       @filter="filterFn"
       @input-value="inputValue"
       :spellcheck="false"
@@ -35,13 +35,13 @@
       clear-icon="app:clear"
     >
       <template #selected>
-        <template v-if="inputModel && inputModel.length">
-          <q-chip :removable="!readonly" v-for="(item, index) in inputModel" :key="item" dense @remove="inputModel.splice(index, 1)"
-            >{{ inputSelectOptionBak.find((data) => String(data.value) === String(item))?.label ?? item }}
+        <template v-if="internalOption.model && internalOption.model.length">
+          <q-chip :removable="!externalOption.readonly" v-for="(item, index) in internalOption.model" :key="item" dense @remove="internalOption.model.splice(index, 1)"
+            >{{ internalOption.selectOptionBak.find((data) => String(data.value) === String(item))?.label ?? item }}
           </q-chip>
         </template>
-        <template v-if="(!inputModel || (inputModel && !inputModel.length)) && showPlaceholder">
-          <span class="text-grey-5 fs-12">{{ inputPlaceholder }}</span>
+        <template v-if="(!internalOption.model || (internalOption.model && !internalOption.model.length)) && internalOption.showPlaceholder">
+          <span class="text-grey-5 text-caption">{{ $t('messages.pleaseSelect') }}</span>
         </template>
       </template>
       <template v-slot:option="scope">
@@ -59,108 +59,146 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-facing-decorator';
+import { cloneDeep } from 'lodash';
+
+interface Option {
+  model: never[];
+  classes?: string;
+  rules: never[];
+  label: string;
+  selectOption: never[];
+  showClose: boolean;
+  readonly: boolean;
+  userInput: boolean;
+  inputId: string;
+  hint: string;
+}
+
+const EXTERNAL_OPTION = {
+  model: [],
+  classes: '',
+  rules: [],
+  label: '',
+  selectOption: [],
+  showClose: true,
+  readonly: false,
+  userInput: false,
+  inputId: '',
+  hint: '',
+};
 
 @Component({ name: 'FormMultipleSelectComponent', emits: ['input'] })
 export default class FormMultipleSelectComponent extends Vue {
   declare $refs: any;
-  @Prop({ default: {} }) option!: {
-    model: string[] | any[];
-    inputPlaceholder?: string;
-    classes?: string;
-    rules: any[];
-    label: string;
-    inputSelectOption: any[];
-    showClose: boolean;
-    readonly: boolean;
-    userInput: boolean;
-    inputId: string;
-    hint: string;
-  };
-  @Watch('inputModel')
+  @Prop({ default: {} }) option!: Option;
+
+  @Watch('option', { deep: true })
+  onOptionChange(newVal: Option) {
+    if (newVal.model !== this.prevOption?.model) {
+      this.internalOption.model = newVal.model;
+    }
+    if (newVal.classes !== this.prevOption?.classes) {
+      this.externalOption.classes = newVal.classes || '';
+    }
+    if (newVal.rules !== this.prevOption?.rules) {
+      this.externalOption.rules = newVal.rules;
+    }
+    if (newVal.label !== this.prevOption?.label) {
+      this.externalOption.label = newVal.label;
+    }
+    if (newVal.selectOption !== this.prevOption?.selectOption) {
+      this.externalOption.selectOption = newVal.selectOption;
+      this.internalOption.selectOptionBak = cloneDeep(newVal.selectOption);
+    }
+    if (newVal.showClose !== this.prevOption?.showClose) {
+      this.externalOption.showClose = newVal.showClose;
+    }
+    if (newVal.readonly !== this.prevOption?.readonly) {
+      this.externalOption.readonly = newVal.readonly;
+    }
+    if (newVal.userInput !== this.prevOption?.userInput) {
+      this.externalOption.userInput = newVal.userInput;
+    }
+    if (newVal.hint !== this.prevOption?.hint) {
+      this.externalOption.hint = newVal.hint;
+    }
+    this.prevOption = cloneDeep(newVal);
+  }
+
+  @Watch('internalOption.model')
   onchange() {
-    this.$refs[this.inputId] && this.$refs[this.inputId].updateInputValue('');
-    if (!this.inputModel || (this.inputModel && !this.inputModel.length)) {
-      this.showPlaceholder = true;
+    this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].updateInputValue('');
+    if (!this.internalOption.model || (this.internalOption.model && !this.internalOption.model.length)) {
+      this.internalOption.showPlaceholder = true;
       this.$nextTick(() => {
-        this.$refs[this.inputId] && this.$refs[this.inputId].blur();
-        this.$refs[this.inputId] && this.$refs[this.inputId].hidePopup();
+        this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].blur();
+        this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].hidePopup();
       });
     }
-    this.$emit('input', this.inputModel);
+    this.$emit('input', this.internalOption.model);
   }
+
+  created() {
+    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.internalOption.model = this.option.model;
+    this.prevOption = cloneDeep(this.option);
+  }
+
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private inputModel: string[] | any[] = [];
-  private inputPlaceholder = '';
-  private classes = '';
-  private rules: any[] = [];
-  private label = '';
-  private inputSelectOption: any[] = [];
-  private inputSelectOptionBak: any[] = [];
-  private showClose: boolean = true;
-  private readonly: boolean = false;
-  private userInput: boolean = false;
-  private inputId: string = '';
-  private hint: string = '';
-  private showPlaceholder = true;
-  mounted() {
-    this.inputModel = this.option.model;
-    this.inputPlaceholder = this.option?.inputPlaceholder ?? this.globals.$t('messages.pleaseSelect');
-    this.classes = this.option?.classes ?? '';
-    this.rules = this.option?.rules;
-    this.label = this.option?.label;
-    this.inputSelectOption = this.option?.inputSelectOption;
-    this.inputSelectOptionBak = this.option?.inputSelectOption;
-    this.showClose = this.option.showClose ?? true;
-    this.readonly = this.option.readonly ?? false;
-    this.userInput = this.option.userInput ?? false;
-    this.inputId = this.option.inputId;
-    this.hint = this.option.hint ?? '';
-  }
+  public prevOption: Option | undefined;
+  public externalOption = cloneDeep(EXTERNAL_OPTION);
+  public internalOption = {
+    model: [],
+    selectOptionBak: [],
+    showPlaceholder: true,
+  };
+
   public async validForm() {
-    return this.$refs[this.inputId].validate();
+    return this.$refs[this.externalOption.inputId].validate();
   }
+
   private popShow() {
-    if (this.userInput) {
-      this.showPlaceholder = false;
-    } else {
-      this.showPlaceholder = true;
-    }
+    this.internalOption.showPlaceholder = !this.externalOption.userInput;
   }
+
   private popHide() {
-    if (!this.inputModel || (this.inputModel && !this.inputModel.length)) {
+    if (!this.internalOption.model || (this.internalOption.model && !this.internalOption.model.length)) {
       this.$nextTick(() => {
-        this.$refs[this.inputId] && this.$refs[this.inputId].blur();
+        this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].blur();
       });
     }
-    this.showPlaceholder = true;
+    this.internalOption.showPlaceholder = true;
   }
+
   private filterFn(val: any, update: any) {
     update(() => {
       if (val === '') {
-        this.inputSelectOption = this.inputSelectOptionBak;
+        this.externalOption.selectOption = this.internalOption.selectOptionBak;
       } else {
-        this.inputSelectOption = this.inputSelectOptionBak.filter((v) => {
+        this.externalOption.selectOption = this.internalOption.selectOptionBak.filter((v: any) => {
           return String(v.label).indexOf(val) !== -1;
         });
       }
     });
   }
+
   private removeItem(index: number) {
-    this.inputModel.splice(index, 1);
-    if (!this.inputModel.length) {
-      this.showPlaceholder = true;
+    this.internalOption.model.splice(index, 1);
+    if (!this.internalOption.model.length) {
+      this.internalOption.showPlaceholder = true;
       this.$nextTick(() => {
-        this.$refs[this.inputId] && this.$refs[this.inputId].hidePopup();
+        this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].hidePopup();
       });
     }
   }
+
   private inputValue(val: string) {
     if (!val) {
-      this.showPlaceholder = true;
-      if (!this.inputModel || (this.inputModel && !this.inputModel.length)) {
+      this.internalOption.showPlaceholder = true;
+      if (!this.internalOption.model || (this.internalOption.model && !this.internalOption.model.length)) {
         this.$nextTick(() => {
-          this.$refs[this.inputId] && this.$refs[this.inputId].blur();
-          this.$refs[this.inputId] && this.$refs[this.inputId].hidePopup();
+          this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].blur();
+          this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].hidePopup();
         });
       }
     }

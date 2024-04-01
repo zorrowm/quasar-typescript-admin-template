@@ -11,7 +11,7 @@
         @contextmenu.prevent="openMenu(tag, $event)"
       >
         {{ $t(`routes.${tag.meta?.title}`) }}
-        <q-icon name="close" class="fs-12" v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)"></q-icon>
+        <q-icon name="close" class="text-caption" v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)"></q-icon>
       </router-link>
     </ScrollPane>
     <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">

@@ -5,9 +5,8 @@ import setting from 'src/setting.json';
 import { UserModule } from 'src/store/modules/user';
 import router from 'src/router';
 import { Loading } from 'quasar';
-import { v4 as uuidv4 } from 'uuid';
-import SHA256 from 'sha256';
 import { AppModule } from 'src/store/modules/app';
+
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
@@ -39,20 +38,14 @@ axios.interceptors.request.use(
     }
     let Timestamp = new Date().getTime();
     //时间戳
-    config.headers['accept-language'] =
-      AppModule.language === 'en-US' ? 'en' : 'zh-cn';
+    config.headers['accept-language'] = AppModule.language === 'en-US' ? 'en' : 'zh-cn';
     config.headers['Timestamp'] = Timestamp;
     if (UserModule.token) {
       let requetId = 'uuidv4()'; //uuid
       let sk = 'UserModule.otherLoginData.sk'; //获取SK
       let SKEnc = 'CryptoJS.MD5(Timestamp + sk)'; // SKEnc = MD5(Timestamp + SK)
       let SKEnc1 = 'CryptoJS.enc.Hex.stringify(SKEnc)';
-      let body =
-        config.method === 'get'
-          ? ''
-          : JSON.stringify(config.data) === '{}'
-          ? '{}'
-          : JSON.stringify(config.data);
+      let body = config.method === 'get' ? '' : JSON.stringify(config.data) === '{}' ? '{}' : JSON.stringify(config.data);
       let data = UserModule.token + Timestamp + requetId + body;
       let sign = 'CryptoJS.HmacSHA256(data, SKEnc1)'; // Signature = HMAC-SHA256(Authorization + Timestamp + Request_Id + Request_Body, SKEnc).toLowerCase()
       let sign1 = 'CryptoJS.enc.Hex.stringify(sign)';
@@ -106,17 +99,13 @@ axios.interceptors.response.use(
               { blob: response.data },
               {
                 ...response.headers,
-                'content-disposition': window.decodeURIComponent(
-                  response.headers['content-disposition'] || ''
-                ),
+                'content-disposition': window.decodeURIComponent(response.headers['content-disposition'] || ''),
               }
             )
             // Object.assign({ blob: response.data }, response.headers)
           );
         } else {
-          return Promise.resolve(
-            Object.assign(response.data.data, response.headers)
-          );
+          return Promise.resolve(Object.assign(response.data.data, response.headers));
         }
       } else {
         return Promise.resolve(response.data.data || {});
@@ -129,11 +118,7 @@ axios.interceptors.response.use(
         var reader: any = new FileReader();
         reader.readAsBinaryString(response.data);
         reader.addEventListener('loadend', () => {
-          if (
-            reader.result.indexOf('status') !== -1 &&
-            reader.result.indexOf('message') !== -1 &&
-            reader.result.indexOf('pdf') === -1
-          ) {
+          if (reader.result.indexOf('status') !== -1 && reader.result.indexOf('message') !== -1 && reader.result.indexOf('pdf') === -1) {
             response.data = JSON.parse(reader.result);
             resolve(errorFuc(response));
           } else {

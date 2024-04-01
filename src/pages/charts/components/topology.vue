@@ -28,6 +28,7 @@ export default class myComponentTopology extends Vue {
   @Prop({ default: [] }) private link!: any[];
   private option = {};
   private chart: any;
+
   private initData() {
     const categories: any = [];
     const graphData: any = [];
@@ -213,6 +214,7 @@ export default class myComponentTopology extends Vue {
     };
     this.option = option;
   }
+
   @Watch('link', { immediate: true })
   onchange(newVal: any) {
     this.initData();
@@ -220,6 +222,7 @@ export default class myComponentTopology extends Vue {
       this.initChart();
     });
   }
+
   private initChart() {
     this.chart && this.chart.dispose();
     this.chart = echarts.init(this.$el as any, 'macarons');

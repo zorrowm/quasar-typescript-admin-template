@@ -1,12 +1,9 @@
 <template>
   <div class="map_components">
     <div id="back" class="hidden">
-      <q-icon class="fs-20" name="close"></q-icon>
+      <q-icon class="text-h6" name="close"></q-icon>
     </div>
-    <div
-      id="map"
-      style="width: 100%; height: 100%; height: 636px; transform: scale(0.95)"
-    ></div>
+    <div id="map" style="width: 100%; height: 636px; transform: scale(0.95)"></div>
   </div>
 </template>
 
@@ -588,8 +585,7 @@ export default class myComponentMapComponents extends Vue {
       /*获取地图数据*/
       const geoCoordMap: any = {};
       myChart.showLoading(); // loading start
-      const mapFeatures: any =
-        window['echarts'].getMap(name).geoJson['features'];
+      const mapFeatures: any = window['echarts'].getMap(name).geoJson['features'];
       myChart.hideLoading(); // loading end
       mapFeatures.forEach((v: { properties: { name: any; cp: any } }) => {
         const name = v.properties.name; // 地区名称
@@ -841,6 +837,7 @@ export default class myComponentMapComponents extends Vue {
 <style lang="scss" scoped>
 .map_components {
   position: relative;
+
   #back {
     position: absolute;
     right: 0;

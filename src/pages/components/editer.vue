@@ -35,32 +35,14 @@
             fixedLabel: true,
             fixedIcon: true,
             list: 'no-icons',
-            options: [
-              'size-1',
-              'size-2',
-              'size-3',
-              'size-4',
-              'size-5',
-              'size-6',
-              'size-7',
-            ],
+            options: ['size-1', 'size-2', 'size-3', 'size-4', 'size-5', 'size-6', 'size-7'],
           },
           {
             label: $q.lang.editor.defaultFont,
             icon: $q.iconSet.editor.font,
             fixedIcon: true,
             list: 'no-icons',
-            options: [
-              'default_font',
-              'arial',
-              'arial_black',
-              'comic_sans',
-              'courier_new',
-              'impact',
-              'lucida_grande',
-              'times_new_roman',
-              'verdana',
-            ],
+            options: ['default_font', 'arial', 'arial_black', 'comic_sans', 'courier_new', 'impact', 'lucida_grande', 'times_new_roman', 'verdana'],
           },
           'removeFormat',
         ],
@@ -103,5 +85,4 @@ export default class myComponentEditor extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
-</style>
+<style scoped lang="scss"></style>

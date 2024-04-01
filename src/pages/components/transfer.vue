@@ -1,72 +1,18 @@
 <template>
   <div>
     <div class="row no-wrap justify-around q-px-md q-pt-md">
-      <div
-        v-mutation="handler1"
-        @dragenter="onDragEnter"
-        @dragleave="onDragLeave"
-        @dragover="onDragOver"
-        @drop="onDrop"
-        class="drop-target rounded-borders overflow-hidden"
-      >
-        <div
-          id="box1"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box navy"
-        />
-        <div
-          id="box2"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box red"
-        />
-        <div
-          id="box3"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box green"
-        />
-        <div
-          id="box4"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box orange"
-        />
-        <div
-          id="box5"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box navy"
-        />
-        <div
-          id="box6"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box red"
-        />
-        <div
-          id="box7"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box green"
-        />
-        <div
-          id="box8"
-          draggable="true"
-          @dragstart="onDragStart"
-          class="box orange"
-        />
+      <div v-mutation="handler1" @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover="onDragOver" @drop="onDrop" class="drop-target rounded-borders overflow-hidden">
+        <div id="box1" draggable="true" @dragstart="onDragStart" class="box navy" />
+        <div id="box2" draggable="true" @dragstart="onDragStart" class="box red" />
+        <div id="box3" draggable="true" @dragstart="onDragStart" class="box green" />
+        <div id="box4" draggable="true" @dragstart="onDragStart" class="box orange" />
+        <div id="box5" draggable="true" @dragstart="onDragStart" class="box navy" />
+        <div id="box6" draggable="true" @dragstart="onDragStart" class="box red" />
+        <div id="box7" draggable="true" @dragstart="onDragStart" class="box green" />
+        <div id="box8" draggable="true" @dragstart="onDragStart" class="box orange" />
       </div>
 
-      <div
-        v-mutation="handler2"
-        @dragenter="onDragEnter"
-        @dragleave="onDragLeave"
-        @dragover="onDragOver"
-        @drop="onDrop"
-        class="drop-target rounded-borders overflow-hidden"
-      />
+      <div v-mutation="handler2" @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover="onDragOver" @drop="onDrop" class="drop-target rounded-borders overflow-hidden" />
     </div>
 
     <div class="row justify-around items-start">
@@ -92,15 +38,14 @@ import { Component, Vue } from 'vue-facing-decorator';
 export default class myComponentTransfer extends Vue {
   private status1: any[] = [];
   private status2: any[] = [];
+
   private handler1(mutationRecords: any[]) {
     this.status1 = [];
     for (const index in mutationRecords) {
       const record = mutationRecords[index];
-      const info = `type: ${record.type}, nodes added: ${
-        record.addedNodes.length > 0 ? 'true' : 'false'
-      }, nodes removed: ${
-        record.removedNodes.length > 0 ? 'true' : 'false'
-      }, oldValue: ${record.oldValue}`;
+      const info = `type: ${record.type}, nodes added: ${record.addedNodes.length > 0 ? 'true' : 'false'}, nodes removed: ${record.removedNodes.length > 0 ? 'true' : 'false'}, oldValue: ${
+        record.oldValue
+      }`;
       this.status1.push(info);
     }
   }
@@ -109,11 +54,9 @@ export default class myComponentTransfer extends Vue {
     this.status2 = [];
     for (const index in mutationRecords) {
       const record = mutationRecords[index];
-      const info = `type: ${record.type}, nodes added: ${
-        record.addedNodes.length > 0 ? 'true' : 'false'
-      }, nodes removed: ${
-        record.removedNodes.length > 0 ? 'true' : 'false'
-      }, oldValue: ${record.oldValue}`;
+      const info = `type: ${record.type}, nodes added: ${record.addedNodes.length > 0 ? 'true' : 'false'}, nodes removed: ${record.removedNodes.length > 0 ? 'true' : 'false'}, oldValue: ${
+        record.oldValue
+      }`;
       this.status2.push(info);
     }
   }
@@ -132,6 +75,7 @@ export default class myComponentTransfer extends Vue {
   private onDragOver(e: any) {
     e.preventDefault();
   }
+
   // store the id of the draggable element
   private onDragStart(e: any) {
     e.dataTransfer.setData('text', e.target.id);
@@ -163,7 +107,7 @@ export default class myComponentTransfer extends Vue {
 }
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .drop-target {
   height: 400px;
   width: 200px;
@@ -195,6 +139,7 @@ export default class myComponentTransfer extends Vue {
     }
   }
 }
+
 .box:nth-child(3) {
   clear: both;
 }
