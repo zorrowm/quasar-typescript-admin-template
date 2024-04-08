@@ -12,7 +12,6 @@
 
 const { configure } = require('quasar/wrappers');
 const setting = require('./src/setting.json');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const multiplePage = require('./multiple.page.generate');
 const path = require('path');
 
@@ -86,9 +85,6 @@ module.exports = configure((ctx) => {
       chainWebpack(/* chain */) {},
       extendWebpack(cfg) {
         // linting is slow in TS projects, we execute it only for production builds
-        if (ctx.prod) {
-          cfg.plugins.push(new CleanWebpackPlugin());
-        }
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
           src2: path.resolve(__dirname, './src2'),

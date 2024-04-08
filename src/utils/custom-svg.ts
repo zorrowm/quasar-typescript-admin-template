@@ -20,6 +20,7 @@ export const myIcons: { [key: string]: string } = {
   'app:expand': 'svg/expand.svg',
   'app:dropdown': 'svg/dropdown.svg',
   'app:upload': 'svg/upload.svg',
+  'app:upload2': 'svg/upload2.svg',
   'app:complete': 'svg/complete.svg',
   'app:countdown': 'svg/countdown.svg',
   'app:clear': 'svg/clear.svg',
@@ -30,4 +31,5 @@ export const myIcons: { [key: string]: string } = {
   'app:end-time': 'svg/end-time.svg',
   'app:start-time-dark': 'svg/start-time-dark.svg',
   'app:end-time-dark': 'svg/end-time-dark.svg',
+  'app:reset-query': 'svg/reset-query.svg',
 };

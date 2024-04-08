@@ -40,19 +40,19 @@
               map-options
             />
           </div>
-          <div class="action">
-            <q-btn color="primary" icon="search" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" class="q-mr-md" style="height: 40px" />
-            <q-btn :label="$t('action.reset')" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" class="q-mr-md" style="height: 40px" />
-            <q-btn
-              :icon="queryParams.allExpand ? 'expand_less' : 'expand_more'"
-              :label="queryParams.allExpand ? 'Collapse' : 'Expand'"
-              outline
-              color="primary"
-              flat
-              @click="handleClickCollapse"
-              style="height: 40px"
-            />
-          </div>
+        </div>
+        <div class="action">
+          <q-btn color="primary" icon="search" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" style="height: 40px" />
+          <q-btn :label="$t('action.reset')" icon="app:reset-query" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" style="height: 40px" />
+          <q-btn
+            :icon="queryParams.allExpand ? 'expand_less' : 'expand_more'"
+            :label="queryParams.allExpand ? 'Collapse' : 'Expand'"
+            outline
+            color="primary"
+            flat
+            @click="handleClickCollapse"
+            style="height: 40px"
+          />
         </div>
       </q-form>
     </div>
@@ -60,7 +60,7 @@
       <q-table
         flat
         bordered
-        :columns="tableParams.column"
+        :columns="tableParams.column as any"
         :rows="tableParams.data"
         :loading="tableParams.loading"
         :pagination="tableParams.pagination"
@@ -75,7 +75,7 @@
         <template #top>
           <div class="full-width justify-end row">
             <q-btn color="primary" icon="o_add" label="Add" class="q-mr-md" @click="handleClickAdd" />
-            <q-btn icon="o_upload" label="Upload" outline color="primary" @click="handleClickUpload" />
+            <q-btn icon="app:upload2" label="Upload" outline color="primary" @click="handleClickUpload" />
           </div>
         </template>
         <template v-slot:header="props">
@@ -159,9 +159,9 @@
         params: dialogAddUpdateParams.params,
         showConfirm: true,
       }"
-      @close="dialogAddUpdateCloseEvent"
       @confirm="dialogAddUpdateConfirmEvent"
-      @before-hide="dialogAddUpdateBeforeHideEvent"
+      @close="dialogAddUpdateParams.visible = false"
+      @before-hide="(data: { type: string; params: any })=>dialogAddUpdateParams.params = data.params"
     >
       <div class="row q-col-gutter-x-md">
         <div v-for="(item, index) in dialogAddUpdateParams.input" :key="index" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
@@ -176,7 +176,7 @@
               selectOption: item.selectOption,
               userInput: true,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) =>(dialogAddUpdateParams.params[item.model] = data)"
           />
           <MyFormDateRange
             v-if="item.type === 'date-range'"
@@ -186,7 +186,7 @@
               required: item.required,
               label: item.label,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           />
           <MyFormDateRangeWithTime
             v-if="item.type === 'date-time-range'"
@@ -197,7 +197,7 @@
               required: item.required,
               label: item.label,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           />
           <MyFormSlider
             v-if="item.type === 'slider'"
@@ -210,7 +210,7 @@
               max: item.max,
               step: item.step,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           />
           <MyFormRadio
             v-if="item.type === 'radio'"
@@ -223,7 +223,7 @@
               selectOption: item.selectOption,
               disable: item.disable,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           />
           <MyFormTreeSelect
             v-if="item.type === 'tree-select'"
@@ -236,7 +236,7 @@
               selectOption: item.selectOption,
               disable: item.disable,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           />
           <MyFormMultipleSelect
             v-if="item.type === 'multiple-select'"
@@ -250,7 +250,7 @@
               multiple: item.multiple,
               userInput: true,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data: any) => (dialogAddUpdateParams.params[item.model] = data)"
           >
             <template #subTitle>
               <el-popover placement="top" title="popover-title" :width="320" popper-style="z-index:9999" trigger="hover">
@@ -269,7 +269,7 @@
               classes: item.classes,
               label: item.label,
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           >
             <template #subTitle>
               <el-popover placement="top" title="popover-title" :width="320" popper-style="z-index:9999" trigger="hover">
@@ -290,7 +290,7 @@
               mask: '####/####/####/####',
               hint: '####/####/####/####',
             }"
-            @input="(data) => (dialogAddUpdateParams.params[item.model] = data)"
+            @input="(data:any) => (dialogAddUpdateParams.params[item.model] = data)"
           >
           </MyFormMaskInput>
         </div>
@@ -307,9 +307,9 @@
         params: dialogUpload.params,
         showConfirm: false,
       }"
-      @close="dialogUploadCloseEvent"
+      @close="dialogUpload.visible = false"
       @confirm="hanleClickUploadConfirm"
-      @before-hide="dialogUploadBeforeHideEvent"
+      @before-hide="(data: { type: string; params: any })=>dialogUpload.params = data.params"
     >
       <div class="dialog-upload-form">
         <input type="file" class="hide" :ref="dialogUpload.fileID" :accept="dialogUpload.accept" :draggable="false" @change="uploadFileSuccess" />
@@ -323,11 +323,13 @@
             </p>
           </div>
         </div>
+      </div>
+      <template #extra-description>
         <div class="upload-limit">
           <span class="link-type">{{ $t('action.download_template') }}</span>
           Here's some text
         </div>
-      </div>
+      </template>
     </MyDialog>
     <MyDialog
       :option="{
@@ -340,8 +342,8 @@
         params: dialogDetailParams.params,
         showConfirm: false,
       }"
-      @close="dialogDetailCloseEvent"
-      @before-hide="dialogDetailBeforeHideEvent"
+      @close="(data: { type: string })=> dialogDetailParams.visible = false"
+      @before-hide="(data: { type: string; params: any })=>dialogDetailParams.params = data.params"
     >
       <q-list class="row q-col-gutter-x-md">
         <q-item v-for="(item, index) in dialogDetailParams.params" :key="index" :clickable="false" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
@@ -395,8 +397,8 @@ export default class myComponentTableBeta extends Vue {
   /**instance */
   declare $refs: any;
   /**params */
-  private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private queryParams: any = {
+  public globals = getCurrentInstance()!.appContext.config.globalProperties;
+  public queryParams: any = {
     id: 'query',
     queryLoading: false,
     resetLoading: false,
@@ -495,7 +497,7 @@ export default class myComponentTableBeta extends Vue {
       },
     ],
   };
-  private tableParams = {
+  public tableParams = {
     selected: [],
     loading: false,
     data: [
@@ -808,7 +810,7 @@ export default class myComponentTableBeta extends Vue {
       },
     ],
   };
-  private dialogUpload = {
+  public dialogUpload = {
     id: 'dialog-upload-file',
     fileID: 'dialog_upload_file',
     clickLoading: false,
@@ -818,7 +820,7 @@ export default class myComponentTableBeta extends Vue {
     accept: '.xls',
     params: { file: '', fileName: '' },
   };
-  private dialogDetailParams = {
+  public dialogDetailParams = {
     id: 'dialog-upload-file',
     getDataLoading: false,
     clickLoading: false,
@@ -840,19 +842,19 @@ export default class myComponentTableBeta extends Vue {
   mounted() {}
 
   /**event */
-  private paginationInput(data: any) {
+  public paginationInput(data: any) {
     this.tableParams.pagination = data;
     this.getData();
   }
 
-  private async handleQuery() {
+  public async handleQuery() {
     this.queryParams.queryLoading = true;
     this.tableParams.pagination.page = 1;
     await this.getData();
     this.queryParams.queryLoading = false;
   }
 
-  private async handleResetQuery() {
+  public async handleResetQuery() {
     this.queryParams.resetLoading = true;
     this.queryParams.params = cloneDeep(CONST_PARAMS.query);
     this.tableParams.pagination.page = 1;
@@ -860,26 +862,26 @@ export default class myComponentTableBeta extends Vue {
     this.queryParams.resetLoading = false;
   }
 
-  private handleClickCollapse() {
+  public handleClickCollapse() {
     this.queryParams.allExpand = !this.queryParams.allExpand;
     this.queryParams.input.forEach((item: any) => {
       item.collapse = this.queryParams.allExpand ? false : item.defaultCollapse;
     });
   }
 
-  private handleClickAdd() {
+  public handleClickAdd() {
     this.dialogAddUpdateParams.visible = true;
     this.dialogAddUpdateParams.dialogType = 'add';
     this.dialogAddUpdateParams.title = 'Add';
   }
 
-  private handlerClickUpdate(row: any) {
+  public handlerClickUpdate(row: any) {
     this.dialogAddUpdateParams.visible = true;
     this.dialogAddUpdateParams.dialogType = 'update';
     this.dialogAddUpdateParams.title = 'Update';
   }
 
-  private handleClickUpload() {
+  public handleClickUpload() {
     this.dialogUpload.visible = true;
     this.dialogUpload.title = 'Upload';
     this.$nextTick(() => {
@@ -893,11 +895,11 @@ export default class myComponentTableBeta extends Vue {
     });
   }
 
-  private handleClickUploadFile() {
+  public handleClickUploadFile() {
     this.$refs[this.dialogUpload.fileID].click();
   }
 
-  private uploadFileSuccess() {
+  public uploadFileSuccess() {
     const files = this.$refs[this.dialogUpload.fileID].files;
     let postFiles = Array.prototype.slice.call(files);
     postFiles = postFiles.slice(0, 1);
@@ -907,7 +909,7 @@ export default class myComponentTableBeta extends Vue {
     });
   }
 
-  private handlerClickDetail(row: any) {
+  public handlerClickDetail(row: any) {
     const arr = cloneDeep(this.dialogDetailParams.params);
     for (let item of arr) {
       for (let key in row) {
@@ -920,43 +922,8 @@ export default class myComponentTableBeta extends Vue {
     this.dialogDetailParams.visible = true;
   }
 
-  private monitorDialogUploadHide() {
-    this.dialogUpload.params.fileName = '';
-    this.dialogUpload.params.file = '';
-  }
-
-  private dialogAddUpdateCloseEvent(data: { type: string }) {
-    this.dialogAddUpdateParams.visible = false;
-  }
-
-  private dialogAddUpdateBeforeHideEvent(data: { type: string; params: any }) {
-    if (data.params) {
-      this.dialogAddUpdateParams.params = data.params;
-    }
-  }
-
-  private dialogUploadCloseEvent(data: { type: string }) {
-    this.dialogUpload.visible = false;
-  }
-
-  private dialogUploadBeforeHideEvent(data: { type: string; params: any }) {
-    if (data.params) {
-      this.dialogUpload.params = data.params;
-    }
-  }
-
-  private dialogDetailCloseEvent(data: { type: string }) {
-    this.dialogDetailParams.visible = false;
-  }
-
-  private dialogDetailBeforeHideEvent(data: { type: string; params: any }) {
-    if (data.params) {
-      this.dialogAddUpdateParams.params = data.params;
-    }
-  }
-
   /**http */
-  private getData() {
+  public getData() {
     try {
       this.tableParams.loading = true;
       this.tableParams.loading = false;
@@ -967,7 +934,7 @@ export default class myComponentTableBeta extends Vue {
     }
   }
 
-  private async dialogAddUpdateConfirmEvent() {
+  public async dialogAddUpdateConfirmEvent() {
     try {
       this.dialogAddUpdateParams.clickLoading = true;
       // await HTTP_REQUEST()
@@ -984,7 +951,7 @@ export default class myComponentTableBeta extends Vue {
     }
   }
 
-  private async handlerClickDelete(row: any) {
+  public async handlerClickDelete(row: any) {
     try {
       const result = await this.$globalConfirm.show({
         title: this.$t('messages.tishi'),
@@ -1003,7 +970,7 @@ export default class myComponentTableBeta extends Vue {
     } catch (error) {}
   }
 
-  private async hanleClickUploadConfirm() {
+  public async hanleClickUploadConfirm() {
     try {
       const form = new FormData();
       form.append('file', this.dialogUpload.params.file);

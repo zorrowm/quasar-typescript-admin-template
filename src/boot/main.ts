@@ -6,6 +6,8 @@ import vue3PhotoPreview from 'vue3-photo-preview';
 import 'vue3-photo-preview/dist/index.css';
 import globalMessage from 'src/utils/notify';
 import globalConfirm from 'src/utils/dialogConfirm';
+// import 'element-plus/dist/index.css';
+import 'element-plus/theme-chalk/dark/css-vars.css';
 import 'src/utils/types';
 import VueSidePanel from 'vue3-side-panel';
 import 'vue3-side-panel/dist/vue3-side-panel.css';

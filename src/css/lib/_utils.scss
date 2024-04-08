@@ -1,45 +1,58 @@
 @import './mixins';
 @import '../quasar.variables.scss';
+
 .body--dark {
   .in-table-link-button {
     box-shadow: 0 1px 2px 0 rgba($color: #ffffff, $alpha: 0);
   }
+
   .in-table-delete-button {
     box-shadow: 0 1px 2px 0 rgba($color: #ffffff, $alpha: 0);
   }
+
   .split-line {
     background-image: linear-gradient(90deg, transparent, rgba($color: #ffffff, $alpha: 0.4), transparent);
   }
+
   .thin-shadow {
     box-shadow: 0 6px 16px -1px rgba($color: #ffffff, $alpha: 0.15);
   }
+
   .detail-link-type:hover {
     color: #ffffff;
   }
+
   .link-type:hover {
     color: #ffffff;
   }
 }
+
 .body--light {
   .in-table-link-button {
     box-shadow: 0 1px 2px 0 rgba($color: #000000, $alpha: 0);
   }
+
   .in-table-delete-button {
     box-shadow: 0 1px 2px 0 rgba($color: #000000, $alpha: 0);
   }
+
   .split-line {
     background-image: linear-gradient(90deg, transparent, rgba($color: #000000, $alpha: 0.4), transparent);
   }
+
   .thin-shadow {
     box-shadow: 0 6px 16px -1px rgba($color: #000000, $alpha: 0.05);
   }
+
   .detail-link-type:hover {
     color: #000000;
   }
+
   .link-type:hover {
     color: #000000;
   }
 }
+
 // 可点击的link
 // explanation
 .eg {
@@ -48,21 +61,25 @@
   display: inline-block;
   font-weight: normal;
 }
+
 .hide {
   display: none !important;
 }
+
 // 点点点
 .ellipsis {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 .detail-link-type,
 .detail-link-type:focus {
   color: var(--q-primary);
   cursor: pointer;
   padding-right: 16px;
   position: relative;
+
   &::after {
     content: url('data:image/svg+xml;charset=utf8,%3Csvg%20t%3D%221677140365147%22%20viewBox%3D%220%200%201024%201024%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20p-id%3D%223571%22%20width%3D%2214%22%20height%3D%2214%22%3E%3Cpath%20d%3D%22M675.11699%20539.183194l-271.900268%20271.91116a38.453744%2038.453744%200%200%201-54.380251-54.383222l244.710141-244.723014-244.710141-244.719054a38.453744%2038.453744%200%200%201%2054.380251-54.383222l271.900268%20271.91116a38.455724%2038.455724%200%200%201%200%2054.386192z%22%20fill%3D%22%235469d4%22%20p-id%3D%223572%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
     position: absolute;
@@ -74,26 +91,32 @@
     transform: translateY(-50%);
   }
 }
+
 .detail-link-type:hover {
   text-decoration: underline;
 }
+
 .link-type,
 .link-type:focus {
   color: var(--q-primary);
   cursor: pointer;
 }
+
 .link-type:hover {
   text-decoration: underline;
 }
+
 .delete-type,
 .delete-type:focus {
   color: var(--q-negative);
   cursor: pointer;
 }
+
 .delete-type:hover {
   color: var(--el-color-error-dark-2);
   text-decoration: underline;
 }
+
 // table里的点击按钮 link
 .in-table-link-button {
   display: inline-block;
@@ -107,10 +130,12 @@
   border-radius: 4px;
   border: solid 1px var(--q-primary);
 }
+
 .in-table-link-button:hover {
   background: var(--q-primary);
   color: var(--my-white);
 }
+
 // table里的删除按钮 delete/negative
 .in-table-delete-button {
   display: inline-block;
@@ -123,67 +148,83 @@
   border: solid 1px var(--el-color-danger);
   border-radius: 4px;
 }
+
 .in-table-delete-button:hover {
   background: var(--q-negative);
   color: var(--my-white);
 }
+
 .input-password {
   font-family: password !important;
+
   input {
     -webkit-text-security: square;
   }
 }
+
 .absolute-center {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 .absolute-x-center {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
 }
+
 .absolute-y-center {
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
 }
+
 .split-line {
   background-color: transparent;
   opacity: 0.2;
 }
+
 .text-gradient {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 .f-bold {
   font-weight: 600;
 }
+
 .q-icon.f-bold {
   font-family: 'Material Icons';
   font-weight: bold;
 }
+
 .thin-shadow {
   border-radius: 8px;
 }
+
 .text-black {
   color: var(--q-dark) !important;
 }
+
 .q-message-error-style {
   background-color: $negative;
   box-shadow: none;
   color: #ffffff !important;
 }
+
 .q-message-warn-style {
   background-color: var(--my-label-warn-major);
   box-shadow: none;
   color: #ffffff !important;
 }
+
 .q-message-success-style {
   background-color: $blue;
   color: #ffffff !important;
 }
+
 .my-label {
   padding: 4px 6px;
   font-size: 12px;
@@ -192,32 +233,38 @@
   justify-content: center;
   align-items: center;
   line-height: 1;
+
   &.blue {
     background: rgba($blue, 0.08);
     color: $blue;
     border: solid 1px rgba($blue, 0.5);
   }
+
   &.green {
     background: $green-2;
     color: $green;
     border: solid 1px rgba($green, 0.5);
   }
+
   &.yellow {
     background: $yellow-2;
     color: $yellow;
     border: solid 1px rgba($yellow, 0.5);
   }
+
   &.red {
     background: $negative-2;
     color: $negative;
     border: solid 1px rgba($negative, 0.5);
   }
+
   &.grey {
     background: var(--my-grey-1);
     color: $grey;
     border: solid 1px rgba($grey, 0.5);
   }
 }
+
 .my-button {
   padding: 6px 14px;
   border-radius: 8px;
@@ -229,6 +276,7 @@
   cursor: pointer;
   user-select: none;
   position: relative;
+
   &.negative {
     border: solid 1px $negative;
     color: $negative;
@@ -236,6 +284,7 @@
     box-sizing: border-box;
     font-weight: 600;
   }
+
   &.primary {
     border: solid 1px $primary;
     color: $primary;
@@ -243,6 +292,7 @@
     box-sizing: border-box;
     font-weight: 600;
   }
+
   &.disabled {
     background: var(--my-white);
     border: solid 1px $primary;
@@ -251,11 +301,13 @@
     color: $primary;
   }
 }
+
 .my-status {
   padding: 0 16px;
   font-size: 14px;
   position: relative;
   color: $dark;
+
   &::before {
     position: absolute;
     left: 0;
@@ -267,44 +319,57 @@
     border-radius: 50%;
     background-color: $dark;
   }
+
   &.grey {
     color: $grey;
+
     &::before {
       background-color: $grey;
     }
   }
+
   &.green {
     color: $green;
+
     &::before {
       background: $green;
     }
   }
+
   &.red {
     color: $negative;
+
     &::before {
       background: $negative;
     }
   }
+
   &.yellow {
     color: $yellow;
+
     &::before {
       background: $yellow;
     }
   }
+
   &.blue {
     color: $blue;
+
     &::before {
       background: $blue;
     }
   }
 }
+
 .my-warn {
   padding: 4px 6px;
   border-radius: 4px;
+
   &.critical {
     padding: 4px 10px;
     background: var(--q-negative);
   }
+
   &.text-critical {
     border-radius: 0;
     position: relative;
@@ -324,10 +389,12 @@
       background-color: var(--q-negative) !important;
     }
   }
+
   &.major {
     padding: 4px 10px;
     background: var(--my-label-warn-major);
   }
+
   &.text-major {
     border-radius: 0;
     position: relative;
@@ -346,10 +413,12 @@
       background-color: var(--my-label-warn-major) !important;
     }
   }
+
   &.minor {
     padding: 4px 10px;
     background: var(--my-label-warn-minor);
   }
+
   &.text-minor {
     border-radius: 0;
     position: relative;
@@ -368,10 +437,12 @@
       background-color: var(--my-label-warn-minor) !important;
     }
   }
+
   &.warning {
     padding: 4px 10px;
     background: var(--my-label-warn-warning);
   }
+
   &.text-warning {
     border-radius: 0;
     position: relative;
@@ -390,10 +461,12 @@
       background-color: var(--my-label-warn-warning) !important;
     }
   }
+
   &.cleared {
     padding: 4px 10px;
     background: var(--my-label-warn-cleared);
   }
+
   &.text-cleared {
     border-radius: 0;
     position: relative;

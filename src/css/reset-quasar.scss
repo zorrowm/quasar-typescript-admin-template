@@ -5,19 +5,23 @@
     box-shadow: 0px 6px 16px -1px rgba($color: #ffffff, $alpha: 0.05);
     // background: #000000;
   }
+
   .query-form-and-action {
     box-shadow: 0px 6px 16px -1px rgba($color: #ffffff, $alpha: 0.05);
   }
+
   .q-pagination {
     &::before {
       border: 1px solid rgba($color: #ffffff, $alpha: 0);
     }
   }
+
   .q-field {
     .q-field__label {
       color: rgba($color: #ffffff, $alpha: 0.541);
     }
   }
+
   .q-table {
     tbody {
       tr {
@@ -29,32 +33,39 @@
       }
     }
   }
+
   .scroll::-webkit-scrollbar-thumb {
     background-color: rgba($color: #ffffff, $alpha: 0.3);
   }
+
   .dialog-upload-form {
     .upload-limit {
       color: rgba($color: #ffffff, $alpha: 0.541);
     }
   }
 }
+
 .body--light {
   .q-card {
     box-shadow: 0px 6px 16px -1px rgba($color: #000000, $alpha: 0.05);
   }
+
   .query-form-and-action {
     box-shadow: 0px 6px 16px -1px rgba($color: #000000, $alpha: 0.05);
   }
+
   .q-pagination {
     &::before {
       border: 1px solid rgba($color: #000000, $alpha: 0);
     }
   }
+
   .q-field {
     .q-field__label {
       color: rgba($color: #000000, $alpha: 0.541);
     }
   }
+
   .q-table {
     tbody {
       tr {
@@ -66,36 +77,52 @@
       }
     }
   }
+
   .scroll::-webkit-scrollbar-thumb {
     background-color: rgba($color: #000000, $alpha: 0.3);
   }
+
   .dialog-upload-form {
     .upload-limit {
       color: rgba($color: #000000, $alpha: 0.541);
     }
   }
 }
+
 .q-card {
   border-radius: 16px !important;
   vertical-align: top;
   position: relative;
   border: none !important;
 }
+
 // 搜索栏
 .query-form-and-action {
   background: var(--my-white);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
+
   .form {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-gap: 16px;
+
     .query {
+      display: grid;
+      // 每行4个，间距20
+      grid-template-columns: repeat(6, 1fr);
+      grid-gap: 16px;
+    }
+
+    .action {
       display: flex;
-      flex-wrap: wrap;
-      margin-bottom: -16px;
-      .query-item {
-        min-width: 250px;
+
+      .q-btn {
+        height: 40px;
+        border-radius: 8px;
         margin-right: 16px;
-        margin-bottom: 16px;
+
         &:last-child {
           margin-right: 0;
         }
@@ -103,30 +130,37 @@
     }
   }
 }
+
 // 按钮
 .q-btn--rectangle {
   border-radius: 8px;
 }
+
 .q-field__control,
 .q-btn {
   padding: 0 16px;
+
   &.q-btn--outline {
     font-weight: 600;
   }
 }
+
 .q-date__content {
   .q-btn {
     height: 30px;
     min-width: 30px;
     line-height: 30px;
     padding: 0 4px;
+
     &.q-btn--rectangle {
       border-radius: 3px !important;
     }
   }
 }
+
 .q-pagination {
   margin-top: 3px;
+
   .q-btn {
     min-height: 32px;
     height: 32px;
@@ -136,39 +170,47 @@
     align-items: center;
     justify-content: center;
     margin: 0 !important;
+
     &:has(img) {
       min-width: 32px !important;
       min-height: 32px;
       height: 32px;
       margin-right: 8px !important;
       margin-left: 8px !important;
+
       &::before {
         border-radius: 8px;
         border: 1px solid var(--my-grey-6);
       }
     }
+
     span {
       height: 32px !important;
       line-height: 32px !important;
     }
+
     &::before {
       box-shadow: none;
       height: 32px !important;
       border-radius: 8px;
       box-sizing: border-box;
     }
+
     &.text-primary {
       font-weight: 600;
     }
   }
 }
-.pagination-currentPage-input{
+
+.pagination-currentPage-input {
   max-width: 68px !important;
   margin-top: 3px;
-  .q-field__inner{
-    .q-field__control{
+
+  .q-field__inner {
+    .q-field__control {
       height: 32px !important;
-      &:before{
+
+      &:before {
         border-radius: 8px;
         border: 1px solid var(--my-grey-6);
       }
@@ -176,25 +218,31 @@
   }
 
 }
+
 .q-field--outlined .q-field__control {
   border-radius: 8px;
 }
+
 // 表格
 .q-table__container {
   border: none !important;
 }
+
 .q-table {
   th {
     color: var(--my-grey-7);
   }
 }
+
 .q-table__bottom--nodata {
   position: relative;
   height: 150px !important;
   color: var(--my-grey-7);
+
   i {
     display: none;
   }
+
   &::before {
     content: '';
     margin-bottom: 10px;
@@ -205,21 +253,26 @@
     background-size: 100% 100%;
   }
 }
+
 /* 滚动条 */
 .scroll::-webkit-scrollbar {
   background: transparent;
 }
+
 .scroll::-webkit-scrollbar:vertical {
   width: 1em;
 }
+
 .scroll::-webkit-scrollbar:horizontal {
   height: 1em;
 }
+
 .scroll::-webkit-scrollbar-thumb {
   border-radius: 99999px;
   border: 0.3125em solid transparent;
   background-clip: content-box;
 }
+
 /* table NO DATA */
 .q-table__bottom--nodata {
   align-items: center;
@@ -227,22 +280,27 @@
   flex-direction: column;
   height: 100px;
   text-align: center;
+
   i {
     font-size: 30px;
     margin-bottom: 10px;
   }
 }
+
 /* 弹窗 */
 .dialog-upload-form {
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   .container {
     height: 195px;
     background: var(--my-grey-1);
     border-radius: 6px;
     color: $dark;
     position: relative;
+
     .center {
       width: 50%;
       position: absolute;
@@ -251,19 +309,23 @@
       transform: translate(-50%, -50%);
       text-align: center;
       cursor: pointer;
+
       img {
         width: 48px;
         height: 48px;
       }
+
       .click {
         font-size: 16px;
         padding-top: 10px;
       }
+
       .format {
         color: var(--my-grey-7);
         font-size: 12px;
         padding-top: 8px;
       }
+
       .fileName {
         font-size: 12px;
         word-break: break-all;
@@ -271,19 +333,23 @@
       }
     }
   }
+
   .upload-limit {
-    padding-top: 10px;
     font-size: 14px;
   }
+
 }
+
 /* tooltip */
 .hide-tooltip {
   z-index: -1 !important;
 }
+
 .el-popover.el-popper,
 .el-popper.el-picker__popper {
   z-index: 10000 !important;
 }
+
 /* tree */
 .q-tree__node-header:before,
 .q-tree__node:after {

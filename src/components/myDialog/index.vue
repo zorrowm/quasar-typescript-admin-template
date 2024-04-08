@@ -11,6 +11,9 @@
             <slot />
           </q-form>
         </div>
+        <div class="q-px-md q-pb-md">
+          <slot name="extra-description" />
+        </div>
         <div class="split-line h-1"></div>
         <div class="text-center q-pa-md row justify-end">
           <q-btn :label="$t(`action.cancel`)" :disable="myDialogParams.clickLoading" @click="handlerClickCancel()" outline color="primary" />
@@ -125,7 +128,7 @@ export default class MyDialogComponent extends Vue {
   }
 
   created() {
-    this.myDialogParams = cloneDeep(Object.assign(DEFAULT_OPTION, this.option));
+    this.myDialogParams = Object.assign(cloneDeep(DEFAULT_OPTION), cloneDeep(this.option));
     this.bakParams = cloneDeep(this.option.params);
     this.prevOption = cloneDeep(this.option);
   }
@@ -133,17 +136,17 @@ export default class MyDialogComponent extends Vue {
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
   private bakParams = {};
   private prevOption: IOption | undefined;
-  private myDialogParams = cloneDeep(DEFAULT_OPTION);
+  public myDialogParams = cloneDeep(DEFAULT_OPTION);
 
   /* event */
   public handlerClickCancel() {
     this.$nextTick(() => {
       this.$emit('close', { type: this.myDialogParams.dialogType });
-      this.$refs[this.myDialogParams.id].resetValidation();
+      this.$refs[this.myDialogParams.id] && this.$refs[this.myDialogParams.id].resetValidation();
     });
   }
 
-  private handlerClickDialogConfirmButton() {
+  public handlerClickDialogConfirmButton() {
     if (!this.option.customComfirm) {
       this.$refs[this.myDialogParams.id].validate().then(async (valid: boolean) => {
         if (valid) {
@@ -167,7 +170,7 @@ export default class MyDialogComponent extends Vue {
     }
   }
 
-  private handlerBeforeHide() {
+  public handlerBeforeHide() {
     this.myDialogParams.params = cloneDeep(this.bakParams);
     this.$emit('before-hide', {
       type: this.myDialogParams.dialogType,
@@ -221,8 +224,7 @@ export default class MyDialogComponent extends Vue {
   }
 
   .content {
-    padding: 0 16px;
-    margin: 10px 0;
+    padding: 16px;
   }
 }
 </style>
