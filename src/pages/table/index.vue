@@ -161,7 +161,7 @@
       }"
       @confirm="dialogAddUpdateConfirmEvent"
       @close="dialogAddUpdateParams.visible = false"
-      @before-hide="(data: { type: string; params: any })=>dialogAddUpdateParams.params = data.params"
+      @before-hide="(data) => (dialogAddUpdateParams.params = data.params)"
     >
       <div class="row q-col-gutter-x-md">
         <div v-for="(item, index) in dialogAddUpdateParams.input" :key="index" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
@@ -309,7 +309,7 @@
       }"
       @close="dialogUpload.visible = false"
       @confirm="hanleClickUploadConfirm"
-      @before-hide="(data: { type: string; params: any })=>dialogUpload.params = data.params"
+      @before-hide="(data) => (dialogUpload.params = data.params)"
     >
       <div class="dialog-upload-form">
         <input type="file" class="hide" :ref="dialogUpload.fileID" :accept="dialogUpload.accept" :draggable="false" @change="uploadFileSuccess" />
@@ -342,8 +342,8 @@
         params: dialogDetailParams.params,
         showConfirm: false,
       }"
-      @close="(data: { type: string })=> dialogDetailParams.visible = false"
-      @before-hide="(data: { type: string; params: any })=>dialogDetailParams.params = data.params"
+      @close="() => (dialogDetailParams.visible = false)"
+      @before-hide="(data) => (dialogDetailParams.params = data.params)"
     >
       <q-list class="row q-col-gutter-x-md">
         <q-item v-for="(item, index) in dialogDetailParams.params" :key="index" :clickable="false" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
@@ -720,6 +720,7 @@ export default class myComponentTableBeta extends Vue {
           },
         ],
         label: 'radio',
+        disable: false,
       },
       {
         model: 'f',
