@@ -106,7 +106,7 @@ export default class mySliderComponent extends Vue {
     model: 0,
   };
 
-  private handlerClickSetSlider() {
+  public handlerClickSetSlider() {
     const item = this.externalOption;
     this.$q
       .dialog({

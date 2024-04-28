@@ -157,11 +157,11 @@ export default class FormMultipleSelectComponent extends Vue {
     return this.$refs[this.externalOption.inputId].validate();
   }
 
-  private popShow() {
+  public popShow() {
     this.internalOption.showPlaceholder = !this.externalOption.userInput;
   }
 
-  private popHide() {
+  public popHide() {
     if (!this.internalOption.model || (this.internalOption.model && !this.internalOption.model.length)) {
       this.$nextTick(() => {
         this.$refs[this.externalOption.inputId] && this.$refs[this.externalOption.inputId].blur();
@@ -170,7 +170,7 @@ export default class FormMultipleSelectComponent extends Vue {
     this.internalOption.showPlaceholder = true;
   }
 
-  private filterFn(val: any, update: any) {
+  public filterFn(val: any, update: any) {
     update(() => {
       if (val === '') {
         this.externalOption.selectOption = this.internalOption.selectOptionBak;
@@ -192,7 +192,7 @@ export default class FormMultipleSelectComponent extends Vue {
     }
   }
 
-  private inputValue(val: string) {
+  public inputValue(val: string) {
     if (!val) {
       this.internalOption.showPlaceholder = true;
       if (!this.internalOption.model || (this.internalOption.model && !this.internalOption.model.length)) {

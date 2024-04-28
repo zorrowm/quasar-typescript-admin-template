@@ -6,7 +6,9 @@
     </p>
     <div class="pick-date">
       <div class="row">
-        <span class="text-caption q-mr-sm mt-3">Start:</span>
+        <span class="text-caption q-mr-sm mt-3">
+          {{ $t('components.start') }}
+        </span>
         <q-input
           ref="startInputEl"
           :rules="internalOption.startRules"
@@ -28,12 +30,12 @@
             <q-icon name="o_event" class="cursor-pointer">
               <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down">
                 <div class="row">
-                  <q-date v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" flat> Start date & time</q-date>
+                  <q-date v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" flat> {{ $t('components.start_date_time') }}</q-date>
                   <q-time v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
                 </div>
-                <div class="row items-center justify-center q-my-sm">
-                  <q-btn v-close-popup label="Now" color="primary" flat @click="setNow('startModel')" />
-                  <q-btn v-close-popup label="Close" color="primary" />
+                <div class="row items-center justify-center q-my-sm q-gutter-x-md">
+                  <q-btn v-close-popup :label="$t('components.now')" color="primary" flat @click="setNow('startModel')" />
+                  <q-btn v-close-popup :label="$t('components.close')" color="primary" />
                 </div>
               </q-popup-proxy>
             </q-icon>
@@ -41,7 +43,9 @@
         </q-input>
       </div>
       <div class="row">
-        <span class="text-caption q-mr-sm mt-3">End:</span>
+        <span class="text-caption q-mr-sm mt-3">
+          {{ $t('components.end') }}
+        </span>
         <q-input
           ref="endInputEl"
           :rules="internalOption.endRules"
@@ -63,12 +67,14 @@
             <q-icon name="o_event" class="cursor-pointer">
               <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down" :target="!!internalOption.startModel">
                 <div class="row">
-                  <q-date v-model="internalOption.endModel" mask="YYYY/MM/DD HH:mm:ss" flat :options="endDateOption"> End date & time</q-date>
+                  <q-date v-model="internalOption.endModel" mask="YYYY/MM/DD HH:mm:ss" flat :options="endDateOption">
+                    {{ $t('components.end_date_time') }}
+                  </q-date>
                   <q-time v-model="internalOption.endModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
                 </div>
                 <div class="row items-center justify-center q-my-sm q-gutter-x-md">
-                  <q-btn v-close-popup label="Now" color="primary" flat @click="setNow('endModel')" />
-                  <q-btn v-close-popup label="Close" color="primary" />
+                  <q-btn v-close-popup :label="$t('components.now')" color="primary" flat @click="setNow('endModel')" />
+                  <q-btn v-close-popup :label="$t('components.close')" color="primary" />
                 </div>
               </q-popup-proxy>
             </q-icon>
@@ -169,15 +175,15 @@ export default class myDateRangeWithTImeComponent extends Vue {
   public internalOption = {
     startModel: '',
     endModel: '',
-    startPlaceholder: 'Start date & time',
-    endPlaceholder: 'End date & time',
+    startPlaceholder: this.globals.$t('components.start_date_time'),
+    endPlaceholder: this.globals.$t('components.end_date_time'),
     startClasses: 'col',
     endClasses: 'col',
     startRules: [],
     endRules: [],
   };
 
-  private setNow(type: string) {
+  public setNow(type: string) {
     (this.internalOption as any)[type] = date.formatDate(new Date().getTime(), 'YYYY/MM/DD HH:mm:ss');
   }
 
@@ -190,10 +196,10 @@ export default class myDateRangeWithTImeComponent extends Vue {
             if (date.isValid(val)) {
               return true;
             } else {
-              return 'Start date is invalid';
+              return this.globals.$t('components.start_time_invalid');
             }
           } else {
-            return 'Start date is required';
+            return this.globals.$t('components.start_time_required');
           }
         },
         (val: any) => {
@@ -203,7 +209,7 @@ export default class myDateRangeWithTImeComponent extends Vue {
               if (+new Date(val) < +new Date(to)) {
                 return true;
               } else {
-                return 'Start date must be less than end date';
+                return this.globals.$t('components.end_date_less_than_start_date');
               }
             } else {
               return 'Start date is invalid';
@@ -220,10 +226,10 @@ export default class myDateRangeWithTImeComponent extends Vue {
             if (date.isValid(val)) {
               return true;
             } else {
-              return 'End date is invalid';
+              return this.globals.$t('components.end_date_invalid');
             }
           } else {
-            return 'End date is required';
+            return this.globals.$t('components.end_time_required');
           }
         },
         (val: any) => {
@@ -233,13 +239,13 @@ export default class myDateRangeWithTImeComponent extends Vue {
               if (+new Date(from) < +new Date(val)) {
                 return true;
               } else {
-                return 'Start date must be less than end date';
+                return this.globals.$t('components.end_date_less_than_start_date');
               }
             } else {
-              return 'End date is invalid';
+              return this.globals.$t('components.end_date_invalid');
             }
           } else {
-            return 'End date is required';
+            return this.globals.$t('components.end_time_required');
           }
         },
       ] as any;
@@ -255,9 +261,11 @@ export default class myDateRangeWithTImeComponent extends Vue {
 :deep(.q-time) {
   border-radius: 0 !important;
 }
+
 :deep(.q-date) {
   border-radius: 0 !important;
 }
+
 .pick-date {
   display: grid;
   grid-template-columns: 1fr 1fr;

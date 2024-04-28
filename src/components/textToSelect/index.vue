@@ -1,10 +1,10 @@
 <template>
-  <q-input outlined class="text-to-input" v-model="text" :loading="_loading" dense :readonly="_loading">
-    <template v-slot:append v-if="!_loading">
-      <q-icon name="o_cancel" class="cursor-pointer text-grey" @click.stop.prevent="close"> </q-icon>
-      <q-icon name="o_check_circle" class="cursor-pointer text-black" @click.stop.prevent="confirm"> </q-icon>
+  <q-select outlined class="text-to-input" v-model="text" :loading="_loading" dense :options="_options" emit-value map-options options-dense>
+    <template v-slot:append>
+      <q-icon name="o_cancel" class="cursor-pointer text-grey" @click.stop.prevent="close"></q-icon>
+      <q-icon name="o_check_circle" class="cursor-pointer text-black" @click.stop.prevent="confirm"></q-icon>
     </template>
-  </q-input>
+  </q-select>
 </template>
 
 <script lang="ts">
@@ -16,6 +16,7 @@ export default class TextToInputComponent extends Vue {
   @Prop({ default: '' }) value!: string;
   @Prop({ default: {} }) that!: any;
   @Prop({ default: {} }) loading!: boolean;
+  @Prop({ default: [] }) options!: any[];
 
   @Watch('loading')
   onLoadingChange() {
@@ -30,6 +31,7 @@ export default class TextToInputComponent extends Vue {
 
   private text = '';
   private oldText = '';
+  private _options = [];
   private _loading = false;
 
   private close() {
@@ -45,7 +47,7 @@ export default class TextToInputComponent extends Vue {
   mounted() {
     this.oldText = this.$props.value;
     this.text = this.$props.value;
-    this._loading = this.loading;
+    this._options = JSON.parse(JSON.stringify(this.$props.options));
   }
 }
 </script>

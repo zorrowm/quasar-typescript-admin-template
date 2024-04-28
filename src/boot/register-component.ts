@@ -3,6 +3,7 @@ import { boot } from 'quasar/wrappers';
 import MyBanner from 'src/components/myBanner/index.vue';
 import RightPanel from 'src/components/rightPanel/index.vue';
 import TextToInput from 'src/components/textToInput/index.vue';
+import TextToSelect from 'src/components/textToSelect/index.vue';
 import MyTooltip from 'src/components/myTooltip/index.vue';
 import MyPagination from 'src/components/myPagination/index.vue';
 import MyDialog from 'src/components/myDialog/index.vue';
@@ -21,6 +22,7 @@ export default boot(({ app }) => {
   app.component('MyBanner', MyBanner);
   app.component('RightPanel', RightPanel);
   app.component('TextToInput', TextToInput);
+  app.component('TextToSelect', TextToSelect);
   app.component('MyPagination', MyPagination);
   app.component('MyTooltip', MyTooltip);
   app.component('MyDialog', MyDialog);

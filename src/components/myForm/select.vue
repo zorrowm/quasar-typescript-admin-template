@@ -148,7 +148,7 @@ export default class FormSelectComponent extends Vue {
     return this.$refs[this.externalOption.inputId].validate();
   }
 
-  private filterFn(val: any, update: any) {
+  public filterFn(val: any, update: any) {
     update(() => {
       if (val === '') {
         this.externalOption.selectOption = this.internalOption.selectOptionBak;

@@ -142,7 +142,7 @@ export default class MyTreeSelectComponent extends Vue {
   };
 
   /* event */
-  private menuItemClick(item: any) {
+  public menuItemClick(item: any) {
     if (!item.children.length) {
       this.$refs.menuRef.hide();
       this.internalOption.inputModel = item.label;
@@ -157,26 +157,26 @@ export default class MyTreeSelectComponent extends Vue {
     }
   }
 
-  private menuShow() {
+  public menuShow() {
     document.addEventListener('click', this.documentClickEvent);
   }
 
-  private menuHide() {
+  public menuHide() {
     document.removeEventListener('click', this.documentClickEvent);
   }
 
-  private inputFocus() {
+  public inputFocus() {
     this.inputValue(this.internalOption.inputModel);
     this.$refs.menuRef.show();
   }
 
-  private inputBlur() {
+  public inputBlur() {
     if (!this.externalOption.selectOption.some((one: any) => one.label === this.internalOption.inputModel)) {
       this.internalOption.inputModel = '';
     }
   }
 
-  private inputValue(value: any) {
+  public inputValue(value: any) {
     const selectOptionBak = cloneDeep(this.internalOption.selectOptionBak);
     if (!value) {
       this.$emit('input', null);

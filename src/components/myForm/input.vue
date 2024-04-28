@@ -38,7 +38,7 @@ import { cloneDeep } from 'lodash';
 
 interface Option {
   model: string;
-  type?: string;
+  type: string;
   placeholder?: string;
   classes?: string;
   rules: never[];

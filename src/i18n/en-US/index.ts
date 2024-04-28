@@ -226,4 +226,18 @@ export default {
     closeAll: 'Close all',
     submit: 'Submit',
   },
+  components: {
+    under_construction: 'Under construction...',
+    start: 'Start:',
+    end: 'End:',
+    end_date_time: 'End date & time',
+    start_date_time: 'Start date & time',
+    start_time_invalid: 'Start date is invalid',
+    start_time_required: 'Start date is required',
+    end_date_invalid: 'End date is invalid',
+    end_date_less_than_start_date: 'Start date must be less than end date',
+    end_time_required: 'End date is required',
+    now: 'Now',
+    close: 'Close',
+  },
 };

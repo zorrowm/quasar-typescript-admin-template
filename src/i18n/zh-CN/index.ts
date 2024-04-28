@@ -225,4 +225,18 @@ export default {
     closeAll: '关闭所有',
     submit: '提交',
   },
+  components: {
+    under_construction: '正在建设中...',
+    start: '开始:',
+    end: '结束:',
+    end_date_time: '结束日期和时间',
+    start_date_time: '开始日期和时间',
+    start_time_invalid: '开始日期无效',
+    start_time_required: '开始日期是必需的',
+    end_date_invalid: '结束日期无效',
+    end_date_less_than_start_date: '开始日期必须小于结束日期',
+    end_time_required: '结束日期是必需的',
+    now: '现在',
+    close: '关闭',
+  },
 };

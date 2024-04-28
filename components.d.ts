@@ -35,6 +35,7 @@ declare module 'vue' {
     Select: typeof import('./src/components/myForm/select.vue')['default']
     Slider: typeof import('./src/components/myForm/slider.vue')['default']
     TextToInput: typeof import('./src/components/textToInput/index.vue')['default']
+    TextToSelect: typeof import('./src/components/textToSelect/index.vue')['default']
     TreeSelect: typeof import('./src/components/myForm/treeSelect.vue')['default']
   }
 }

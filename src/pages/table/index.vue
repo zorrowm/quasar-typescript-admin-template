@@ -345,17 +345,43 @@
       @close="() => (dialogDetailParams.visible = false)"
       @before-hide="(data) => (dialogDetailParams.params = data.params)"
     >
-      <q-list class="row q-col-gutter-x-md">
+      <q-list class="row q-col-gutter-x-md items-start">
         <q-item v-for="(item, index) in dialogDetailParams.params" :key="index" :clickable="false" v-responseClass="'sm:col-12 md:col-12 lg:col-6 xl:col-6'">
           <q-item-section>
-            <q-item-label caption>{{ item.label }}：</q-item-label>
+            <q-item-label style="font-weight: 500">{{ item.label }}：</q-item-label>
             <q-item-label :class="item.class" style="margin-top: 8px">
-              <span v-if="!item.inSlot">{{ item.value }}</span>
-              <div v-else class="text-left">
+              <span v-if="!item.inSlot" class="text-grey-9">{{ item.value }}</span>
+              <section v-else class="text-left">
                 <span class="text-red" v-if="item.id === 'name'">
                   {{ item.value }}
                 </span>
-              </div>
+                <div class="edit-with-input" v-if="item.editType === 'input'">
+                  <div class="row justify-between" v-if="!item.inputVisible">
+                    <div class="w-p-90 lh-22" style="word-break: break-all">
+                      {{ item.value }}
+                    </div>
+                    <span class="link-type q-ml-md" @click="item.inputVisible = true">编辑</span>
+                  </div>
+                  <TextToInput :value="item.value" :that="item" :loading="item.loading" @confirm="item.textToInputConfirm" @close="item.textToInputClose" v-if="item.inputVisible" />
+                </div>
+                <div class="edit-with-select" v-if="item.editType === 'select'">
+                  <div class="row justify-between" v-if="!item.inputVisible">
+                    <div class="w-p-90 lh-22" style="word-break: break-all">
+                      {{ item.value }}
+                    </div>
+                    <span class="link-type q-ml-md" @click="item.inputVisible = true">编辑</span>
+                  </div>
+                  <TextToSelect
+                    :value="item.value"
+                    :that="item"
+                    :loading="item.loading"
+                    :options="item.options"
+                    @confirm="item.textToInputConfirm"
+                    @close="item.textToInputClose"
+                    v-if="item.inputVisible"
+                  />
+                </div>
+              </section>
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -829,8 +855,55 @@ export default class myComponentTableBeta extends Vue {
     title: 'Detail',
     params: [
       { label: 'Name', value: '', id: 'name', class: '', inSlot: true },
-      { label: 'Sex', value: '', id: 'sex', class: '' },
-      { label: 'C', value: '', id: 'c', class: '' },
+      {
+        label: 'select with edit',
+        value: '',
+        id: 'sex',
+        class: '',
+        inSlot: true,
+        editType: 'select',
+        loading: false,
+        inputVisible: false,
+        options: [
+          {
+            label: 'option1',
+            value: 'female',
+          },
+          {
+            label: 'option2',
+            value: 'male',
+          },
+        ],
+        textToInputConfirm({ value, that }: { value: string; that: any }) {
+          console.log(value, that);
+          that.inputVisible = false;
+          that.value = value;
+        },
+        textToInputClose({ value, that }: { value: string; that: any }) {
+          console.log(value, that);
+          that.inputVisible = false;
+        },
+      },
+
+      {
+        label: 'input with edit',
+        value: '',
+        id: 'c',
+        class: '',
+        inSlot: true,
+        editType: 'input',
+        loading: false,
+        inputVisible: false,
+        textToInputConfirm({ value, that }: { value: string; that: any }) {
+          console.log(value, that);
+          that.inputVisible = false;
+          that.value = value;
+        },
+        textToInputClose({ value, that }: { value: string; that: any }) {
+          console.log(value, that);
+          that.inputVisible = false;
+        },
+      },
       { label: 'D', value: '', id: 'd', class: '' },
       { label: 'E', value: '', id: 'e', class: '' },
       { label: 'F', value: '', id: 'f', class: '' },

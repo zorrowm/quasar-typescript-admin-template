@@ -22,7 +22,9 @@
         </div>
       </div>
     </div>
-    <p class="text-left">Under construction...</p>
+    <p class="text-left">
+      {{ $t('components.under_construction') }}
+    </p>
   </div>
 </template>
 
@@ -45,6 +47,7 @@ export default class ConstructionComponent extends Vue {}
   margin-top: -72.5px;
   margin-left: -237.5px;
   border-bottom: 5px solid var(--machine-color);
+
   .road {
     .mud {
       &:before {
@@ -58,6 +61,7 @@ export default class ConstructionComponent extends Vue {}
         left: 0;
         bottom: -17px;
       }
+
       &:after {
         content: '';
         position: absolute;
@@ -69,49 +73,60 @@ export default class ConstructionComponent extends Vue {}
         right: 0;
         bottom: -20px;
       }
+
       bottom: 0;
       width: 40px;
       height: 15px;
       position: relative;
       display: inline-block;
     }
+
     right: 0;
     bottom: 0;
     height: 15px;
     width: 140px;
     overflow: hidden;
     position: absolute;
+
     .mud-wrap {
       width: 160px;
       position: absolute;
       animation: moveRoad 0.4s linear infinite;
     }
   }
+
   .machine-roof {
     animation: upDown 0.6s linear infinite;
   }
+
   .machine-body {
     animation: upDown 0.6s linear infinite;
   }
+
   .machine-silencer {
     animation: upDown 0.6s linear infinite;
     animation-duration: 0.4s;
   }
+
   .machine-back {
     &:before {
       animation: upDown 0.6s linear infinite;
     }
+
     animation: upDown 0.8s linear infinite;
   }
+
   .machine-front {
     animation: upDown 0.6s linear infinite;
     animation-duration: 0.3s;
   }
 }
+
 .machine {
   width: 475px;
   height: 145px;
   padding-bottom: 20px;
+
   .machine-roof {
     margin: auto;
     width: 80px;
@@ -121,6 +136,7 @@ export default class ConstructionComponent extends Vue {}
     background: var(--my-white);
     border: 15px solid var(--machine-color);
     border-bottom: none;
+
     .machine-silencer {
       &:before {
         content: '';
@@ -132,6 +148,7 @@ export default class ConstructionComponent extends Vue {}
         border-top: 4px solid transparent;
         border-left: 8px solid transparent;
       }
+
       &:after {
         content: '';
         position: absolute;
@@ -142,12 +159,14 @@ export default class ConstructionComponent extends Vue {}
         background: inherit;
         transform: skewY(-35deg);
       }
+
       width: 14px;
       left: -50px;
       height: 12px;
       bottom: -1px;
       position: absolute;
       background: var(--machine-color);
+
       .machine-smoke {
         left: -5px;
         width: 16px;
@@ -161,8 +180,10 @@ export default class ConstructionComponent extends Vue {}
       }
     }
   }
+
   .machine-main {
     margin: auto;
+
     .machine-back {
       &:before {
         content: '';
@@ -172,6 +193,7 @@ export default class ConstructionComponent extends Vue {}
         background: var(--my-white);
         border-radius: 50% 50% 0 0 / 85% 85% 0 0;
       }
+
       &:after {
         content: '';
         position: absolute;
@@ -185,11 +207,13 @@ export default class ConstructionComponent extends Vue {}
         background: transparent;
         border: 15px solid var(--machine-color);
       }
+
       bottom: -1px;
       width: 75px;
       height: 45px;
       position: absolute;
     }
+
     .machine-front {
       &:after {
         content: '';
@@ -203,6 +227,7 @@ export default class ConstructionComponent extends Vue {}
         background: inherit;
         border: 2px solid var(--my-white);
       }
+
       z-index: 1;
       width: 60px;
       height: 60px;
@@ -213,11 +238,13 @@ export default class ConstructionComponent extends Vue {}
       background: var(--machine-color);
       border-top: 2px solid var(--my-white);
     }
+
     .machine-body {
       height: inherit;
       width: inherit;
       position: relative;
       background: var(--machine-color);
+
       &:before {
         left: -15px;
         width: 30px;
@@ -225,6 +252,7 @@ export default class ConstructionComponent extends Vue {}
         background: inherit;
         transform: skewX(-20deg);
       }
+
       &:after {
         bottom: 0;
         right: 15px;
@@ -234,17 +262,20 @@ export default class ConstructionComponent extends Vue {}
       }
     }
   }
+
   .machine-body {
     &:before {
       content: '';
       position: absolute;
     }
+
     &:after {
       content: '';
       position: absolute;
     }
   }
 }
+
 .machine-main {
   height: 60px;
   width: 185px;
@@ -259,6 +290,7 @@ export default class ConstructionComponent extends Vue {}
     right: 0;
   }
 }
+
 @keyframes moveSmoke {
   0% {
     opacity: 0;
@@ -272,6 +304,7 @@ export default class ConstructionComponent extends Vue {}
     transform: scale(1) translate(-10px, -40px);
   }
 }
+
 @keyframes upDown {
   0% {
     transform: translateY(0);

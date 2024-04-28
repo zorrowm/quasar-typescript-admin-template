@@ -111,7 +111,7 @@ export default class FormMaskInputComponent extends Vue {
 
   private globals = getCurrentInstance()!.appContext.config.globalProperties;
   public prevOption: Option | undefined;
-  private externalOption = cloneDeep(EXTERNAL_OPTION);
+  public externalOption = cloneDeep(EXTERNAL_OPTION);
   public internalOption = {
     model: '',
   };
