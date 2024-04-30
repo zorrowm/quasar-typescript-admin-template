@@ -1,9 +1,18 @@
 <template>
   <div>
-    <q-dialog transition-show="jump-down" transition-hide="jump-up" v-model="myDialogParams.visible" persistent @before-hide="handlerBeforeHide">
+    <q-dialog
+      transition-show="slide-left"
+      transition-hide="slide-right"
+      v-model="myDialogParams.visible"
+      @before-hide="handlerBeforeHide"
+      position="right"
+      full-height
+      :persistent="myDialogParams.persistent"
+    >
       <q-card class="my-dialog" :style="calcMyDialogWidth">
-        <div class="title f-bold q-pa-md text-h6">
-          {{ myDialogParams.title }}
+        <div class="title q-pa-md row items-center">
+          <span class="text-h6 f-bold">{{ myDialogParams.title }}</span>
+          <q-icon class="q-ml-auto" name="close" @click="handlerClickCancel" size="20px" v-if="myDialogParams.showClose" />
         </div>
         <div class="split-line h-1"></div>
         <div class="scroll content" style="max-height: 500px">
@@ -14,11 +23,20 @@
         <div class="q-px-md q-pb-md">
           <slot name="extra-description" />
         </div>
-        <div class="split-line h-1"></div>
-        <div class="text-center q-pa-md row justify-end">
-          <q-btn :label="$t(`action.cancel`)" :disable="myDialogParams.clickLoading" @click="handlerClickCancel()" outline color="primary" />
-          <q-btn :label="$t(`action.confirm`)" color="primary" class="q-ml-md" @click="handlerClickDialogConfirmButton()" :loading="myDialogParams.clickLoading" v-show="myDialogParams.showConfirm" />
-        </div>
+        <q-card-actions class="actions q-pa-none">
+          <div class="q-pa-md full-width text-right">
+            <div class="split-line h-1 q-my-md"></div>
+            <q-btn :label="$t(`action.cancel`)" :disable="myDialogParams.clickLoading" @click="handlerClickCancel()" outline color="primary" />
+            <q-btn
+              :label="$t(`action.confirm`)"
+              color="primary"
+              class="q-ml-md"
+              @click="handlerClickDialogConfirmButton()"
+              :loading="myDialogParams.clickLoading"
+              v-show="myDialogParams.showConfirm"
+            />
+          </div>
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
@@ -40,6 +58,8 @@ interface IOption {
   params: any;
   customComfirm: boolean;
   noTwiceConfirm: boolean;
+  persistent?: boolean;
+  showClose?: boolean;
 }
 
 const DEFAULT_OPTION: IOption = {
@@ -53,6 +73,8 @@ const DEFAULT_OPTION: IOption = {
   params: {},
   customComfirm: false,
   noTwiceConfirm: false,
+  persistent: true,
+  showClose: true,
 };
 
 @Component({
@@ -176,6 +198,9 @@ export default class MyDialogComponent extends Vue {
       type: this.myDialogParams.dialogType,
       params: this.myDialogParams.params,
     });
+    if (!this.myDialogParams.persistent) {
+      this.$emit('close', { type: this.myDialogParams.dialogType });
+    }
   }
 
   public validForm() {
@@ -198,6 +223,10 @@ export default class MyDialogComponent extends Vue {
       }
     }
   }
+
+  .actions {
+    background: #000000;
+  }
 }
 
 .body--light {
@@ -212,10 +241,16 @@ export default class MyDialogComponent extends Vue {
       }
     }
   }
+
+  .actions {
+    background: #ffffff;
+  }
 }
 
 .my-dialog {
-  border-radius: 12px;
+  border-radius: 12px 0 0 12px !important;
+  display: flex;
+  flex-direction: column;
 
   .title {
     padding: 16px;
@@ -225,6 +260,11 @@ export default class MyDialogComponent extends Vue {
 
   .content {
     padding: 16px;
+  }
+
+  .actions {
+    width: 100%;
+    margin-top: auto;
   }
 }
 </style>

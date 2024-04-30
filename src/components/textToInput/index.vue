@@ -1,8 +1,8 @@
 <template>
   <q-input outlined class="text-to-input" v-model="text" :loading="_loading" dense :readonly="_loading">
     <template v-slot:append v-if="!_loading">
-      <q-icon name="o_cancel" class="cursor-pointer text-grey" @click.stop.prevent="close"> </q-icon>
-      <q-icon name="o_check_circle" class="cursor-pointer text-black" @click.stop.prevent="confirm"> </q-icon>
+      <q-icon name="app:text-to-input-close" class="cursor-pointer text-grey" @click.stop.prevent="close"> </q-icon>
+      <q-icon name="app:text-to-input-confirm" class="cursor-pointer text-black" @click.stop.prevent="confirm"> </q-icon>
     </template>
   </q-input>
 </template>
@@ -28,16 +28,16 @@ export default class TextToInputComponent extends Vue {
     this.text = newVal;
   }
 
-  private text = '';
+  public text = '';
   private oldText = '';
-  private _loading = false;
+  public _loading = false;
 
-  private close() {
+  public close() {
     this.text = this.oldText;
     this.$emit('close', { value: this.text, that: this.that });
   }
 
-  private confirm() {
+  public confirm() {
     this.oldText = this.text;
     this.$emit('confirm', { value: this.text, that: this.that });
   }

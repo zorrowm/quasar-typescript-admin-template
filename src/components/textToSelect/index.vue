@@ -1,8 +1,20 @@
 <template>
-  <q-select outlined class="text-to-input" v-model="text" :loading="_loading" dense :options="_options" emit-value map-options options-dense>
+  <q-select
+    outlined
+    class="text-to-input"
+    v-model="text"
+    :loading="_loading"
+    dense
+    :options="_options"
+    emit-value
+    map-options
+    options-dense
+    dropdown-icon="app:topbar-arrow-bottom"
+    clear-icon="app:clear"
+  >
     <template v-slot:append>
-      <q-icon name="o_cancel" class="cursor-pointer text-grey" @click.stop.prevent="close"></q-icon>
-      <q-icon name="o_check_circle" class="cursor-pointer text-black" @click.stop.prevent="confirm"></q-icon>
+      <q-icon name="app:text-to-input-close" class="cursor-pointer text-grey" @click.stop.prevent="close"></q-icon>
+      <q-icon name="app:text-to-input-confirm" class="cursor-pointer text-black" @click.stop.prevent="confirm"></q-icon>
     </template>
   </q-select>
 </template>
@@ -32,14 +44,14 @@ export default class TextToInputComponent extends Vue {
   private text = '';
   private oldText = '';
   private _options = [];
-  private _loading = false;
+  public _loading = false;
 
-  private close() {
+  public close() {
     this.text = this.oldText;
     this.$emit('close', { value: this.text, that: this.that });
   }
 
-  private confirm() {
+  public confirm() {
     this.oldText = this.text;
     this.$emit('confirm', { value: this.text, that: this.that });
   }
@@ -47,7 +59,7 @@ export default class TextToInputComponent extends Vue {
   mounted() {
     this.oldText = this.$props.value;
     this.text = this.$props.value;
-    this._options = JSON.parse(JSON.stringify(this.$props.options));
+    this._options = JSON.parse(JSON.stringify(this.options));
   }
 }
 </script>

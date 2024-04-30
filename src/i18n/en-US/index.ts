@@ -89,7 +89,7 @@ export default {
   },
   account: {},
   charts: {},
-  components: {},
+  components2: {},
   copy: {},
   i18n: {},
   icon: {},

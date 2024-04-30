@@ -42,17 +42,9 @@
           </div>
         </div>
         <div class="action">
-          <q-btn color="primary" icon="search" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" style="height: 40px" />
-          <q-btn :label="$t('action.reset')" icon="app:reset-query" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" style="height: 40px" />
-          <q-btn
-            :icon="queryParams.allExpand ? 'expand_less' : 'expand_more'"
-            :label="queryParams.allExpand ? 'Collapse' : 'Expand'"
-            outline
-            color="primary"
-            flat
-            @click="handleClickCollapse"
-            style="height: 40px"
-          />
+          <q-btn color="primary" icon="search" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" />
+          <q-btn :label="$t('action.reset')" icon="app:reset-query" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" />
+          <q-btn :icon="queryParams.allExpand ? 'expand_less' : 'expand_more'" :label="queryParams.allExpand ? '收起' : '展开'" outline color="primary" @click="handleClickCollapse" />
         </div>
       </q-form>
     </div>
@@ -306,17 +298,19 @@
         title: dialogUpload.title,
         params: dialogUpload.params,
         showConfirm: false,
+        persistent: false,
+        showClose: false,
       }"
       @close="dialogUpload.visible = false"
       @confirm="hanleClickUploadConfirm"
       @before-hide="(data) => (dialogUpload.params = data.params)"
     >
       <div class="dialog-upload-form">
-        <input type="file" class="hide" :ref="dialogUpload.fileID" :accept="dialogUpload.accept" :draggable="false" @change="uploadFileSuccess" />
+        <input type="file" class="hide" :ref="dialogUpload.fileID" :accept="dialogUpload.accept" :draggable="true" @change="uploadFileSuccess" />
         <div class="container">
-          <div class="center" @click="handleClickUploadFile">
+          <div class="center" @click="handleClickUploadFile" @dragover="uploadDragover" @drop="uploadDrop" @dragleave="uploadDragleave">
             <q-icon name="o_cloud_upload" class="fs-50" color="primary"></q-icon>
-            <p class="click">Click to upload</p>
+            <p class="click">Click or drag file to this area to upload</p>
             <p class="format">File type is: xlsx</p>
             <p class="fileName" v-if="dialogUpload.params.fileName">
               {{ dialogUpload.params.fileName }}
@@ -341,6 +335,7 @@
         title: dialogDetailParams.title,
         params: dialogDetailParams.params,
         showConfirm: false,
+        persistent: false,
       }"
       @close="() => (dialogDetailParams.visible = false)"
       @before-hide="(data) => (dialogDetailParams.params = data.params)"
@@ -844,7 +839,8 @@ export default class myComponentTableBeta extends Vue {
     getDataLoading: false,
     visible: false,
     title: '',
-    accept: '.xls',
+    accept: '.xls,.xlsx,.csv',
+    maxFileSize: 1024 * 1024 * 10,
     params: { file: '', fileName: '' },
   };
   public dialogDetailParams = {
@@ -955,6 +951,8 @@ export default class myComponentTableBeta extends Vue {
     this.dialogAddUpdateParams.title = 'Update';
   }
 
+  // ---------文件上传的函数开始---------
+
   public handleClickUpload() {
     this.dialogUpload.visible = true;
     this.dialogUpload.title = 'Upload';
@@ -973,15 +971,86 @@ export default class myComponentTableBeta extends Vue {
     this.$refs[this.dialogUpload.fileID].click();
   }
 
+  // 检查文件类型和大小
+  private checkFile(rawFile: any): boolean {
+    const fileType = rawFile.name.split('.').pop().toLowerCase();
+    const trueType = this.dialogUpload.accept.split(',').map((item: string) => item.trim().replace('.', '').toLowerCase());
+
+    if (!trueType.includes(fileType)) {
+      this.$globalMessage.show({
+        type: 'error',
+        content: 'File type is not supported',
+      });
+      return false;
+    }
+
+    if (rawFile.size > this.dialogUpload.maxFileSize) {
+      this.$globalMessage.show({
+        type: 'error',
+        content: 'File size is too large',
+      });
+      return false;
+    }
+
+    return true;
+  }
+
+  // 设置文件参数
+  private setFileParams(rawFile: any): void {
+    this.dialogUpload.params.fileName = rawFile.name;
+    this.dialogUpload.params.file = rawFile;
+  }
+
+  // 清理拖拽状态
+  private clearDragState(): void {
+    const dom: any = document.querySelector('.dialog-upload-form .container .center');
+    dom.classList.remove('ondrag');
+  }
+
+  // 增加拖拽状态
+  private addDragState(): void {
+    const dom: any = document.querySelector('.dialog-upload-form .container .center');
+    dom.classList.add('ondrag');
+  }
+
   public uploadFileSuccess() {
     const files = this.$refs[this.dialogUpload.fileID].files;
-    let postFiles = Array.prototype.slice.call(files);
-    postFiles = postFiles.slice(0, 1);
+    let postFiles = Array.prototype.slice.call(files).slice(0, 1);
+
     postFiles.forEach((rawFile: any) => {
-      this.dialogUpload.params.fileName = rawFile.name;
-      this.dialogUpload.params.file = rawFile;
+      if (this.checkFile(rawFile)) {
+        this.setFileParams(rawFile);
+      }
     });
   }
+
+  public uploadDrop(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer.files;
+    let postFiles = Array.prototype.slice.call(files).slice(0, 1);
+
+    postFiles.forEach((rawFile: any) => {
+      if (this.checkFile(rawFile)) {
+        this.setFileParams(rawFile);
+      }
+      this.clearDragState();
+    });
+  }
+
+  public uploadDragover(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.addDragState();
+  }
+
+  public uploadDragleave(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.clearDragState();
+  }
+
+  // ---------文件上传的函数结束---------
 
   public handlerClickDetail(row: any) {
     const arr = cloneDeep(this.dialogDetailParams.params);

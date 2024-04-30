@@ -88,7 +88,7 @@ export default {
     passwordRules: "包含10 - 20个字符{'{}'}包含大小写字母{'{}'}包含数字和特殊字符（{'#?!@+.$%^&*-'}）{'{}' }不能包含空格、中文和中文特殊字符",
   },
   charts: {},
-  components: {},
+  components2: {},
   copy: {},
   i18n: {},
   icon: {},
