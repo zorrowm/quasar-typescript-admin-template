@@ -9,7 +9,7 @@
             <div class="q-pb-lg text-body1">Please enter the following information to change your password</div>
             <q-form ref="changePasswordForm">
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="w-p-30">* Username</label>
                 </div>
                 <q-input
@@ -26,7 +26,7 @@
                 />
               </div>
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="w-p-30">* Old password</label>
                 </div>
                 <q-input
@@ -47,7 +47,7 @@
                 />
               </div>
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="q-mr-sm">* New password</label>
                   <el-popover placement="top" title="Password rules" :width="320" popper-style="z-index:9999" trigger="hover">
                     <p v-for="(item, index) in passwordRules" :key="index">{{ index + 1 }}. {{ item }}</p>
@@ -75,7 +75,7 @@
                 />
               </div>
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="w-p-30">* Confirm Password</label>
                 </div>
                 <q-input
@@ -113,7 +113,7 @@
             <div class="q-pb-lg text-body1">Please enter your username and email address to reset your password.</div>
             <q-form ref="forgotPasswordForm">
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="w-p-30">* Username</label>
                 </div>
                 <q-input
@@ -130,8 +130,8 @@
                 />
               </div>
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
-                  <label class="w-p-30">* Email</label>
+                <div class="row q-py-xs text-weight-medium">
+                  <label class="w-p-30">* Email4</label>
                 </div>
                 <q-input
                   type="text"
@@ -163,7 +163,7 @@
             <div class="q-pb-lg text-body1">Please reset your password.</div>
             <q-form ref="resetPasswordForm">
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="q-mr-sm">* Password</label>
                   <el-popover placement="top" title="Password rules" :width="320" trigger="hover">
                     <p v-for="(item, index) in passwordRules" :key="index">{{ index + 1 }}. {{ item }}</p>
@@ -230,7 +230,7 @@
             <p class="text-grey q-pb-lg">(Login by typing in any username, code and password)</p>
             <q-form>
               <div class="field">
-                <div class="row q-pb-md text-weight-medium">
+                <div class="row q-pb-xs text-weight-medium">
                   <label>Username</label>
                 </div>
                 <q-input
@@ -247,7 +247,7 @@
                 />
               </div>
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label>Code</label>
                 </div>
                 <div class="row q-col-gutter-md">
@@ -290,7 +290,7 @@
                 </div>
               </div>
               <div class="field">
-                <div class="row q-py-md text-weight-medium">
+                <div class="row q-py-xs text-weight-medium">
                   <label class="w-p-30">Password</label>
                   <div class="text-right w-p-70">
                     <span class="detail-link-type" @click="pageType = 'forgotPassword'">Forgot password?</span>
@@ -322,10 +322,10 @@
         </div>
       </div>
       <!-- 插画 -->
-      <div class="col-md-6 col-lg-6 col-xl-6 full-height relative-position q-pa-md" :class="$q.screen.xs || $q.screen.sm ? 'hidden' : ''">
+      <div class="col-md-6 col-lg-6 col-xl-6 full-height relative-position" :class="$q.screen.xs || $q.screen.sm ? 'hidden' : ''">
         <div class="cover row column">
           <div class="img">
-            <q-img src="~assets/widget.svg" alt="chat-img" fit="fit" />
+            <q-img src="~assets/debug.svg" alt="chat-img" />
           </div>
           <div class="intro">
             <h4 class="f-bold lh-48" style="font-size: 2.5em">“{{ $t('login.illustrationDescription') }}”</h4>
@@ -725,24 +725,11 @@ export default class LoginPage2 extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.body--dark {
-  .cover {
-    box-shadow: 0px 6px 16px 3px rgba($color: #ffffff, $alpha: 0.09);
-  }
-}
-
-.body--light {
-  .cover {
-    box-shadow: 0px 6px 16px 3px rgba($color: #000000, $alpha: 0.09);
-  }
-}
-
 .cover {
   width: 100%;
   height: 100%;
-  background: $primary;
-  border-radius: 16px;
-  color: #ffffff;
+  color: $dark;
+  border-left: 1px solid #eeeeee;
 
   .intro {
     text-align: center;
@@ -756,6 +743,10 @@ export default class LoginPage2 extends Vue {
     padding: 16px;
     margin: 128px auto;
   }
+}
+
+.field {
+  padding-bottom: 16px;
 }
 
 body.screen--md {

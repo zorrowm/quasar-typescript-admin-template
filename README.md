@@ -20,7 +20,7 @@ To sum up, using **vue-facing-decorator** to write Vue3 code in class syntax is 
 
 - Login
 
-<img src="https://s1.ax1x.com/2023/07/22/pCbvasH.png" >
+<img src="https://picshack.net/ib/rZ9DqliAgO.jpeg" >
 
 - Dashboard
 
@@ -40,18 +40,16 @@ To sum up, using **vue-facing-decorator** to write Vue3 code in class syntax is 
 
 [![pSdfJVU.png](https://s1.ax1x.com/2023/01/30/pSdfJVU.png)](https://imgse.com/i/pSdfJVU)
 
-## Install the dependencies
+## Install the dependencies (only support yarn)
 
 ```bash
 yarn
-# or
-npm install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
 ```bash
-quasar dev
+yarn dev
 ```
 
 ### Lint the files
@@ -70,12 +68,17 @@ yarn format
 npm run format
 ```
 
+### generate svg
+```bash
+npm run svg
+# will generate svg map file -> src/utils/custom-svg.ts
+```
 ### Build the app for production
 
 ```bash
-quasar build
+npm run build
 ```
 
 ### Customize the configuration
 
-See [Configuring quasar.config.js](http://www.quasarchs.com/quasar-cli-webpack/quasar-config-js).
+See [Configuring quasar.config.js](https://quasar.dev/quasar-cli-webpack/quasar-config-file).

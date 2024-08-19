@@ -1,7 +1,40 @@
 <template>
   <div>
-    <div class="row items-center justify-end q-mt-md">
-      <p class="q-mt-xs">{{ $t('table.total') }} {{ _paginationParams.rowsNumber }}</p>
+    <div class="row items-center justify-end q-mt-lg">
+      <div style="margin-top: 4px">
+        <span>{{ $t('table.total', { count: _paginationParams.rowsNumber }) }}</span>
+      </div>
+      <q-select
+        class="my-pagination"
+        v-model="_paginationParams.rowsPerPage"
+        :options="_rowNumbersArr"
+        dropdown-icon="app:topbar-arrow-bottom"
+        @update:model-value="selectChange"
+        style="margin-top: 4px; margin-left: 12px; margin-right: 8px"
+        dense
+        outlined
+        options-dense
+      />
+      <div style="margin-top: 4px; margin-right: 24px">
+        <span>{{ $t('table.pieces_page') }}</span>
+      </div>
+      <q-pagination
+        v-model="_paginationParams.page"
+        :input="false"
+        :max-pages="6"
+        :max="_paginationParams.rowsNumber / _paginationParams.rowsPerPage < 1 ? 1 : Math.ceil(_paginationParams.rowsNumber / _paginationParams.rowsPerPage)"
+        @update:model-value="_paginationInput"
+        direction-links
+        icon-prev="app:navigation-arrow-left"
+        icon-next="app:navigation-arrow-right"
+        color="grey"
+        active-color="primary"
+        active-text-color="white"
+        :ripple="false"
+      ></q-pagination>
+      <p style="margin-left: 24px">
+        {{ $t('table.goto') }}
+      </p>
       <q-input
         v-model.trim="_paginationParams.currentPage"
         @keyup.enter="_paginationInput"
@@ -13,31 +46,6 @@
         :placeholder="currentPagePlaceholder"
         class="pagination-currentPage-input q-mx-sm"
         :mask="currentPageMask"
-      />
-      <q-pagination
-        v-model="_paginationParams.page"
-        :input="false"
-        :max-pages="6"
-        :max="_paginationParams.rowsNumber / _paginationParams.rowsPerPage < 1 ? 1 : Math.ceil(_paginationParams.rowsNumber / _paginationParams.rowsPerPage)"
-        @update:model-value="_paginationInput"
-        direction-links
-        icon-prev="app:navigation-arrow-left"
-        icon-next="app:navigation-arrow-right"
-        color="grey"
-        active-color="white"
-        active-text-color="primary"
-        :ripple="false"
-      ></q-pagination>
-      <q-select
-        class="my-pagination q-ml-sm"
-        borderless
-        v-model="_paginationParams.rowsPerPage"
-        :options="_rowNumbersArr"
-        dropdown-icon="app:topbar-arrow-bottom"
-        @update:model-value="selectChange"
-        dense
-        :display-value="`${globals.$t('table.pieces_page')} ${_paginationParams.rowsPerPage} `"
-        options-dense
       />
     </div>
   </div>
@@ -83,9 +91,9 @@ export default class MyPaginationComponent extends Vue {
     return Array(total.length).fill('#').join('');
   }
 
-  private globals = getCurrentInstance()!.appContext.config.globalProperties;
-  private _rowNumbersArr = [10, 20, 30];
-  private _paginationParams: Pagination = {
+  public globals = getCurrentInstance()!.appContext.config.globalProperties;
+  public _rowNumbersArr = [10, 20, 30];
+  public _paginationParams: Pagination = {
     page: 1,
     rowsPerPage: 10,
     rowsNumber: 0, // 总数
@@ -93,7 +101,7 @@ export default class MyPaginationComponent extends Vue {
     currentPage: '', // 当前页
   };
 
-  private _paginationInput() {
+  public _paginationInput() {
     if (this._paginationParams.currentPage) {
       if (Number(this._paginationParams.currentPage) > this._paginationParams.totalPage) {
         this._paginationParams.currentPage = this._paginationParams.totalPage.toString();
@@ -108,7 +116,7 @@ export default class MyPaginationComponent extends Vue {
     });
   }
 
-  private selectChange() {
+  public selectChange() {
     this._paginationParams.page = 1;
     this.$emit('pagination', {
       page: this._paginationParams.page,
@@ -129,7 +137,7 @@ export default class MyPaginationComponent extends Vue {
 <style lang="scss">
 .body--dark {
   .q-pagination__middle button {
-    background: #121212 !important;
+    background: #202020 !important;
   }
 }
 

@@ -3,14 +3,7 @@ import { i18n } from 'src/boot/i18n';
 import settings from 'src/setting.json';
 import { getLanguage, setLanguage } from 'src/utils/cookie';
 import { getSidebarStatus, setSidebarStatus } from 'src/utils/localStorage';
-import { Vue } from 'vue-facing-decorator';
-import {
-  VuexModule,
-  Module,
-  Mutation,
-  Action,
-  getModule,
-} from 'vuex-module-decorators';
+import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import store from '../index';
 
 export enum DeviceType {
@@ -31,6 +24,9 @@ class App extends VuexModule {
   public device: DeviceType = DeviceType.Desktop;
   public refreshPage = true;
   public toolTipClass = '';
+  public dialogVisible = false;
+  public appMainIsScroll = false;
+
   @Mutation
   public SET_TOOL_TIP_CLASS(className: string) {
     this.toolTipClass = className;
@@ -44,6 +40,12 @@ class App extends VuexModule {
     this.language = status;
     setLanguage(status);
   }
+
+  @Mutation
+  public SET_DIALOG_VISIBLE(value: boolean) {
+    this.dialogVisible = value;
+  }
+
   @Mutation
   public TOGGLE_SIDEBAR(withoutAnimation: boolean) {
     this.sidebar.opened = !this.sidebar.opened;
@@ -64,6 +66,12 @@ class App extends VuexModule {
   public TOGGLE_DEVICE(value: DeviceType) {
     this.device = value;
   }
+
+  @Mutation
+  public SET_APP_MAIN_IS_SCROLL(value: boolean) {
+    this.appMainIsScroll = value;
+  }
+
   @Action({ rawError: true })
   public refreshCurPage() {
     this.SET_REFRESH_PAGE(false);

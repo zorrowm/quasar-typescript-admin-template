@@ -2,7 +2,7 @@
   <transition appear enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
     <div class="inner-page" :style="calcStyle" ref="innerPage">
       <div class="inner">
-        <q-btn color="primary" icon="arrow_back" label="Back" outline dense flat style="margin-top: 16px; margin-bottom: 16px; margin-left: 16px" @click="hide" />
+        <q-btn color="primary" no-caps icon="arrow_back" label="Back" outline dense flat style="margin-top: 16px; margin-bottom: 16px; margin-left: 16px" @click="hide" :ripple="false" />
         <div>
           <slot></slot>
         </div>
@@ -58,7 +58,7 @@ export default class MyFixedPageComponent extends Vue {
     box-shadow: 0px 6px 16px -1px rgba(#000000, 0.05);
     background: #ffffff;
     &::-webkit-scrollbar-thumb {
-      background-color: rgba($color: $dark, $alpha: 0.4);
+      background-color: rgba($color: #909399, $alpha: 0.3);
     }
   }
 }
@@ -67,12 +67,12 @@ export default class MyFixedPageComponent extends Vue {
   transition: all 0.3s;
   visibility: hidden;
   transform: translateY(120%);
-  height: calc(100vh - var(--v3-header-height) - var(--v3-navigationbar-height) - 16px);
+  height: calc(100vh - var(--v3-navigationbar-height) - 16px);
   right: 16px;
-  top: calc(var(--v3-navigationbar-height) + var(--v3-header-height) + 16px);
+  top: calc(var(--v3-navigationbar-height) + 16px);
   bottom: 16px;
   z-index: 10;
-  border-radius: 8px;
+  border-radius: 4px;
   .inner {
     height: 100%;
     overflow: auto;

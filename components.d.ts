@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ConfirmDialog: typeof import('./src/components/confirmDialog/index.vue')['default']
     Construction: typeof import('./src/components/Construction/index.vue')['default']
+    Date: typeof import('./src/components/myForm/date.vue')['default']
     DateRange: typeof import('./src/components/myForm/dateRange.vue')['default']
     DateRangeWithTime: typeof import('./src/components/myForm/dateRangeWithTime.vue')['default']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']

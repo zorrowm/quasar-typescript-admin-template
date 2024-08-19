@@ -1,7 +1,10 @@
 <template>
   <div>
-    <p class="text-caption q-pb-sm row items-center text-weight-regular" v-show="!externalOption.hideTitle">
-      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
+    <p class="q-pb-sm row items-center text-weight-medium" v-show="!externalOption.hideTitle">
+      <span class="q-mr-xs fs-12">
+        <i v-if="externalOption.rules.length" class="text-negative"> * </i>
+        {{ externalOption.label }}
+      </span>
       <slot name="subTitle"></slot>
     </p>
     <q-select
@@ -45,6 +48,13 @@
               <slot name="extra-label-content" :opt="scope.opt" />
             </q-item-label>
             <q-item-label caption v-if="scope.opt.description" class="text-grey">{{ scope.opt.description }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+      <template v-slot:no-option>
+        <q-item dense>
+          <q-item-section class="text-grey text-caption">
+            {{ $t('tip.noData') }}
           </q-item-section>
         </q-item>
       </template>
@@ -118,6 +128,9 @@ export default class FormSelectComponent extends Vue {
       this.externalOption.selectOption = newVal.selectOption;
       this.internalOption.selectOptionBak = cloneDeep(newVal.selectOption);
     }
+    if (newVal.userInput !== this.prevOption?.userInput) {
+      this.externalOption.userInput = newVal.userInput;
+    }
     this.prevOption = cloneDeep(this.option);
   }
 
@@ -131,7 +144,7 @@ export default class FormSelectComponent extends Vue {
 
   created() {
     EXTERNAL_OPTION.placeholder = this.$t('messages.pleaseSelect');
-    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.model = this.option.model;
     this.prevOption = cloneDeep(this.option);
   }

@@ -4,15 +4,15 @@
       <div class="title f-bold">
         {{ title }}
         <div class="close">
-          <q-icon name="app:navigation-close" class="icon" @click="onCancelClick"></q-icon>
+          <q-icon name="close" class="icon" @click="onCancelClick"></q-icon>
         </div>
       </div>
       <div class="content">
         {{ getJsx(content) }}
       </div>
       <div class="action">
-        <q-btn :color="color" :label="confirmButtonText" @click="onOKClick" class="q-mr-md" />
-        <q-btn :color="color" outline :label="$t('action.cancel')" @click="onCancelClick" />
+        <q-btn :color="color" :label="confirmButtonText" @click="onOKClick" class="q-mr-md" no-caps :ripple="false" unelevated />
+        <q-btn :color="color" outline :label="$t('action.cancel')" @click="onCancelClick" no-caps :ripple="false" />
       </div>
     </q-card>
   </q-dialog>
@@ -31,19 +31,24 @@ export default class dialogConfirmComponent extends Vue {
   @Prop({ default: '' }) content!: string;
   @Prop({ default: '' }) confirmButtonText!: string;
   @Prop({ default: 'primary' }) color!: string;
+
   private show() {
     this.$refs.dialogRef.show();
   }
+
   private hide() {
     this.$refs.dialogRef.hide();
   }
+
   public onOKClick() {
     this.$emit('ok');
     this.hide();
   }
+
   public onCancelClick() {
     this.hide();
   }
+
   public getJsx(content: string) {
     this.$nextTick(() => {
       document.querySelector('.q-dialog-confirm-plugin .content')!.innerHTML = content;
@@ -57,6 +62,7 @@ export default class dialogConfirmComponent extends Vue {
   .q-dialog-confirm-plugin {
     background: #000000;
   }
+
   .title {
     .close {
       &:hover {
@@ -66,10 +72,12 @@ export default class dialogConfirmComponent extends Vue {
     }
   }
 }
+
 .body--light {
   .q-dialog-confirm-plugin {
     background: #ffffff;
   }
+
   .title {
     .close {
       &:hover {
@@ -78,13 +86,16 @@ export default class dialogConfirmComponent extends Vue {
     }
   }
 }
+
 .q-dialog-confirm-plugin {
   width: 480px;
-  border-radius: 12px;
+  border-radius: 6px !important;
+
   .title {
     padding: 16px;
     font-size: 16px;
     position: relative;
+
     .close {
       position: absolute;
       right: 16px;
@@ -96,16 +107,19 @@ export default class dialogConfirmComponent extends Vue {
       justify-content: center;
       background: var(--my-white);
       transition: all 0.2s;
+
       &:hover {
         cursor: pointer;
       }
     }
   }
+
   .content {
     padding: 16px;
     font-size: 14px;
     line-height: 21px;
   }
+
   .action {
     padding: 16px;
     text-align: right;

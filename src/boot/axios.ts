@@ -6,6 +6,7 @@ import { UserModule } from 'src/store/modules/user';
 import router from 'src/router';
 import { Loading } from 'quasar';
 import { AppModule } from 'src/store/modules/app';
+import JSONbig from 'json-bigint';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -22,6 +23,16 @@ declare module '@vue/runtime-core' {
 const isPro = process.env.NODE_ENV === 'production';
 axios.defaults.timeout = 1500 * 1000;
 axios.defaults.baseURL = isPro ? setting.pro : setting.ip;
+// 大数处理
+axios.defaults.transformResponse = [
+  (data) => {
+    // 如果data是blob，就直接返回
+    if (data instanceof Blob) {
+      return data;
+    }
+    return JSONbig.parse(data);
+  },
+];
 // Request interceptors
 axios.interceptors.request.use(
   (config: any) => {
@@ -35,6 +46,22 @@ axios.interceptors.request.use(
     if (config.method === 'get' && config.params.getResHeader) {
       delete config.params.getResHeader;
       config.getResHeader = true;
+    }
+    // 大数还原post
+    if (config.data) {
+      for (let key in config.data) {
+        if (typeof config.data[key] === 'bigint') {
+          config.data[key] = config.data[key].toString();
+        }
+      }
+    }
+    // 大数还原get
+    if (config.params) {
+      for (let key in config.params) {
+        if (typeof config.params[key] === 'bigint') {
+          config.params[key] = config.params[key].toString();
+        }
+      }
     }
     let Timestamp = new Date().getTime();
     //时间戳
@@ -50,10 +77,14 @@ axios.interceptors.request.use(
       let sign = 'CryptoJS.HmacSHA256(data, SKEnc1)'; // Signature = HMAC-SHA256(Authorization + Timestamp + Request_Id + Request_Body, SKEnc).toLowerCase()
       let sign1 = 'CryptoJS.enc.Hex.stringify(sign)';
       config.headers['Authorization'] = UserModule.token;
-      config.headers.Signature = sign1;
-      config.headers['Request-ID'] = requetId;
-      config.headers.Version = '1.0';
-      config.headers['Sign-Method'] = 'HMAC-SHA256';
+    }
+    // 如果是get请求，且有参数，参数的值是空串或者null，那么就删除这个参数
+    if (config.method === 'get') {
+      for (let key in config.params) {
+        if (config.params[key] === '' || config.params[key] === null) {
+          delete config.params[key];
+        }
+      }
     }
     return config;
   },

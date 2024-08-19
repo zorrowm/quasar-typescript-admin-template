@@ -1,6 +1,5 @@
 //globalMessage.ts
 import { Notify, QNotifyCreateOptions } from 'quasar';
-import { useQuasar } from 'quasar';
 import { AppModule } from 'src/store/modules/app';
 
 type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top' | 'bottom' | 'left' | 'right' | 'center' | undefined;
@@ -30,7 +29,7 @@ class GlobalMessage {
       message: content,
       position: position ?? 'top',
       multiLine: isNotify ?? false,
-      icon: type === 'error' ? 'o_highlight_off' : type === 'warn' ? 'o_error_outline' : 'o_check_circle', // error warn success
+      icon: type === 'error' ? 'highlight_off' : type === 'warn' ? 'warning' : 'check_circle', // error warn success
       actions: isNotify
         ? [
             {
@@ -39,7 +38,8 @@ class GlobalMessage {
             },
           ]
         : [],
-      classes: type === 'success' ? `q-message-${type}-style min-h-36 m-t-55` : `q-message-${type}-style min-h-36`,
+      badgeStyle: `background-color: #fff;box-shadow:rgba(0, 0, 0, 0.1) 0px 2px 4px 0px;${type === 'success' ? 'color: #2DA641;' : 'color: #D40000;'}`,
+      classes: type === 'success' ? `q-message-${type}-style min-h-36 m-t-55` : `q-message-${type}-style min-h-36 m-t-55`,
     });
     try {
       Notify.create(data);

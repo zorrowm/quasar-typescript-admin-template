@@ -1,12 +1,15 @@
 <template>
   <div>
-    <p class="text-caption q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs"> {{ externalOption.required ? '*' : '' }} {{ externalOption.label }} </span>
+    <p class="q-pb-sm row items-center text-weight-medium">
+      <span class="q-mr-xs fs-12">
+        <i v-if="externalOption.required" class="text-negative"> * </i>
+        {{ externalOption.label }}
+      </span>
       <slot name="subTitle"></slot>
     </p>
     <div class="pick-date">
       <div class="row">
-        <span class="text-caption q-mr-sm mt-3">
+        <span class="text-caption q-mr-sm q-mt-sm">
           {{ $t('components.start') }}
         </span>
         <q-input
@@ -30,11 +33,11 @@
             <q-icon name="o_event" class="cursor-pointer">
               <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down">
                 <div class="row">
-                  <q-date v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" flat> {{ $t('components.start_date_time') }}</q-date>
-                  <q-time v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
+                  <q-date v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" no-caps flat> {{ $t('components.start_date_time') }}</q-date>
+                  <q-time v-model="internalOption.startModel" mask="YYYY/MM/DD HH:mm:ss" format24h no-caps flat with-seconds></q-time>
                 </div>
                 <div class="row items-center justify-center q-my-sm q-gutter-x-md">
-                  <q-btn v-close-popup :label="$t('components.now')" color="primary" flat @click="setNow('startModel')" />
+                  <q-btn v-close-popup :label="$t('components.now')" color="primary" no-caps flat @click="setNow('startModel')" />
                   <q-btn v-close-popup :label="$t('components.close')" color="primary" />
                 </div>
               </q-popup-proxy>
@@ -43,7 +46,7 @@
         </q-input>
       </div>
       <div class="row">
-        <span class="text-caption q-mr-sm mt-3">
+        <span class="text-caption q-mr-sm q-mt-sm">
           {{ $t('components.end') }}
         </span>
         <q-input
@@ -73,8 +76,8 @@
                   <q-time v-model="internalOption.endModel" mask="YYYY/MM/DD HH:mm:ss" format24h flat with-seconds></q-time>
                 </div>
                 <div class="row items-center justify-center q-my-sm q-gutter-x-md">
-                  <q-btn v-close-popup :label="$t('components.now')" color="primary" flat @click="setNow('endModel')" />
-                  <q-btn v-close-popup :label="$t('components.close')" color="primary" />
+                  <q-btn v-close-popup :label="$t('components.now')" color="primary" no-caps flat @click="setNow('endModel')" />
+                  <q-btn v-close-popup :label="$t('components.close')" color="primary" no-caps />
                 </div>
               </q-popup-proxy>
             </q-icon>
@@ -160,7 +163,7 @@ export default class myDateRangeWithTImeComponent extends Vue {
   }
 
   created() {
-    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.startModel = this.option.from;
     this.internalOption.endModel = this.option.to;
     this.initDateRule();

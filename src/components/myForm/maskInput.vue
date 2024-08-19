@@ -1,7 +1,10 @@
 <template>
   <div>
-    <p class="text-caption q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
+    <p class="q-pb-sm row items-center text-weight-medium">
+      <span class="q-mr-xs fs-12">
+        <i v-if="externalOption.rules.length" class="text-negative"> * </i>
+        {{ externalOption.label }}
+      </span>
       <slot name="subTitle"></slot>
     </p>
     <q-input
@@ -104,7 +107,7 @@ export default class FormMaskInputComponent extends Vue {
 
   created() {
     EXTERNAL_OPTION.placeholder = this.globals.$t('messages.pleaseEnter');
-    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.model = this.option.model;
     this.prevOption = cloneDeep(this.option);
   }

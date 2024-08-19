@@ -6,6 +6,7 @@ import { AppModule } from 'src/store/modules/app';
 export const i18n = createI18n({
   locale: AppModule.language,
   legacy: false,
+  warnHtmlMessage: false,
   messages,
 });
 /* eslint-enable @typescript-eslint/no-empty-interface */

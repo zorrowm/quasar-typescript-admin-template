@@ -1,10 +1,13 @@
 <template>
   <div>
     <q-list>
-      <div class="text-caption q-pb-md row items-center text-weight-regular">
-        <span class="q-mr-md">
-          {{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}
-          <span class="q-ml-sm detail-link-type" @click="handlerClickSetSlider">Input?</span>
+      <div class="q-pb-md row items-center text-weight-medium">
+        <span class="q-mr-md fs-12">
+          <span class="q-mr-xs">
+            <i v-if="externalOption.rules.length" class="text-negative"> * </i>
+            {{ externalOption.label }}
+          </span>
+          <span class="q-ml-sm detail-link-type" @click="handleClickSetSlider">Input?</span>
         </span>
       </div>
       <q-item>
@@ -94,7 +97,7 @@ export default class mySliderComponent extends Vue {
   }
 
   created() {
-    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.model = this.option.model;
     this.prevOption = cloneDeep(this.option);
   }
@@ -106,7 +109,7 @@ export default class mySliderComponent extends Vue {
     model: 0,
   };
 
-  public handlerClickSetSlider() {
+  public handleClickSetSlider() {
     const item = this.externalOption;
     this.$q
       .dialog({

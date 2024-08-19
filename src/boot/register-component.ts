@@ -16,6 +16,7 @@ import MyFormSlider from 'src/components/myForm/slider.vue';
 import MyFormRadio from 'src/components/myForm/radio.vue';
 import MyMaskInput from 'src/components/myForm/maskInput.vue';
 import MyTreeSelect from 'src/components/myForm/treeSelect.vue';
+import MyFormDate from 'src/components/myForm/date.vue';
 
 // 我们使用Vue全局注册了我们的组件
 export default boot(({ app }) => {
@@ -35,4 +36,5 @@ export default boot(({ app }) => {
   app.component('MyFormSlider', MyFormSlider);
   app.component('MyFormRadio', MyFormRadio);
   app.component('MyFormTreeSelect', MyTreeSelect);
+  app.component('MyFormDate', MyFormDate);
 });

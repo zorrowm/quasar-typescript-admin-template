@@ -7,19 +7,50 @@
       </span>
       <slot name="subTitle"></slot>
     </p>
-    <q-option-group
+    <q-input
       v-model="internalOption.model"
-      :options="externalOption.selectOption"
-      color="primary"
-      inline
       :class="['q-mb-sm', externalOption.classes]"
-      :ref="externalOption.inputId"
-      :disable="externalOption.disable || externalOption.readonly"
-      :spellcheck="false"
+      :placeholder="externalOption.placeholder"
+      :rules="externalOption.rules"
+      :hint="externalOption.hint"
+      :readonly="externalOption.readonly"
+      :disable="externalOption.disable"
+      ref="MyDateRef"
       autocapitalize="off"
       autocomplete="new-password"
       autocorrect="off"
-    />
+      clearable
+      no-error-icon
+      dense
+      outlined
+      clear-icon="app:clear"
+      :spellcheck="false"
+      :mask="externalOption.hhmmss ? '####/##/## ##:##:##' : '####/##/##'"
+    >
+      <template v-slot:prepend v-if="!externalOption.readonly">
+        <q-icon name="app:calendar" class="cursor-pointer">
+          <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down">
+            <q-date v-model="internalOption.model" :mask="externalOption.hhmmss ? 'YYYY/MM/DD HH:mm:ss' : 'YYYY/MM/DD'">
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup :label="$t('components.close')" color="primary" flat no-caps />
+              </div>
+            </q-date>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+
+      <template v-slot:append v-if="!externalOption.readonly && externalOption.hhmmss">
+        <q-icon name="app:time2" class="cursor-pointer">
+          <q-popup-proxy cover ttransition-show="jump-up" transition-hide="jump-down">
+            <q-time v-model="internalOption.model" mask="YYYY/MM/DD HH:mm:ss" format24h with-seconds>
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup :label="$t('components.close')" color="primary" flat no-caps />
+              </div>
+            </q-time>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
   </div>
 </template>
 
@@ -30,31 +61,35 @@ import { cloneDeep } from 'lodash';
 
 interface Option {
   model: string;
-  classes: string;
+  placeholder?: string;
+  classes?: string;
   rules: never[];
   label: string;
-  selectOption: never[];
   hint: string;
   readonly: boolean;
-  inputId: string;
   disable: boolean;
+  hhmmss?: boolean;
 }
 
 const EXTERNAL_OPTION = {
   model: '',
+  placeholder: '',
   classes: '',
   rules: [],
   label: '',
   hint: '',
-  selectOption: [],
   readonly: false,
-  inputId: '',
   disable: false,
+  hhmmss: false,
 };
 
-@Component({ name: 'FormRadioComponent', emits: ['input'] })
-export default class FormRadioComponent extends Vue {
+@Component({
+  name: 'FormDateComponent',
+  emits: ['input'],
+})
+export default class FormDateComponent extends Vue {
   declare $refs: any;
+
   @Prop({ default: {} }) option!: Option;
 
   @Watch('option', { deep: true })
@@ -81,10 +116,6 @@ export default class FormRadioComponent extends Vue {
     if (newVal.readonly !== this.prevOption?.readonly) {
       this.externalOption.readonly = newVal.readonly;
     }
-    if (newVal.selectOption !== this.prevOption?.selectOption) {
-      this.externalOption.selectOption = newVal.selectOption;
-      this.internalOption.selectOptionBak = cloneDeep(newVal.selectOption);
-    }
     this.prevOption = cloneDeep(newVal);
   }
 
@@ -94,6 +125,7 @@ export default class FormRadioComponent extends Vue {
   }
 
   created() {
+    EXTERNAL_OPTION.placeholder = this.$t('messages.pleaseEnter');
     this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.model = this.option.model;
     this.prevOption = cloneDeep(this.option);
@@ -104,9 +136,12 @@ export default class FormRadioComponent extends Vue {
   public externalOption = cloneDeep(EXTERNAL_OPTION);
   public internalOption = {
     model: '',
-    selectOptionBak: [],
   };
+
+  public async validForm() {
+    return await this.$refs['MyDateRef'].validate();
+  }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

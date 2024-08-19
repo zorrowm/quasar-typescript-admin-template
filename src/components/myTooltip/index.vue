@@ -1,7 +1,7 @@
 <template>
   <div class="block ellipsis" v-tooltip :style="style">
     {{ content }}
-    <q-tooltip :class="toolTipClass" anchor="top middle" self="bottom middle">
+    <q-tooltip :class="toolTipClass" anchor="top middle" self="bottom middle" max-width="300px">
       {{ content }}
     </q-tooltip>
   </div>
@@ -21,6 +21,4 @@ export default class MyTooltipComponent extends Vue {
 }
 </script>
 
-
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -1,7 +1,10 @@
 <template>
   <div>
-    <p class="text-caption q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs">{{ externalOption.rules.length ? '*' : '' }} {{ externalOption.label }}</span>
+    <p class="q-pb-sm row items-center text-weight-medium">
+      <span class="q-mr-xs fs-12">
+        <i v-if="externalOption.rules.length" class="text-negative"> * </i>
+        {{ externalOption.label }}
+      </span>
       <slot name="subTitle"></slot>
     </p>
     <q-select
@@ -49,6 +52,13 @@
           <q-item-section v-close-popup>
             <q-item-label>{{ scope.opt.label }}</q-item-label>
             <q-item-label caption v-if="scope.opt.description" class="text-grey">{{ scope.opt.description }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+      <template v-slot:no-option>
+        <q-item dense>
+          <q-item-section class="text-grey text-caption">
+            {{ $t('tip.noData') }}
           </q-item-section>
         </q-item>
       </template>
@@ -139,7 +149,7 @@ export default class FormMultipleSelectComponent extends Vue {
   }
 
   created() {
-    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.model = this.option.model;
     this.prevOption = cloneDeep(this.option);
   }

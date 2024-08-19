@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="query-form-and-action">
+    <div class="query-form-and-action expand-btn">
       <q-form ref="queryFrom" class="form">
         <div class="query">
           <div v-for="(item, index) in queryParams.input" :key="index" class="query-item" v-show="!item.collapse">
@@ -42,9 +42,9 @@
           </div>
         </div>
         <div class="action">
-          <q-btn color="primary" icon="search" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" />
-          <q-btn :label="$t('action.reset')" icon="app:reset-query" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" />
-          <q-btn :icon="queryParams.allExpand ? 'expand_less' : 'expand_more'" :label="queryParams.allExpand ? '收起' : '展开'" outline color="primary" @click="handleClickCollapse" />
+          <q-btn color="primary" :label="$t('action.search')" :loading="queryParams.queryLoading" @click="handleQuery" />
+          <q-btn :label="$t('action.reset')" outline color="primary" :loading="queryParams.resetLoading" @click="handleResetQuery" />
+          <q-btn :label="queryParams.allExpand ? $t('action.collapse') : $t('action.expand')" outline color="primary" @click="handleClickCollapse" />
         </div>
       </q-form>
     </div>
@@ -66,8 +66,8 @@
       >
         <template #top>
           <div class="full-width justify-end row">
-            <q-btn color="primary" icon="o_add" label="Add" class="q-mr-md" @click="handleClickAdd" />
-            <q-btn icon="app:upload2" label="Upload" outline color="primary" @click="handleClickUpload" />
+            <q-btn color="primary" label="Add" class="q-mr-md" @click="handleClickAdd" />
+            <q-btn label="Upload" outline color="primary" @click="handleClickUpload" />
           </div>
         </template>
         <template v-slot:header="props">
@@ -1096,6 +1096,7 @@ export default class myComponentTableBeta extends Vue {
 
   public async handlerClickDelete(row: any) {
     try {
+      console.log(123123);
       const result = await this.$globalConfirm.show({
         title: this.$t('messages.tishi'),
         color: 'primary',

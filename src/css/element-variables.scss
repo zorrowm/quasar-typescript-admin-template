@@ -13,13 +13,17 @@
   --v3-sidebar-menu-active-text-color: var(--q-primary);
   /** TagsView 组件 */
   --v3-tagsview-tag-active-bg-color: var(--q-primary);
-  --v3-tagsview-tag-border-radius: 8px;
+  --v3-tagsview-tag-border-radius: 4px;
   --v3-tagsview-tag-active-border-color: var(--q-primary);
   /** RightPanel 组件  */
   --v3-rightpanel-button-bg-color: var(--q-primary);
   /* 强制修改el css变量 */
   --el-color-primary: var(--q-primary) !important;
   --el-menu-active-color: var(--q-primary) !important;
+  --el-component-size: 36px !important;
+  --el-menu-level-padding: 25px !important;
+
+
   .body--light {
     --my-dark-1: #323232;
     --my-white: #ffffff;
@@ -43,7 +47,11 @@
     --el-color-black: var(--q-dark) !important;
     --el-text-color-primary: var(--q-dark) !important;
     --el-menu-text-color: var(--q-dark) !important;
+    --el-menu-hover-bg-color: rgba(50, 83, 220, 0.08) !important;
+    --el-border-color: #EBEBEB !important;
+    --el-text-color-regular: #303133 !important;
   }
+
   .body--dark {
     --my-dark-1: darken(#323232, 50%);
     --my-white: darken(#ffffff, 50%);
@@ -62,5 +70,8 @@
     --my-label-warn-cleared: #f7f7f7;
     --my-label-success-green: darken(#67c23a, 50%);
     --machine-color: #f9f9f9;
+    --el-menu-hover-bg-color: rgba(50, 83, 220, 0.08) !important;
+    --el-border-color: #d2d2d2 !important;
+    --el-text-color-regular: #606266 !important;
   }
 }

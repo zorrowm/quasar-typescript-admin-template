@@ -1,7 +1,10 @@
 <template>
   <div class="relative-position">
-    <p class="text-caption q-pb-sm row items-center text-weight-regular">
-      <span class="q-mr-xs"> {{ externalOption.required ? '*' : '' }} {{ externalOption.label }} </span>
+    <p class="q-pb-sm row items-center text-weight-medium">
+      <span class="q-mr-xs fs-12">
+        <i v-if="externalOption.required" class="text-negative"> * </i>
+        {{ externalOption.label }}
+      </span>
       <slot name="subTitle"></slot>
     </p>
     <q-input
@@ -25,7 +28,7 @@
           <q-popup-proxy cover transition-show="jump-up" transition-hide="jump-down">
             <q-date v-model="internalOption.dateModel" range>
               <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
+                <q-btn v-close-popup :label="$t('components.close')" color="primary" flat no-caps />
               </div>
             </q-date>
           </q-popup-proxy>
@@ -59,8 +62,8 @@ const EXTERNAL_OPTION = {
   disable: false,
 };
 
-@Component({ name: 'FormDateComponent', emits: ['input'] })
-export default class FormDateComponent extends Vue {
+@Component({ name: 'FormDateRangeComponent', emits: ['input'] })
+export default class FormDateRangeComponent extends Vue {
   $refs!: any;
   @Prop({ default: {} }) option!: Option;
 
@@ -101,7 +104,7 @@ export default class FormDateComponent extends Vue {
   }
 
   created() {
-    this.externalOption = cloneDeep(Object.assign(EXTERNAL_OPTION, this.option));
+    this.externalOption = cloneDeep(Object.assign(cloneDeep(EXTERNAL_OPTION), this.option));
     this.internalOption.model = `${this.option.from} - ${this.option.to}`;
     this.internalOption.dateModel = { from: this.option.from, to: this.option.to };
     this.initDateRule();

@@ -16,7 +16,7 @@
     </template>
     <div class="content" :id="bid + '-' + bannerType + '-banner-content'"></div>
     <div class="close" @click.prevent.stop="show = false" v-if="showClose">
-      <q-icon name="cancel"></q-icon>
+      <q-icon name="w"></q-icon>
     </div>
   </q-banner>
 </template>
@@ -90,7 +90,7 @@ export default class BannerComponent extends Vue {
 }
 
 .my-banner {
-  border-radius: 8px;
+  border-radius: 4px;
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 16px;
